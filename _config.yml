@@ -4,7 +4,7 @@
 
 url: http://liweican1992.github.io
 title: 李伟灿的Blog
-subtitle: A blogging framework for hackers.
+subtitle: 野生散养程序猿.
 author: CC
 simple_search: https://www.google.com/search
 description:
@@ -19,7 +19,7 @@ date_format: "ordinal"
 subscribe_rss: /atom.xml
 subscribe_email:
 # RSS feeds can list your email address if you like
-email:
+email: 350169125@qq.com
 
 # ----------------------- #
 #    Jekyll & Plugins     #
