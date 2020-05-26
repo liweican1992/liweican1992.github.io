@@ -31,7 +31,7 @@
 <meta property="og:image" content="http://note.youdao.com/yws/res/2652/AEEDBA1F308D4D35947F260BF85E6FD8">
 <meta property="og:image" content="http://note.youdao.com/yws/res/2665/7610FB2C8F9344258FB0B17186F93850">
 <meta property="article:published_time" content="2020-05-22T09:18:00.000Z">
-<meta property="article:modified_time" content="2020-05-26T03:11:16.651Z">
+<meta property="article:modified_time" content="2020-05-26T03:20:00.963Z">
 <meta property="article:author" content="weican Li">
 <meta property="article:tag" content="多线程">
 <meta name="twitter:card" content="summary">
@@ -187,7 +187,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-05-26 11:11:16" itemprop="dateModified" datetime="2020-05-26T11:11:16+08:00">2020-05-26</time>
+                <time title="Modified: 2020-05-26 11:20:00" itemprop="dateModified" datetime="2020-05-26T11:20:00+08:00">2020-05-26</time>
               </span>
 
           
@@ -267,7 +267,19 @@
 <p>自己创建的队列，默认值是 .inherit</p>
 <p>系统定义的全局队列，此属性是 .never</p>
 <p>如果任务中需要大量创建对象，可以设置为.never，然后手动创建autoreleasepool</p>
+<p><strong>target</strong></p>
+<p>设置一个队列的目标队列，讲当前队列中的任务放到目标队列中取执行。目标队列最终约束了队列任务的优先级。</p>
+<p>所有手动创建的队列，target最终都指向了系统自带的队列。主队列或者全局并发队列。</p>
+<blockquote>
+<p>为什么不直接加到系统队列，而是要自定义队列呢？这样的好处是可以将任务分组管理。如单独阻塞某个队列中的任务，而不是阻塞系统队列中的全部任务。如果阻塞了系统队列，所有指向它的原队列也就被阻塞。</p>
+</blockquote>
+<p>设置target可以在DispatchQueue初始化时候指定。</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">let task_queue = DispatchQueue.init(<span class="string">label:</span> <span class="string">"abc"</span>, <span class="string">qos:</span> .<span class="keyword">default</span>, <span class="string">attributes:</span> [.concurrent], <span class="string">autoreleaseFrequency:</span> .workItem, <span class="string">target:</span> DispatchQueue.global())</span><br></pre></td></tr></table></figure>
+<p>也可以指定attributes为.initiallyInactive。手动触发前使用setTarget更改指定的target</p>
+<figure class="highlight reasonml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> task_queue = <span class="module-access"><span class="module"><span class="identifier">DispatchQueue</span>.</span></span>init(label: <span class="string">"abc"</span>, qos: .default, attributes: <span class="literal">[.<span class="identifier">initiallyInactive</span>, .<span class="identifier">concurrent</span>]</span>, autoreleaseFrequency: .workItem, target: <span class="module-access"><span class="module"><span class="identifier">DispatchQueue</span>.</span></span>global<span class="literal">()</span>)</span><br><span class="line">        </span><br><span class="line">task_queue.set<span class="constructor">Target(<span class="params">queue</span>: DispatchQueue.<span class="params">global</span>(<span class="params">qos</span>: .<span class="params">background</span>)</span>)</span><br></pre></td></tr></table></figure>
 
+<p>可以思考下，下方代码会输出什么。</p>
+<figure class="highlight reasonml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> task_queue = <span class="module-access"><span class="module"><span class="identifier">DispatchQueue</span>.</span></span>init(label: <span class="string">"abc"</span>, qos: .default, attributes: <span class="literal">[.<span class="identifier">initiallyInactive</span>, .<span class="identifier">concurrent</span>]</span>, autoreleaseFrequency: .workItem, target: <span class="module-access"><span class="module"><span class="identifier">DispatchQueue</span>.</span></span>main)</span><br><span class="line">        </span><br><span class="line">task_queue.async &#123;</span><br><span class="line">    for k <span class="keyword">in</span> <span class="number">0.</span>.&lt;<span class="number">10</span> &#123;</span><br><span class="line">        print( <span class="string">"A"</span> + <span class="constructor">String(<span class="params">k</span>)</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task_queue.async &#123;</span><br><span class="line">    for k <span class="keyword">in</span> <span class="number">0.</span>.&lt;<span class="number">10</span> &#123;</span><br><span class="line">        print( <span class="string">"B"</span> + <span class="constructor">String(<span class="params">k</span>)</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">        </span><br><span class="line">task_queue.activate<span class="literal">()</span></span><br></pre></td></tr></table></figure>
     </div>
 
     
