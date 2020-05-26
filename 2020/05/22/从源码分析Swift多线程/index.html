@@ -31,7 +31,7 @@
 <meta property="og:image" content="http://note.youdao.com/yws/res/2652/AEEDBA1F308D4D35947F260BF85E6FD8">
 <meta property="og:image" content="http://note.youdao.com/yws/res/2665/7610FB2C8F9344258FB0B17186F93850">
 <meta property="article:published_time" content="2020-05-22T09:18:00.000Z">
-<meta property="article:modified_time" content="2020-05-22T10:22:45.816Z">
+<meta property="article:modified_time" content="2020-05-26T03:11:16.651Z">
 <meta property="article:author" content="weican Li">
 <meta property="article:tag" content="多线程">
 <meta name="twitter:card" content="summary">
@@ -179,10 +179,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2020-05-22 17:18:00 / Modified: 18:22:45" itemprop="dateCreated datePublished" datetime="2020-05-22T17:18:00+08:00">2020-05-22</time>
+              <time title="Created: 2020-05-22 17:18:00" itemprop="dateCreated datePublished" datetime="2020-05-22T17:18:00+08:00">2020-05-22</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-05-26 11:11:16" itemprop="dateModified" datetime="2020-05-26T11:11:16+08:00">2020-05-26</time>
+              </span>
 
           
 
@@ -207,7 +213,7 @@
 <figure class="highlight reasonml"><table><tr><td class="code"><pre><span class="line"><span class="module-access"><span class="module"><span class="identifier">DispatchQueue</span>.</span></span>main</span><br></pre></td></tr></table></figure>
 
 <p>常见的主线程死锁</p>
-<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="comment">//mian Threed</span></span><br><span class="line"><span class="function"><span class="title">print</span><span class="params">(<span class="number">1</span>)</span></span></span><br><span class="line">DispatchQueue<span class="selector-class">.main</span><span class="selector-class">.sync</span> &#123;</span><br><span class="line">     print(<span class="number">2</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="title">print</span><span class="params">(<span class="number">3</span>)</span></span></span><br></pre></td></tr></table></figure>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="comment">//main Threed</span></span><br><span class="line"><span class="function"><span class="title">print</span><span class="params">(<span class="number">1</span>)</span></span></span><br><span class="line">DispatchQueue<span class="selector-class">.main</span><span class="selector-class">.sync</span> &#123;</span><br><span class="line">     print(<span class="number">2</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="title">print</span><span class="params">(<span class="number">3</span>)</span></span></span><br></pre></td></tr></table></figure>
 
 
 
