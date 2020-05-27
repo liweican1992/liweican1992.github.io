@@ -172,10 +172,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2020-05-25 20:05:19 / Modified: 21:03:46" itemprop="dateCreated datePublished" datetime="2020-05-25T20:05:19+08:00">2020-05-25</time>
+              <time title="Created: 2020-05-25 20:05:19" itemprop="dateCreated datePublished" datetime="2020-05-25T20:05:19+08:00">2020-05-25</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-05-27 11:09:22" itemprop="dateModified" datetime="2020-05-27T11:09:22+08:00">2020-05-27</time>
+              </span>
 
           
 
@@ -194,116 +200,14 @@
 <p>Widget是iOS8以后Apple推出的一项功能，并且在iOS10后进行了大幅的优化。</p>
 <p>在主屏幕和锁定屏幕上向右滑动来访问Widget,也可以在对应的App图标上面使用3D Touch按压访问相应的Widget。</p>
 <p><img src="https://upload-images.jianshu.io/upload_images/525360-5aa52b4509503da2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<h1 id="Widget设计规范和要求"><a href="#Widget设计规范和要求" class="headerlink" title="Widget设计规范和要求"></a>Widget设计规范和要求</h1><p>Widget是一个单独的进程，和主App独立，但是支持数据共享。在设计和开发Widget时候要注意以下几点设计规范：</p>
-<ul>
-<li><p><strong>设计一个友好的交互体验</strong></p>
-<p>Widget用来执行非常简单的任务，尽可能提供点击一次就能完成的任务，Widget不支持窗口滚动，不支持键盘输入（其实是可以做到键盘输入的 具体办法见后面）<br>详见<a href="https://developer.apple.com/library/archive/documentation/General/Conceptual/ExtensibilityPG/Today.html" target="_blank" rel="noopener">《App Extension Programming Guide》</a></p>
-</li>
-</ul>
-<p><img src="https://upload-images.jianshu.io/upload_images/525360-8a7629d32d636e67.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1"></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/525360-d600c4ec537f4d8f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2"></p>
-<ul>
-<li><p><strong>要快速显示内容</strong></p>
-<p>  内容要尽量从本地加载，依赖网络的内容要在本地做缓存，以免长时间等待。确保每次出现都有内容</p>
-</li>
-<li><p><strong>提供充足的边距和填充</strong></p>
-<p>  避免将内容扩展到Widegt边缘。<strong>每行最多显示4个按钮或图标</strong></p>
-</li>
-<li><p><strong>适应屏幕</strong></p>
-<p>  iOS10以后，Widget支持折叠和展开。<strong>折叠状态下默认高度为110且不可更改。展开高度不超过一个屏幕的高度</strong>。（官方文档说最低高度为2.5个默认行高 44<em>3.5=110）官方推荐使用AutoLayout布局。<br>  *</em>横屏时候宽度还是默认屏幕宽度。不会拉伸**<br><img src="https://upload-images.jianshu.io/upload_images/525360-ef6eda0b5bf90214.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-</li>
-<li><p><strong>不要自定义背景色</strong></p>
-<p>  系统自带模糊的背景色，尽量不要改(当然只是建议咯）。不要用照片做背景，会和壁纸冲突。<br><img src="https://upload-images.jianshu.io/upload_images/525360-45f3965da989cb50.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="部分App设计了皮肤功能"></p>
-</li>
-<li><p><strong>注意字体颜色、取一个好名字、一个App可以有多个Widget</strong></p>
-<p>  字体颜色尽量是深色或者深灰色（然而用白色的最多）。如果一个App存在多个Widget，要命名清晰。Widget的名字里面，<strong>英文字母系统会自动转换成大写</strong>。</p>
-<p>  <strong>Logo会自动使用主App的icon</strong></p>
-</li>
-<li><p><strong>适当的时候让用户跳转到主App来做更多的事</strong></p>
-<p>  Widget尽量只给用户提供简单的功能（规范而已。。），不要在Widget中出现“打开App”等按钮。点击Widget icon后会自动吊起主App。和主App交互使用URLScheme方法。后面会讲到。</p>
-</li>
-<li><p><strong>很短的生命周期、要注意内存问题</strong></p>
-<p>离开屏幕2s+就会被销毁，后面会讲到</p>
-</li>
-</ul>
-<h1 id="建立Widget-Target"><a href="#建立Widget-Target" class="headerlink" title="建立Widget Target"></a>建立Widget Target</h1><p>选择主工程，在Project设置界面下方点击加号，新建Today Extension</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/525360-df1adf5fb5a2d83b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/525360-2b63a7d3402d8762.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>系统会自动生成TodayViewController和storyBoard。不要忘记在Target设置里面设置基本信息，版本号和主App保持一致，否则上传iTunes Connect会有警告邮件</p>
-<p><strong>也要注意选择Deployment Target。Xcode10默认是iOS12</strong><br><img src="https://upload-images.jianshu.io/upload_images/525360-3793f8a5b159e998.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<h1 id="和Widget共享代码"><a href="#和Widget共享代码" class="headerlink" title="和Widget共享代码"></a>和Widget共享代码</h1><ul>
-<li>支持pod导入三方库，在podfile中新增Widget的target<br><img src="https://upload-images.jianshu.io/upload_images/525360-fcc69d58cb905036.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></li>
-</ul>
-<p>Xcode10 后，如果在Build Phases中运行Script。执行pod可能报错。解决办法见<br><a href="https://www.jianshu.com/p/ebdcfc86886b" target="_blank" rel="noopener">《#iOS知识小集# Xcode10 pod install 报错》</a></p>
-<ul>
-<li>主工程代码共享<br>在需要共享的类的.m文件中的Target Membership中勾选Widget所在的Target<br><img src="https://upload-images.jianshu.io/upload_images/525360-0dc2f99380a64e2f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></li>
-</ul>
-<h1 id="Widget代码实现"><a href="#Widget代码实现" class="headerlink" title="Widget代码实现"></a>Widget代码实现</h1><p><strong>NCWidgetProviding协议</strong><br>Widget工程建立后会自动生成TodayViewController。<br>会遵循NCWidgetProviding协议<br>iOS10以后这个协议只有两个方法</p>
-<figure class="highlight less"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">-</span> (void)<span class="selector-tag">widgetPerformUpdateWithCompletionHandler</span><span class="selector-pseudo">:(void</span> (^)(NCUpdateResult result))<span class="selector-tag">completionHandler</span>;</span><br><span class="line"><span class="selector-tag">-</span> (void)<span class="selector-tag">widgetActiveDisplayModeDidChange</span><span class="selector-pseudo">:(NCWidgetDisplayMode)activeDisplayMode</span> <span class="selector-tag">withMaximumSize</span><span class="selector-pseudo">:(CGSize)maxSize</span> <span class="selector-tag">NS_AVAILABLE_IOS</span>(<span class="number">10</span>_0);</span><br></pre></td></tr></table></figure>
-
-<p>其中widgetPerformUpdateWithCompletionHandler 默认返回NCUpdateResultNewData</p>
-<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line">- (<span class="type">void</span>)widgetPerformUpdateWithCompletionHandler:(<span class="type">void</span> (^)(NCUpdateResult))completionHandler &#123;</span><br><span class="line">    // <span class="keyword">Perform</span> <span class="keyword">any</span> setup necessary <span class="keyword">in</span> <span class="keyword">order</span> <span class="keyword">to</span> <span class="keyword">update</span> the <span class="keyword">view</span>.</span><br><span class="line">    </span><br><span class="line">    // <span class="keyword">If</span> an error <span class="keyword">is</span> encountered, use NCUpdateResultFailed</span><br><span class="line">    // <span class="keyword">If</span> ther<span class="string">e's no update required, use NCUpdateResultNoData</span></span><br><span class="line"><span class="string">    // If there'</span>s an <span class="keyword">update</span>, use NCUpdateResultNewData</span><br><span class="line"></span><br><span class="line">    completionHandler(NCUpdateResultNewData);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这个可以忽略掉，直接返回NCUpdateResultNewData就好了<br>iOS10以后支持折叠和展开功能，折叠状态下默认高度为110且不可更改。展开高度不超过一个屏幕的高度。（官方文档说最低高度为2.5个默认行高 44*3.5=110）</p>
-<p>在ViewDidLoaded方法中设置是否开启折叠功能</p>
-<figure class="highlight gml"><table><tr><td class="code"><pre><span class="line"><span class="comment">//NCWidgetDisplayModeCompact 收起模式</span></span><br><span class="line"><span class="comment">//NCWidgetDisplayModeExpanded  展开模式</span></span><br><span class="line">     </span><br><span class="line"><span class="literal">self</span>.extensionContext.widgetLargestAvailableDisplayMode = NCWidgetDisplayModeExpanded;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight objectivec"><table><tr><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)widgetActiveDisplayModeDidChange:(NCWidgetDisplayMode)activeDisplayMode withMaximumSize:(<span class="built_in">CGSize</span>)maxSize &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (activeDisplayMode == NCWidgetDisplayModeCompact) &#123;</span><br><span class="line">        <span class="keyword">self</span>.preferredContentSize = <span class="built_in">CGSizeMake</span>(maxSize.width, <span class="number">110</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">self</span>.preferredContentSize = <span class="built_in">CGSizeMake</span>(maxSize.width, <span class="number">200</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>使用纯代码</strong></p>
-<p>示例工程会默认使用StoryBoard，如果想使用纯代码。进行以下步骤</p>
-<ol>
-<li>删除MainInterface.storyboard文件和NSExtensionMainStoryboard键值对<br><img src="https://upload-images.jianshu.io/upload_images/525360-201a33ebaa3d9d23.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></li>
-</ol>
-<p>2.添加NSExtensionPrincipalClass为key ,value为TodayViewController<br><img src="https://upload-images.jianshu.io/upload_images/525360-3191b5090c1294ea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p><strong>图片管理</strong><br>Widget可以使用Asset Catalog管理图片，命名为Assets，和主工程使用方式一致<br>[图片上传失败…(image-63b41f-1548926798999)]</p>
-<p><strong>代码调试</strong><br>在Widget工程更新代码后，可以运行主工程，然后添加Widget。就可以看到最新的效果展示。<br>如果想断点调试，要选择Widget Target<br><img src="https://upload-images.jianshu.io/upload_images/525360-477ca9ff7379e2a2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p><strong>和主工程共享数据</strong></p>
-<blockquote>
-<p>Widget和主工程是完全独立的两个工程,两个独立的进程。所以数据共享是通过App Groups进行的。</p>
-</blockquote>
-<p>App Groups需要去开发者中心去创建。ID必须以group开头。后面一般跟公司名称。<br><img src="https://upload-images.jianshu.io/upload_images/525360-4b13ec223f932575.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>建立完成后回到主工程，打开App Groups开关，就能刷新出刚刚创建的Groups,打钩远中</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/525360-b81a55c8ce0bdd30.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>然后把Widget Target 也打开App Groups，选中同一个Groups</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/525360-151d35d8a57d6341.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>App Groups可以通过NSUserDefaults和NSFileManager共享数据</p>
-<ul>
-<li>NSUserDefaults</li>
-</ul>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line"><span class="comment">//主工程中存</span></span><br><span class="line">NSUserDefaults *shared = [[NSUserDefaults alloc] <span class="string">initWithSuiteName:</span>@<span class="string">"group.YouDao.xxxx"</span>];</span><br><span class="line">[shared <span class="string">setObject:</span>_targetLanguage.abb <span class="string">forKey:</span>@<span class="string">"UD_TargetLanguage_Widget_key"</span>];</span><br><span class="line">[shared synchronize];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//Widget 中取</span></span><br><span class="line">[[NSUserDefaults alloc] <span class="string">initWithSuiteName:</span>@<span class="string">"group.YouDao.xxxx"</span>] <span class="string">objectForKey:</span>@<span class="string">"UD_TargetLanguage_Widget_key"</span>];</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>NSFileManager</li>
-</ul>
-<figure class="highlight objectivec"><table><tr><td class="code"><pre><span class="line"><span class="comment">//存</span></span><br><span class="line"><span class="built_in">NSString</span> *groupID = <span class="string">@"group.YouDao.xxxx"</span>;</span><br><span class="line"><span class="built_in">NSError</span> *err = <span class="literal">nil</span>;</span><br><span class="line"><span class="built_in">NSURL</span> *fileUrl = [[<span class="built_in">NSFileManager</span> defaultManager] containerURLForSecurityApplicationGroupIdentifier:groupID];</span><br><span class="line">fileUrl = [fileUrl URLByAppendingPathComponent:<span class="string">@"Library/Caches/test"</span>];</span><br><span class="line"><span class="built_in">NSString</span> *value = <span class="string">@"test"</span>;</span><br><span class="line"><span class="built_in">BOOL</span> result = [value writeToURL:fileUrl atomically:<span class="literal">YES</span> encoding:<span class="built_in">NSUTF8StringEncoding</span> error:&amp;err];</span><br><span class="line"><span class="keyword">if</span>(result)&#123;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"写入成功"</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//取</span></span><br><span class="line"><span class="built_in">NSString</span> *groupID = <span class="string">@"group.YouDao.xxxx"</span>;</span><br><span class="line"><span class="built_in">NSError</span> *err = <span class="literal">nil</span>;</span><br><span class="line"><span class="built_in">NSURL</span> *containerURL = [[<span class="built_in">NSFileManager</span> defaultManager] containerURLForSecurityApplicationGroupIdentifier:groupID];</span><br><span class="line">containerURL = [containerURL URLByAppendingPathComponent:<span class="string">@"Library/Caches/test"</span>];</span><br><span class="line"><span class="built_in">NSString</span> *value = [<span class="built_in">NSString</span> stringWithContentsOfURL:containerURL encoding:<span class="built_in">NSUTF8StringEncoding</span> error:&amp;err];</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>App Gropu是跨App的，只要在同一个开发中账号。不同的App使用同一个Gropu ID都是可以共享数据的。在Shared目录下还有AppGroup目录。里面有各个Group ID的文件夹。其中通过NSUserDefault共享的数据在Library/Prefrences下。是一个plist文件。</p>
-</blockquote>
-<p><img src="https://upload-images.jianshu.io/upload_images/525360-68ed49a0d79abe61.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<h1 id="Widget吊起主工程"><a href="#Widget吊起主工程" class="headerlink" title="Widget吊起主工程"></a>Widget吊起主工程</h1><p>Widget吊起主App通过URLSchemes</p>
-<ol>
-<li>为主App设置URLSchemes<br><img src="https://upload-images.jianshu.io/upload_images/525360-485befca59696c0c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></li>
-</ol>
-<p>￼￼2.Widget添加交互</p>
-<figure class="highlight scheme"><table><tr><td class="code"><pre><span class="line">[<span class="name">self.extensionContext</span> openURL:[<span class="name">NSURL</span> URLWithString:@<span class="string">"YDUDictionary://action=CameraTranslate"</span>] completionHandler:^(<span class="name">BOOL</span> success) &#123;</span><br><span class="line">                NSLog(<span class="name">@</span><span class="string">"open url result:%d"</span>,success)<span class="comment">;</span></span><br><span class="line">            &#125;]<span class="comment">;</span></span><br></pre></td></tr></table></figure>
-<p>3.主App中处理Scheme.在AppDelegate中实现application:openURL:options:</p>
-<figure class="highlight objectivec"><table><tr><td class="code"><pre><span class="line">- (<span class="built_in">BOOL</span>)application:(<span class="built_in">UIApplication</span> *)app openURL:(<span class="built_in">NSURL</span> *)url options:(<span class="built_in">NSDictionary</span>&lt;<span class="built_in">UIApplicationOpenURLOptionsKey</span>,<span class="keyword">id</span>&gt; *)options &#123;</span><br><span class="line">      <span class="built_in">NSString</span> *urlStr = [url.absoluteString stringByRemovingPercentEncoding];</span><br><span class="line">        <span class="keyword">if</span> ([urlStr hasPrefix:<span class="string">@"YDUDictionary://action="</span>]) &#123;</span><br><span class="line">            <span class="built_in">NSString</span> *parameter = [urlStr stringByReplacingOccurrencesOfString:<span class="string">@"YDUDictionary://action="</span> withString:<span class="string">@""</span>];</span><br><span class="line">                <span class="keyword">if</span> ([parameter isEqualToString:<span class="string">@"CameraTranslate"</span>]) &#123;</span><br><span class="line">                <span class="comment">//Do Somthinhg</span></span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="主App中控制Widget是否显示"><a href="#主App中控制Widget是否显示" class="headerlink" title="主App中控制Widget是否显示"></a>主App中控制Widget是否显示</h1><p>在Widget编辑页面可以进行Widget排序很删减。<br><img src="https://upload-images.jianshu.io/upload_images/525360-aeda1fc3bd93b5e9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>当添加Widget以后，主工程还可以控制Widget是否显示。</p>
-<figure class="highlight objectivec"><table><tr><td class="code"><pre><span class="line"><span class="comment">//为什么要引入NotificationCenter呢？可以思考下</span></span><br><span class="line"><span class="meta">#import <span class="meta-string">&lt;NotificationCenter/NotificationCenter.h&gt;</span></span></span><br><span class="line"><span class="comment">//youdao.com.WidgetTest.Widget是Widget的Bundle ID</span></span><br><span class="line">[[NCWidgetController widgetController] setHasContent:<span class="literal">YES</span> forWidgetWithBundleIdentifier:<span class="string">@"youdao.com.WidgetTest.Widget"</span>];</span><br></pre></td></tr></table></figure>
-
-<h1 id="刷新机制"><a href="#刷新机制" class="headerlink" title="刷新机制"></a>刷新机制</h1><p>Widget有自己进程，有特殊的生命周期和内存限制。通过测试得出</p>
-<blockquote>
-<p>Widget离开屏幕2s以上，就会被销毁回收掉。每次离开前系统会做快照处理。下次进来先加载快照。<br>离开超过2s以上，下次进入就会调用ViewDidLoad,然后是viewWillAppear<br>离开不超过2s 下次进入会调用viewWillAppear</p>
-</blockquote>
-<p>所以为了交互体验，最好是记录用户上次的使用状态，下次加载时候进行还原操作。</p>
-<p>当内存不足时候，系统会优先kill掉Widget。所以要注意内存问题，不要进行需要大量内存的操作。<br>网络请求如果需要频繁刷新。可以在viewWillAppear方法中启用一个Timer,在Timer中请求接口数据。在viewWillDisAppear中取消定时器。</p>
-<h1 id="如何在Widget中使用键盘"><a href="#如何在Widget中使用键盘" class="headerlink" title="如何在Widget中使用键盘"></a>如何在Widget中使用键盘</h1><blockquote>
-<p>Apple官方文档说Widget是不支持键盘输入的。如果在TodayViewController中新建一个输入框。点击是没有反应的。但是我们可以用另外一种办法绕过去。效果如下图。</p>
-</blockquote>
-<p><strong>做法就是做一个假的输入框，让用户点击。点击后present一个ViewController，在这个Controller新建UITextView或者UITextField就可以获取焦点，出现键盘啦</strong></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/525360-661905094d21be6f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/05/25/Widget%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -353,7 +257,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-05-26 11:51:51" itemprop="dateModified" datetime="2020-05-26T11:51:51+08:00">2020-05-26</time>
+                <time title="Modified: 2020-05-27 11:08:07" itemprop="dateModified" datetime="2020-05-27T11:08:07+08:00">2020-05-27</time>
               </span>
 
           
@@ -380,75 +284,14 @@
 
 <p>常见的主线程死锁</p>
 <figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="comment">//main Threed</span></span><br><span class="line"><span class="function"><span class="title">print</span><span class="params">(<span class="number">1</span>)</span></span></span><br><span class="line">DispatchQueue<span class="selector-class">.main</span><span class="selector-class">.sync</span> &#123;</span><br><span class="line">     print(<span class="number">2</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="title">print</span><span class="params">(<span class="number">3</span>)</span></span></span><br></pre></td></tr></table></figure>
-
-
-
-<h6 id="（并行队列）-并发队列"><a href="#（并行队列）-并发队列" class="headerlink" title="（并行队列）  并发队列"></a><del>（并行队列）</del>  并发队列</h6><p>并行(parallel)：指在同一时刻，有多条指令在多个处理器上同时执行。所以无论从微观还是从宏观来看，二者都是一起执行的。<br><img src="http://note.youdao.com/yws/res/2653/42B22ECA21AC47819E5BB63995D7A21B" alt="image"></p>
-<p>并发(concurrency)：指在同一时刻只能有一条指令执行，但多个进程指令被快速的轮换执行，使得在宏观上具有多个进程同时执行的效果，但在微观上并不是同时执行的，只是把时间分成若干段，使多个进程快速交替的执行。</p>
-<p><img src="http://note.youdao.com/yws/res/2652/AEEDBA1F308D4D35947F260BF85E6FD8" alt="image"></p>
-<p>Erlang 之父 Joe Armstrong 的解释</p>
-<p><img src="http://note.youdao.com/yws/res/2665/7610FB2C8F9344258FB0B17186F93850" alt="image"></p>
-<p>创建并发队列</p>
-<figure class="highlight reasonml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> taskD_queue = <span class="module-access"><span class="module"><span class="identifier">DispatchQueue</span>.</span></span>init(label: <span class="string">"com.youdao.concurrent"</span>, attributes: .concurrent)</span><br></pre></td></tr></table></figure>
-
-<p>系统并发队列</p>
-<figure class="highlight reasonml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> globalQueue = <span class="module-access"><span class="module"><span class="identifier">DispatchQueue</span>.</span></span>global<span class="literal">()</span></span><br></pre></td></tr></table></figure>
-
-
-<h6 id="更多参数"><a href="#更多参数" class="headerlink" title="更多参数"></a>更多参数</h6><figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> convenience init(<span class="string">label:</span> String, <span class="string">qos:</span> DispatchQoS = .unspecified, <span class="string">attributes:</span> DispatchQueue.Attributes = [],</span><br><span class="line"><span class="string">autoreleaseFrequency:</span> DispatchQueue.AutoreleaseFrequency = .inherit, <span class="string">target:</span> DispatchQueue? = nil)</span><br></pre></td></tr></table></figure>
-
-<p><strong>qos</strong></p>
-<p>Quality of Service(服务质量)<br>队列执行有优先级，优先级由高到低</p>
-<ul>
-<li>userInteractive： 用户交互任务（例如动画，事件处理或更新应用程序的用户界面）的服务</li>
-<li>userInitiated：用户发起的动作需要立即得到结果 如打开文档，显示电子邮件</li>
-<li>default：默认的</li>
-<li>utility:用户不主动关注的，一些耗时操作。下载或者导入数据,utility任务一般有一个进度条让用户能看到</li>
-<li>background：最低优先级 后台运行。建立索引 清理文件</li>
-</ul>
-<p>默认值为 <strong>default</strong></p>
-<p>还有一个特殊的<strong>unspecified</strong></p>
-<blockquote>
-<p>它表示当前没有QoS信息，系统应该根据环境自动推断QoS信息。如果使用遗弃的API，线程有可能会脱离QoS，这个时候，线程就是unspecified QoS类别的</p>
-</blockquote>
-<p>因此系统并发队列有6个</p>
-<figure class="highlight reasonml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> globalQueue1 = <span class="module-access"><span class="module"><span class="identifier">DispatchQueue</span>.</span></span>global(qos: .userInteractive)</span><br><span class="line"><span class="keyword">let</span> globalQueue2 = <span class="module-access"><span class="module"><span class="identifier">DispatchQueue</span>.</span></span>global(qos: .userInitiated)</span><br><span class="line"><span class="keyword">let</span> globalQueue5 = <span class="module-access"><span class="module"><span class="identifier">DispatchQueue</span>.</span></span>global<span class="literal">()</span> <span class="comment">//qos default </span></span><br><span class="line"><span class="keyword">let</span> globalQueue3 = <span class="module-access"><span class="module"><span class="identifier">DispatchQueue</span>.</span></span>global(qos: .utility)</span><br><span class="line"><span class="keyword">let</span> globalQueue4 = <span class="module-access"><span class="module"><span class="identifier">DispatchQueue</span>.</span></span>global(qos: .background)</span><br><span class="line"><span class="comment">//❌  不存在这种</span></span><br><span class="line"><span class="keyword">let</span> globalQueue4 = <span class="module-access"><span class="module"><span class="identifier">DispatchQueue</span>.</span></span>global(qos: .unspecified)</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>要注意，在Low Power Mode下，qos为background的队列将被暂停</p>
-</blockquote>
-<p><strong>attributes</strong></p>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line"><span class="comment">//Set</span></span><br><span class="line"><span class="keyword">public</span> struct <span class="string">Attributes :</span> OptionSet</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> let <span class="string">concurrent:</span> DispatchQueue.Attributes</span><br><span class="line"></span><br><span class="line"><span class="meta">@available</span>(OSX <span class="number">10.12</span>, iOS <span class="number">10.0</span>, tvOS <span class="number">10.0</span>, watchOS <span class="number">3.0</span>, *)</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> let <span class="string">initiallyInactive:</span> DispatchQueue.Attributes</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>concurrent：标记为并发队列</li>
-<li>initiallyInactive：标识队列中的任务需要手动触发，由队列activate()方法触发。未标记initiallyInactive的队列会自动触发任务</li>
-</ul>
-<p>不标明此参数，默认是串行队列。</p>
-<figure class="highlight reasonml"><table><tr><td class="code"><pre><span class="line"><span class="comment">//串行队列</span></span><br><span class="line"><span class="keyword">let</span> task_queue_ser = <span class="module-access"><span class="module"><span class="identifier">DispatchQueue</span>.</span></span>init(label: <span class="string">"com.youdao.queue"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">//并发队列</span></span><br><span class="line"><span class="keyword">let</span> task_queue_concurrent = <span class="module-access"><span class="module"><span class="identifier">DispatchQueue</span>.</span></span>init(label: <span class="string">"com.youdao.queue"</span>, attributes: .concurrent)</span><br><span class="line"></span><br><span class="line"><span class="comment">//手动触发</span></span><br><span class="line"><span class="keyword">let</span> task_queue_initial = <span class="module-access"><span class="module"><span class="identifier">DispatchQueue</span>.</span></span>init(label: <span class="string">"com.youdao.queue"</span>, attributes: .initiallyInactive)</span><br><span class="line">task_queue_initial.active<span class="literal">()</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//手动触发的并发队列</span></span><br><span class="line"><span class="keyword">let</span> task_queue_combine = <span class="module-access"><span class="module"><span class="identifier">DispatchQueue</span>.</span></span>init(label: <span class="string">"com.youdao.queue"</span>, attributes: <span class="literal">[.<span class="identifier">concurrent</span>, .<span class="identifier">initiallyInactive</span>]</span>)</span><br><span class="line">task_queue_combine.active<span class="literal">()</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>autoreleaseFrequency</strong></p>
-<p>autoreleaseFrequency是枚举，标明autoreleasepool的释放频率</p>
-<figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="keyword">enum</span> AutoreleaseFrequency &#123;</span><br><span class="line">        <span class="comment">//继承目标队列</span></span><br><span class="line">        <span class="keyword">case</span> inherit</span><br><span class="line">        <span class="comment">//跟随每个任务的执行周期进行自动创建和释放</span></span><br><span class="line">        @available(OSX <span class="number">10.12</span>, iOS <span class="number">10.0</span>, tvOS <span class="number">10.0</span>, watchOS <span class="number">3.0</span>, *)</span><br><span class="line">        <span class="keyword">case</span> workItem</span><br><span class="line">        <span class="comment">//不创建autoreleasepool</span></span><br><span class="line">        @available(OSX <span class="number">10.12</span>, iOS <span class="number">10.0</span>, tvOS <span class="number">10.0</span>, watchOS <span class="number">3.0</span>, *)</span><br><span class="line">        <span class="keyword">case</span> never</span><br><span class="line">        </span><br><span class="line">        ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>自己创建的队列，默认值是 .inherit</p>
-<p>系统定义的全局队列，此属性是 .never</p>
-<p>如果任务中需要大量创建对象，可以设置为.never，然后手动创建autoreleasepool</p>
-<p><strong>target</strong></p>
-<p>设置一个队列的目标队列，讲当前队列中的任务放到目标队列中取执行。目标队列最终约束了队列任务的优先级。</p>
-<p>所有手动创建的队列，target最终都指向了系统自带的队列。主队列或者全局并发队列。</p>
-<blockquote>
-<p>为什么不直接加到系统队列，而是要自定义队列呢？这样的好处是可以将任务分组管理。如单独阻塞某个队列中的任务，而不是阻塞系统队列中的全部任务。如果阻塞了系统队列，所有指向它的原队列也就被阻塞。</p>
-</blockquote>
-<p>设置target可以在DispatchQueue初始化时候指定。</p>
-<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">let task_queue = DispatchQueue.init(<span class="string">label:</span> <span class="string">"abc"</span>, <span class="string">qos:</span> .<span class="keyword">default</span>, <span class="string">attributes:</span> [.concurrent], <span class="string">autoreleaseFrequency:</span> .workItem, <span class="string">target:</span> DispatchQueue.global())</span><br></pre></td></tr></table></figure>
-<p>也可以指定attributes为.initiallyInactive。手动触发前使用setTarget更改指定的target</p>
-<figure class="highlight reasonml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> task_queue = <span class="module-access"><span class="module"><span class="identifier">DispatchQueue</span>.</span></span>init(label: <span class="string">"abc"</span>, qos: .default, attributes: <span class="literal">[.<span class="identifier">initiallyInactive</span>, .<span class="identifier">concurrent</span>]</span>, autoreleaseFrequency: .workItem, target: <span class="module-access"><span class="module"><span class="identifier">DispatchQueue</span>.</span></span>global<span class="literal">()</span>)</span><br><span class="line">        </span><br><span class="line">task_queue.set<span class="constructor">Target(<span class="params">queue</span>: DispatchQueue.<span class="params">global</span>(<span class="params">qos</span>: .<span class="params">background</span>)</span>)</span><br></pre></td></tr></table></figure>
-
-<p>可以思考下，下方代码会输出什么。</p>
-<figure class="highlight reasonml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> task_queue = <span class="module-access"><span class="module"><span class="identifier">DispatchQueue</span>.</span></span>init(label: <span class="string">"abc"</span>, qos: .default, attributes: <span class="literal">[.<span class="identifier">initiallyInactive</span>, .<span class="identifier">concurrent</span>]</span>, autoreleaseFrequency: .workItem, target: <span class="module-access"><span class="module"><span class="identifier">DispatchQueue</span>.</span></span>main)</span><br><span class="line">        </span><br><span class="line">task_queue.async &#123;</span><br><span class="line">    for k <span class="keyword">in</span> <span class="number">0.</span>.&lt;<span class="number">10</span> &#123;</span><br><span class="line">        print( <span class="string">"A"</span> + <span class="constructor">String(<span class="params">k</span>)</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task_queue.async &#123;</span><br><span class="line">    for k <span class="keyword">in</span> <span class="number">0.</span>.&lt;<span class="number">10</span> &#123;</span><br><span class="line">        print( <span class="string">"B"</span> + <span class="constructor">String(<span class="params">k</span>)</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">        </span><br><span class="line">task_queue.activate<span class="literal">()</span></span><br></pre></td></tr></table></figure>
-
-<p>Group</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/05/22/%E4%BB%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90Swift%E5%A4%9A%E7%BA%BF%E7%A8%8B/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -571,7 +414,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-05-25 17:49:23" itemprop="dateModified" datetime="2020-05-25T17:49:23+08:00">2020-05-25</time>
+                <time title="Modified: 2020-05-27 11:07:40" itemprop="dateModified" datetime="2020-05-27T11:07:40+08:00">2020-05-27</time>
               </span>
 
           
@@ -593,43 +436,14 @@
 <p>update<br>补充下图片，当还有一个月过期时候，登录iTunes Connect 或者开发者中心都会有提示信息</p>
 </blockquote>
 <p><img src="http://note.youdao.com/yws/res/2802/BE948F1B60E34DF28A704FD1135C2113" alt="iTunes Connect"></p>
-<p><img src="http://note.youdao.com/yws/res/2805/5FFA805FD9844E78970B9FB30F71B3A4" alt="Developer"></p>
-<p>点击任意入口。登录开发者账号，会进入到付款界面</p>
-<p><img src="http://note.youdao.com/yws/res/2810/68C8CF8FFA384BF292FD7F2D0406CCE4" alt="付款界面"></p>
-<p>选择VISA还是MasterCard。国内银联当然是不支持啦，但是这里要注意，招商银行VISA全币卡（就是黑色那张）是不能用的！</p>
-<p><img src="http://note.youdao.com/yws/res/2817/954867D8AEBA4BEEBCAAE773B65BBCAE" alt="招行的VISA授权失败"></p>
-<p>  后来查了下，说要去招行官网开通什么结算通道，但是开通以后依旧不行，还有人说要使用VISA和银联双标卡，说苹果关闭了国内银行发行的VISA单标卡的结算通道。总之用不了啊。。。</p>
-<p><strong><em>update</em></strong></p>
-<blockquote>
-<p>评论有小伙伴反应招行Visa单标卡验证失败的原因是<br>可能是因为没有开通：<br>1：网上支付功能<br>2：VISA验证服务</p>
-</blockquote>
-<blockquote>
-<p>我记得当时我有去招行官网开通VISA验证服务，至于网上支付功能这个应该是开通着的，但是时间太久就不得了。如果有小伙伴出现招行单标卡验证失败的情况，请尝试上述两种方法。有结果的话麻烦留言告知一下~</p>
-</blockquote>
-<p>  因为我的招行万事达卡还在申请的路上，所以我也没办法尝试招行的Mastercard能不能用。最后用了同事一张国外的Mastercard付费成功。</p>
-<blockquote>
-<p>update 17年7月<br>发票问题<br>17年税改以后发票报销不能只写公司抬头了，还要写税号。但是苹果给的界面并没有填写入口。但是却说可以电话订购。<br>如果有小伙伴有电话订购的经历，欢迎留言补充。</p>
-</blockquote>
-<p><img src="http://note.youdao.com/yws/res/2814/5D497299A2EC478D8E81342BB65E1677" alt="发票"></p>
-<p>   付费以后过几分钟会收到Apple发的邮件，一个是订单确认邮件一个是电子收据</p>
-<p><img src="http://note.youdao.com/yws/res/2820/73AC5280D66347B5AE1B5905204BB5EE" alt="订单确认"></p>
-<p><img src="http://note.youdao.com/yws/res/2827/72C4BB0CE70144CD8262F6A65608BD60" alt="电子收据"></p>
-<blockquote>
-<p>update 17年<br>今年续费出现一种新情况，24小时以后再看结果好了</p>
-</blockquote>
-<p><img src="http://note.youdao.com/yws/res/2823/2C06F1F2F88540CEA665F7567B9BF02D" alt="处理中.."></p>
-<blockquote>
-<p>上面那个挂掉了，说订单失败，重新换了一个信用卡</p>
-</blockquote>
-<p><img src="http://note.youdao.com/yws/res/2830/E96A8D62740E47CD84AB10C2E7D16ADD" alt="最新的付款成功界面"></p>
-<p>因为写的联系和发票邮箱不是Apple开发者账号那个主邮箱，登录开发者账号主邮箱，会有一封名为“Thank you for purchasing an Apple Developer Program ”的邮件。</p>
-<p><img src="http://note.youdao.com/yws/res/2833/E2E1AE7925DD46CC93481A3DD9DBFC9B" alt="邮件"><br>邮件中会告诉你你已经续费成功，并且到期日期也确实更新了。<br>but！！！<br>当我回到开发者中心的MembersShip里面查看<br><strong>到期信息还是依旧！</strong><br><img src="http://note.youdao.com/yws/res/2836/8BB6E3901D7F44759FE5F8F7AE577722" alt="到期信息还是旧的"></p>
-<p>WTF! 然后上网找资料，有人说要去主账号邮箱找一个激活码，用激活码激活，但是里面根本没有这个邮件！<br>因为怕账号到期App被下架，所以我发邮件咨询了苹果官方。具体入口在<br>开发者中心首页-&gt;右上方Support-&gt;右下角Contact Us。然后<br><img src="http://note.youdao.com/yws/res/2838/8BE7914E04374FAA8035024B1BE28E74" alt="箭头所示"></p>
-<p>Then<br><img src="http://note.youdao.com/yws/res/2841/F88882CA0BB24788BFD0A90FCF1FA305" alt="写具体问题"></p>
-<p>Ok，过了小半天就收到Apple的回复邮件了</p>
-<p><img src="http://note.youdao.com/yws/res/2844/A1E6283BB9214C6EA44C7240F1118317" alt="回复邮件"></p>
-<p>原来苹果信息更新也是很不及时的，但终究续费成功。<br>Done~</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017/07/17/Apple%E5%BC%80%E5%8F%91%E8%B4%A6%E5%8F%B7%E7%BB%AD%E8%B4%B9%E6%B5%81%E7%A8%8B%E5%8F%8ATips%EF%BC%8817%E5%B9%B47%E6%9C%88%E6%9B%B4%E6%96%B0%EF%BC%89/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
