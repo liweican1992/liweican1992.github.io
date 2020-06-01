@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="随着Apple审核时间的大大加快，确实造福了我们这些苦逼的开发者。今天主要聊一些审核被拒以后如果中间存在误会什么的，如何向苹果申诉。  关于申诉，我之前的博客就提及过，详见： 关于审核被拒申诉那点事  但是考虑到时间这么久了，有一些规则可能发生变化，就再重新开一篇。    苹果的审核总是充满了随机性，之前用的好好的一个功能就会忽然告诉你不符合他们的标准了。这次提交审核总共被拒绝了两次，第一次是因">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Apple审核那点事：被拒后如何申诉">
+<meta property="og:url" content="http://yoursite.com/2017/05/07/Apple%E5%AE%A1%E6%A0%B8%E9%82%A3%E7%82%B9%E4%BA%8B%EF%BC%9A%E8%A2%AB%E6%8B%92%E5%90%8E%E5%A6%82%E4%BD%95%E7%94%B3%E8%AF%89/index.html">
+<meta property="og:site_name" content="licc">
+<meta property="og:description" content="随着Apple审核时间的大大加快，确实造福了我们这些苦逼的开发者。今天主要聊一些审核被拒以后如果中间存在误会什么的，如何向苹果申诉。  关于申诉，我之前的博客就提及过，详见： 关于审核被拒申诉那点事  但是考虑到时间这么久了，有一些规则可能发生变化，就再重新开一篇。    苹果的审核总是充满了随机性，之前用的好好的一个功能就会忽然告诉你不符合他们的标准了。这次提交审核总共被拒绝了两次，第一次是因">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601160409.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601160421.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601160439.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601160500.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601160515.png">
+<meta property="article:published_time" content="2017-05-07T08:02:00.000Z">
+<meta property="article:modified_time" content="2020-06-01T08:35:04.006Z">
+<meta property="article:author" content="weican Li">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601160409.png">
+
+<link rel="canonical" href="http://yoursite.com/2017/05/07/Apple%E5%AE%A1%E6%A0%B8%E9%82%A3%E7%82%B9%E4%BA%8B%EF%BC%9A%E8%A2%AB%E6%8B%92%E5%90%8E%E5%A6%82%E4%BD%95%E7%94%B3%E8%AF%89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Apple审核那点事：被拒后如何申诉 | licc</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="licc" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">licc</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">我心有猛虎 细嗅蔷薇</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/07/Apple%E5%AE%A1%E6%A0%B8%E9%82%A3%E7%82%B9%E4%BA%8B%EF%BC%9A%E8%A2%AB%E6%8B%92%E5%90%8E%E5%A6%82%E4%BD%95%E7%94%B3%E8%AF%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/avatar.png">
+      <meta itemprop="name" content="weican Li">
+      <meta itemprop="description" content="iOS开发者">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="licc">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Apple审核那点事：被拒后如何申诉
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-05-07 16:02:00" itemprop="dateCreated datePublished" datetime="2017-05-07T16:02:00+08:00">2017-05-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-06-01 16:35:04" itemprop="dateModified" datetime="2020-06-01T16:35:04+08:00">2020-06-01</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>随着Apple审核时间的大大加快，确实造福了我们这些苦逼的开发者。今天主要聊一些审核被拒以后如果中间存在误会什么的，如何向苹果申诉。<br>  关于申诉，我之前的博客就提及过，详见： <a href="http://www.cnblogs.com/cc412/p/5006029.html" target="_blank" rel="noopener">关于审核被拒申诉那点事</a><br>  但是考虑到时间这么久了，有一些规则可能发生变化，就再重新开一篇。</p>
+</blockquote>
+<p>  苹果的审核总是充满了随机性，之前用的好好的一个功能就会忽然告诉你不符合他们的标准了。这次提交审核总共被拒绝了两次，第一次是因为版本号，第二次因为服务器机房挂了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601160409.png" alt=""></p>
+<a id="more"></a>
+
+<blockquote>
+<p>Design Preamble<br>Your app includes an update button or alerts the user to update the app. To avoid user confusion, app version updates must utilize the iOS built-in update mechanism.<br>Specifically, the 關於我們 button contains reference to the version number. Although the 關於我們 button does not contain update functionality, it will be appropriate to remove this responsive feature.<br>Please see attached screenshots for details.<br>Next Steps<br>To resolve this issue, please remove the update feature from your app. To distribute a new version of your app, upload the new app binary version into the same iTunes Connect record you created for the app’s previous version. Updated versions keep the same Apple ID, iTunes Connect ID (SKU), and bundle ID as the original version, and are available free to customers who purchased a previous version.<br>Resources<br>To create new versions of your app, please review the Create a new version section in iTunes Connect Developer Help.</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601160421.png" alt=""></p>
+<p>大意就是我们在关于我们后面加了一个版本号，会让用户以为点击这里可以检测版本，因为苹果禁止主动的版本检测功能（详见：<a href="http://www.jianshu.com/p/3b5dc03099b5" target="_blank" rel="noopener">关于iOS App 版本控制以及强制更新</a>和<a href="http://www.cnblogs.com/cc412/p/4371148.html" target="_blank" rel="noopener">苹果新政，禁止开发者在App中加入检查更新功能</a>），所以给拒了。</p>
+<p>最后在下方增加一个不能点击的当前版本功能解决此问题。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601160439.png" alt=""></p>
+<p>继续提交，这次一天就审核了，可能现在苹果在被拒以后再次提交走的通道不一样。然而苹果晚上审核时候刚好我们服务器机房网络波动，给的测试账号一直登不上去，再次被拒绝。</p>
+<blockquote>
+<p>Guideline 2.1 - Performance<br>We discovered one or more bugs in your app when reviewed on iPhone running iOS 10.3.1 on Wi-Fi connected to an IPv6 network.<br>Specifically, we were not able to log into the application with the demo credentials provided.<br>-The application remained at the login menu as we attempted to log in.<br>The steps to reproduce are:</p>
+<ol>
+<li>Lauch application</li>
+<li>Navigate to login screen</li>
+<li>Enter demo credentials/ credentials</li>
+<li>Tap log in<br>Please see attached screenshots for details.<br>Next Steps<br>To resolve this issue, please run your app on a device while connected to an IPv6 network (all apps must support IPv6) to identify any issues, then revise and resubmit your app for review.<br>If we misunderstood the intended behavior of your app, please reply to this message in Resolution Center to provide information on how these features were intended to work.<br>For new apps, uninstall all previous versions of your app from a device, then install and follow the steps to reproduce the issue. For updates, install the new version as an update to the previous version, then follow the steps to reproduce the issue.<br>Resources<br>For information about supporting IPv6 Networks, please review Supporting IPv6 DNS64/NAT64 Networks and About Networking.</li>
+</ol>
+</blockquote>
+<p>苹果给出的意见是做IPV6的适配，他们怀疑是IPV6的原因造成无法访问，而之前我们IPV6没出现过问题，并且查看服务器日志，昨天晚上确实出现了警报。那么下一步就是要和苹果解释了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601160500.png" alt=""></p>
+<p>在被拒绝下方有一个回复框，你在这里可以向苹果解释误会以及一些操作步骤。使用中文就可以。但是要注意，不要使用上方的<strong>向App审查委员会提交上诉</strong></p>
+<blockquote>
+<p>苹果审核有两个部门，一个是Resolution Center另外一个是App Review Board。App Review Board就是审核委员会，他们的级别高于Resolution Center。当你对Resolution Center给出的原因和解决方案不满意的话，可以向更高一级的App Review Board提出上诉。<br>但是请注意<strong><em>如果你已经回复过了Resolution Center（也就是下方的输入框哪里）而他们还没有给你回应时候，不要再点击上方的向“App审查委员会提交上诉”</em></strong></p>
+</blockquote>
+<p>因为你会像我一样收到一封邮件</p>
+<blockquote>
+<p>Hello xxx,<br>Thank you for contacting the App Review Board.<br>We see that you’re currently communicating with the App Store Review team through the Resolution Center, so we’re closing your appeal. If you would like to continue the appeal process, please reply to this message to let us know.<br>Best regards.<br> App Store Review Board</p>
+</blockquote>
+<p>所以他们是两个独立的部门，<strong>并且个人不建议你去上诉，苹果的审核人员素质还是挺高的，只要你阐明你的理由并且是合理的</strong>，一般都会给你通过。而上诉会留下类似案底的东西，对你的后续审核“可能”会造成一些不必要的麻烦。</p>
+<p>  好吧，扯了这么多。后续就是我把机房问题阐述了一下，第二天审核就通过了。并且人家会再次给你很有礼貌的回复。一片和谐~</p>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601160515.png" alt=""></p>
+<p>所以苹果的申诉机制还是很有用处的，并且我们在申诉时候一定要注意语言，别人也是履行自己的职责。还有就是要注意他们不同部门的划分。<br>以上。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/03/01/iOS-APNs%E7%AF%87%EF%BC%9A%E6%8C%BD%E6%95%91%E6%8E%A8%E9%80%81%E4%BA%8B%E6%95%85%E2%80%94%E2%80%94%E5%A6%82%E4%BD%95%E2%80%9C%E6%92%A4%E5%9B%9E%E2%80%9D%E5%B7%B2%E5%8F%91%E9%80%81%E7%9A%84%E6%8E%A8%E9%80%81%E9%80%9A%E7%9F%A5/" rel="prev" title="iOS APNs篇：挽救推送事故——如何“撤回”已发送的推送通知">
+      <i class="fa fa-chevron-left"></i> iOS APNs篇：挽救推送事故——如何“撤回”已发送的推送通知
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/11/28/UIActivityViewController-%E5%9C%A8iOS11%E4%B8%8A%E7%9A%84%E5%9D%91/" rel="next" title="UIActivityViewController 在iOS11上的坑">
+      UIActivityViewController 在iOS11上的坑 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="weican Li"
+      src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/avatar.png">
+  <p class="site-author-name" itemprop="name">weican Li</p>
+  <div class="site-description" itemprop="description">iOS开发者</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/liweican1992" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;liweican1992" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:liweican1992@163.com" title="E-Mail → mailto:liweican1992@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">weican Li</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

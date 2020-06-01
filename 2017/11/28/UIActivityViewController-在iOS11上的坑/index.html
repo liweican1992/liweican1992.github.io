@@ -28,7 +28,7 @@
 <meta property="og:description" content="最近在做针对国外用户的App，考虑到国外都是Facebook和Twitter等社交平台，所以考虑使用iOS系统中的原生分享。但是在iOS11上面遇到一些坑，遂记录一下。  在iOS11以下的版本中，系统默认集成了社交账号的功能。但是在iOS11中内置的社交账号被移除了。并且在iOS11中废弃了一些方法。 SOCIAL_EXTERN NSString *const SLServiceTypeTwi">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2017-11-28T06:48:00.000Z">
-<meta property="article:modified_time" content="2020-06-01T06:51:39.118Z">
+<meta property="article:modified_time" content="2020-06-01T08:34:51.302Z">
 <meta property="article:author" content="weican Li">
 <meta name="twitter:card" content="summary">
 
@@ -182,7 +182,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-06-01 14:51:39" itemprop="dateModified" datetime="2020-06-01T14:51:39+08:00">2020-06-01</time>
+                <time title="Modified: 2020-06-01 16:34:51" itemprop="dateModified" datetime="2020-06-01T16:34:51+08:00">2020-06-01</time>
               </span>
 
           
@@ -201,6 +201,9 @@
 </blockquote>
 <p>在iOS11以下的版本中，系统默认集成了社交账号的功能。但是在iOS11中内置的社交账号被移除了。并且在iOS11中废弃了一些方法。</p>
 <figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line">SOCIAL_EXTERN NSString *<span class="keyword">const</span> SLServiceTypeTwitter NS_DEPRECATED(<span class="number">10</span>_8, <span class="number">10</span>_13, <span class="number">6</span>_0, <span class="number">11</span>_0);</span><br><span class="line">SOCIAL_EXTERN NSString *<span class="keyword">const</span> SLServiceTypeFacebook NS_DEPRECATED(<span class="number">10</span>_8, <span class="number">10</span>_13, <span class="number">6</span>_0, <span class="number">11</span>_0);</span><br><span class="line">SOCIAL_EXTERN NSString *<span class="keyword">const</span> SLServiceTypeSinaWeibo NS_DEPRECATED(<span class="number">10</span>_8, <span class="number">10</span>_13, <span class="number">6</span>_0, <span class="number">11</span>_0);</span><br><span class="line">SOCIAL_EXTERN NSString *<span class="keyword">const</span> SLServiceTypeTencentWeibo NS_DEPRECATED(<span class="number">10</span>_8, <span class="number">10</span>_13, <span class="number">6</span>_0, <span class="number">11</span>_0);</span><br><span class="line">SOCIAL_EXTERN NSString *<span class="keyword">const</span> SLServiceTypeLinkedIn NS_DEPRECATED(<span class="number">10</span>_8, <span class="number">10</span>_13, <span class="number">6</span>_0, <span class="number">11</span>_0);</span><br></pre></td></tr></table></figure>
+
+<a id="more"></a>
+
 <p>使用系统分享可以使用<code>UIActivityViewController</code>和<code>SLComposeViewController</code>。但是在iOS11中<code>SLComposeViewController</code>已经无法使用。</p>
 <figure class="highlight arduino"><table><tr><td class="code"><pre><span class="line">BOOL <span class="built_in">available</span> = [SLComposeViewController isAvailableForServiceType:SLServiceTypeSinaWeibo];</span><br><span class="line">  <span class="comment">//iOS11系统中使用这个方法应该所有平台都是NO</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="built_in">available</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
 <p>所以只能使用<code>UIActivityViewController</code>。使用系统的分享SDK好处还是很多的。不用再各个平台上申请账号，申请Key，设置白名单等等，只需几行代码就能优雅的实现分享功能。</p>
@@ -253,8 +256,8 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2016/07/17/Apple%E5%BC%80%E5%8F%91%E8%B4%A6%E5%8F%B7%E7%BB%AD%E8%B4%B9%E6%B5%81%E7%A8%8B%E5%8F%8ATips%EF%BC%8817%E5%B9%B47%E6%9C%88%E6%9B%B4%E6%96%B0%EF%BC%89/" rel="prev" title="Apple开发账号续费流程及Tips（17年7月更新）">
-      <i class="fa fa-chevron-left"></i> Apple开发账号续费流程及Tips（17年7月更新）
+    <a href="/2017/05/07/Apple%E5%AE%A1%E6%A0%B8%E9%82%A3%E7%82%B9%E4%BA%8B%EF%BC%9A%E8%A2%AB%E6%8B%92%E5%90%8E%E5%A6%82%E4%BD%95%E7%94%B3%E8%AF%89/" rel="prev" title="Apple审核那点事：被拒后如何申诉">
+      <i class="fa fa-chevron-left"></i> Apple审核那点事：被拒后如何申诉
     </a></div>
       <div class="post-nav-item">
     <a href="/2018/11/12/Widget%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/" rel="next" title="Widget开发指南">
@@ -334,7 +337,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

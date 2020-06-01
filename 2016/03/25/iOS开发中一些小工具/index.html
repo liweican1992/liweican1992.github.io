@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="做iOS开发已经有几年了，中间也积累下了不少工具做一个总结吧 一、Mac 菜单栏工具   Bartender   Barteder是一款优秀的菜单栏管理工具，可以把一些不常用的隐藏起来，将大量的菜单有选择折进 Bartender 的二级菜单，不仅会看起来更整洁，使用起来也不会造成太大的麻烦。配合下面的 iStar Menus 食用更加官网地址：https:&#x2F;&#x2F;www.macbartender.co">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS开发中一些小工具">
+<meta property="og:url" content="http://yoursite.com/2016/03/25/iOS%E5%BC%80%E5%8F%91%E4%B8%AD%E4%B8%80%E4%BA%9B%E5%B0%8F%E5%B7%A5%E5%85%B7/index.html">
+<meta property="og:site_name" content="licc">
+<meta property="og:description" content="做iOS开发已经有几年了，中间也积累下了不少工具做一个总结吧 一、Mac 菜单栏工具   Bartender   Barteder是一款优秀的菜单栏管理工具，可以把一些不常用的隐藏起来，将大量的菜单有选择折进 Bartender 的二级菜单，不仅会看起来更整洁，使用起来也不会造成太大的麻烦。配合下面的 iStar Menus 食用更加官网地址：https:&#x2F;&#x2F;www.macbartender.co">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601163902.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601163920.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601163937.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601163949.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164010.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164023.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164043.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164112.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164128.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164140.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164152.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164216.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164243.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164256.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164307.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164323.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164340.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164350.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164417.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164434.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164446.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164457.png">
+<meta property="article:published_time" content="2016-03-25T08:36:00.000Z">
+<meta property="article:modified_time" content="2020-06-01T08:45:15.233Z">
+<meta property="article:author" content="weican Li">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601163902.png">
+
+<link rel="canonical" href="http://yoursite.com/2016/03/25/iOS%E5%BC%80%E5%8F%91%E4%B8%AD%E4%B8%80%E4%BA%9B%E5%B0%8F%E5%B7%A5%E5%85%B7/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>iOS开发中一些小工具 | licc</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="licc" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">licc</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">我心有猛虎 细嗅蔷薇</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/03/25/iOS%E5%BC%80%E5%8F%91%E4%B8%AD%E4%B8%80%E4%BA%9B%E5%B0%8F%E5%B7%A5%E5%85%B7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/avatar.png">
+      <meta itemprop="name" content="weican Li">
+      <meta itemprop="description" content="iOS开发者">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="licc">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          iOS开发中一些小工具
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-03-25 16:36:00" itemprop="dateCreated datePublished" datetime="2016-03-25T16:36:00+08:00">2016-03-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-06-01 16:45:15" itemprop="dateModified" datetime="2020-06-01T16:45:15+08:00">2020-06-01</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>做iOS开发已经有几年了，中间也积累下了不少工具<br>做一个总结吧</p>
+<p><strong>一、Mac 菜单栏工具</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601163902.png" alt=""></p>
+<ul>
+<li>Bartender</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601163920.png" alt=""></p>
+<p>Barteder是一款优秀的菜单栏管理工具，可以把一些不常用的隐藏起来，将大量的菜单有选择折进 Bartender 的二级菜单，不仅会看起来更整洁，使用起来也不会造成太大的麻烦。配合下面的 <strong><em>iStar Menus</em></strong> 食用更加<br>官网地址：<a href="https://www.macbartender.com/" target="_blank" rel="noopener">https://www.macbartender.com/</a><br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601163937.png" alt=""></p>
+<ul>
+<li>iStar Menus</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601163949.png" alt=""><br>这个工具可以监测Mac的各种性能，并且可以就改样式颜色等。装逼利器之一~</p>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164010.png" alt=""><br>官网地址:<a href="https://bjango.com/mac/istatmenus/" target="_blank" rel="noopener">https://bjango.com/mac/istatmenus/</a></p>
+<ul>
+<li>Alfred2<br>神兵利器，工作流典范</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164023.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164043.png" alt=""><br>总之，只有你想不到没有你做不到<br>网上教程较多，有很多其他人写好的workflow，可以直接拿来使用<br>官方地址：<a href="https://www.alfredapp.com/" target="_blank" rel="noopener">https://www.alfredapp.com/</a></p>
+<p><strong><em>二、实用类 开发工具</em></strong></p>
+<ul>
+<li>Switcher<br>可以方便的切换各个国家的App Store，看在各区的排名和评论。国际化项目的开发利器</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164112.png" alt=""><br>安装地址：<a href="http://switchr.imagility.io/" target="_blank" rel="noopener">http://switchr.imagility.io/</a><br>浏览器打开，保存至桌面即可</p>
+<ul>
+<li>Sourcetree<br>git界面化工具，使用最多的软件了没啥好讲的</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164128.png" alt=""></p>
+<ul>
+<li>kaleidoscope</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164140.png" alt=""><br>配合Sourcetree使用用于多人开发时解决冲突使用，我会单独写一篇博客介绍其安装和使用</p>
+<ul>
+<li>PostMan</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164152.png" alt=""><br>Chorme插件<br>接口调试利器 ，发送各种请求，看接口的返回样式等等等<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164216.png" alt=""><br>安装： chorme应用商店搜索postman</p>
+<p><strong><em>需翻墙！！！<br>选择扩展程序那个安装</em></strong><br>下面有翻墙软件 往后翻<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164243.png" alt=""></p>
+<ul>
+<li>Lantern</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164256.png" alt=""><br>长城的存在是保护外国人的（笑），奈何做开发还是需要翻墙的<br>免费的！你懂得</p>
+<ul>
+<li>MarkMan<br>淘宝，鹅厂都在用的工具，取色量取尺寸神器，60软妹币一年，当然你可以不付费，不付费除了不能保存一切都一样。</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164307.png" alt=""></p>
+<ul>
+<li>Hex color picker<br>Xcode颜色神器，上面介绍了markman的取色功能，那么在开发中用代码赋值颜色多麻烦啊。因为我使用storyboard比较多，所以Hex color picker用到的比较多。<br>先放一个下载地址 <a href="https://pan.baidu.com/s/1dFM92Kx" target="_blank" rel="noopener">https://pan.baidu.com/s/1dFM92Kx</a></li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164323.png" alt=""><br>恩，大概就是这个样子，可以在storyboard中直接用16进制颜色赋值。<br>安装办法：把整个文件夹copy到资源库中（需要输入本机密码），文件夹命名为ColorPickers，然后重启Xcode即可</p>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164340.png" alt=""></p>
+<ul>
+<li>Chrales<br>抓包神器，不管是调试接口还是想看其他App的接口数据，都很好用（https加密暂时还没解密出来，目前只能看http接口）</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164350.png" alt=""><br>设置很简单，看你当前电脑本机IP，然后打开手机WiFi选项，点击当前连接WiFi后面的感叹号，进入设置界面，在HTTP代理那里选择手动，把电脑本机IP填进去，端口为8888.然后找一个使用http协议的App，看看其他人的接口设计吧~</p>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164417.png" alt=""><br>扔一个下载地址 链接: <a href="http://pan.baidu.com/s/1c27JcKK" target="_blank" rel="noopener">http://pan.baidu.com/s/1c27JcKK</a> 密码: kw27<br>（你懂的）</p>
+<p>Update 2016-10-17</p>
+<ul>
+<li>Tinypng<br>App瘦身利器，当App中的图片资源越来越多时候，App的体积也会越来越大。是时候给你App中内置的图片瘦身了。使用方便，只需拖图片进去在线即可压缩。<br>地址：<a href="https://tinypng.com/" target="_blank" rel="noopener">Tinypng</a></li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164434.png" alt=""><br>Update 2016-11-04</p>
+<ul>
+<li>Prepo<br>App图标裁剪软件，iOS10 以后图标有新增两个尺寸。不过这个软件依旧可以满足。UI操作简单，一键生成所有尺寸图标。只需让UI出一个<strong><em>1024x1024</em></strong>分辨率的图就好。</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164446.png" alt=""><br>上方还可以选择iOS7 +、 iPhoneOnly之类的筛选</p>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164457.png" alt=""><br>然后点击上方的Export导出即可</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2016/07/17/Apple%E5%BC%80%E5%8F%91%E8%B4%A6%E5%8F%B7%E7%BB%AD%E8%B4%B9%E6%B5%81%E7%A8%8B%E5%8F%8ATips%EF%BC%8817%E5%B9%B47%E6%9C%88%E6%9B%B4%E6%96%B0%EF%BC%89/" rel="next" title="Apple开发账号续费流程及Tips（17年7月更新）">
+      Apple开发账号续费流程及Tips（17年7月更新） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="weican Li"
+      src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/avatar.png">
+  <p class="site-author-name" itemprop="name">weican Li</p>
+  <div class="site-description" itemprop="description">iOS开发者</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/liweican1992" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;liweican1992" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:liweican1992@163.com" title="E-Mail → mailto:liweican1992@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">weican Li</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

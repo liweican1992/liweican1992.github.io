@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="简书旧文   推送服务在日常运营中至关重要，就算是大厂也经常发生推送事故。相信很多人都收到过名为“test”的推送信息。本篇将介绍如何在推送事故发生时“撤回”已发送的推送通知。   细心的用户会发现当微信消息被撤回或者视频请求被取消时，相应的推送信息也会消失不见。哪怕是微信没有在后台运行。 本人很是好奇，网上又没有查到有用的资料，今天花了点时间实现了类似的功能。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS APNs篇：挽救推送事故——如何“撤回”已发送的推送通知">
+<meta property="og:url" content="http://yoursite.com/2017/03/01/iOS-APNs%E7%AF%87%EF%BC%9A%E6%8C%BD%E6%95%91%E6%8E%A8%E9%80%81%E4%BA%8B%E6%95%85%E2%80%94%E2%80%94%E5%A6%82%E4%BD%95%E2%80%9C%E6%92%A4%E5%9B%9E%E2%80%9D%E5%B7%B2%E5%8F%91%E9%80%81%E7%9A%84%E6%8E%A8%E9%80%81%E9%80%9A%E7%9F%A5/index.html">
+<meta property="og:site_name" content="licc">
+<meta property="og:description" content="简书旧文   推送服务在日常运营中至关重要，就算是大厂也经常发生推送事故。相信很多人都收到过名为“test”的推送信息。本篇将介绍如何在推送事故发生时“撤回”已发送的推送通知。   细心的用户会发现当微信消息被撤回或者视频请求被取消时，相应的推送信息也会消失不见。哪怕是微信没有在后台运行。 本人很是好奇，网上又没有查到有用的资料，今天花了点时间实现了类似的功能。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601163016.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601163042.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601163058.png">
+<meta property="article:published_time" content="2017-03-01T08:29:00.000Z">
+<meta property="article:modified_time" content="2020-06-01T08:35:11.656Z">
+<meta property="article:author" content="weican Li">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601163016.png">
+
+<link rel="canonical" href="http://yoursite.com/2017/03/01/iOS-APNs%E7%AF%87%EF%BC%9A%E6%8C%BD%E6%95%91%E6%8E%A8%E9%80%81%E4%BA%8B%E6%95%85%E2%80%94%E2%80%94%E5%A6%82%E4%BD%95%E2%80%9C%E6%92%A4%E5%9B%9E%E2%80%9D%E5%B7%B2%E5%8F%91%E9%80%81%E7%9A%84%E6%8E%A8%E9%80%81%E9%80%9A%E7%9F%A5/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>iOS APNs篇：挽救推送事故——如何“撤回”已发送的推送通知 | licc</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="licc" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">licc</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">我心有猛虎 细嗅蔷薇</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/01/iOS-APNs%E7%AF%87%EF%BC%9A%E6%8C%BD%E6%95%91%E6%8E%A8%E9%80%81%E4%BA%8B%E6%95%85%E2%80%94%E2%80%94%E5%A6%82%E4%BD%95%E2%80%9C%E6%92%A4%E5%9B%9E%E2%80%9D%E5%B7%B2%E5%8F%91%E9%80%81%E7%9A%84%E6%8E%A8%E9%80%81%E9%80%9A%E7%9F%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/avatar.png">
+      <meta itemprop="name" content="weican Li">
+      <meta itemprop="description" content="iOS开发者">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="licc">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          iOS APNs篇：挽救推送事故——如何“撤回”已发送的推送通知
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-03-01 16:29:00" itemprop="dateCreated datePublished" datetime="2017-03-01T16:29:00+08:00">2017-03-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-06-01 16:35:11" itemprop="dateModified" datetime="2020-06-01T16:35:11+08:00">2020-06-01</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>简书旧文</p>
+</blockquote>
+<blockquote>
+<p>推送服务在日常运营中至关重要，就算是大厂也经常发生推送事故。相信很多人都收到过名为“test”的推送信息。本篇将介绍如何在推送事故发生时“撤回”已发送的推送通知。</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601163016.png" alt=""></p>
+<p>细心的用户会发现当微信消息被撤回或者视频请求被取消时，相应的推送信息也会消失不见。哪怕是微信没有在后台运行。</p>
+<p>本人很是好奇，网上又没有查到有用的资料，今天花了点时间实现了类似的功能。</p>
+<a id="more"></a>
+
+
+<p>那么如何实现呢，请往下看。</p>
+<ul>
+<li><h3 id="猜想其原理"><a href="#猜想其原理" class="headerlink" title="猜想其原理"></a>猜想其原理</h3></li>
+</ul>
+<p>“撤回”这里是打了引号的，我翻看了下APNs资料并没有找到撤回的接口。<br>关于详细的APNs介绍可以参考这里：<a href="http://www.jianshu.com/p/ace1b422bad4" target="_blank" rel="noopener">国内 90%以上的 iOS 开发者，对 APNs 的认识都是错的</a>。</p>
+<p>微信的消息提醒应该走的也是苹果的APNs通道，当微信在后台kill掉时候推送消息过来后再撤回，依旧可以“撤回”这个通知。但这时候App根本就没有在后台运行，<strong>那么应该还是走APNs通道来发一条新推送去除掉之前那条。</strong><br>用新推送来去除旧的推送，并且新推送不显示。那么方案应该就是<strong>静默推送（Silent Remote Notifications）</strong>了</p>
+<ul>
+<li><h3 id="静默推送"><a href="#静默推送" class="headerlink" title="静默推送"></a>静默推送</h3></li>
+</ul>
+<p>静默推送（Silent Remote Notifications）是iOS7以后的新特性。特色就是可以不打扰用户，无声音无角标悄无声息的唤醒App来进行一些更新操作。</p>
+<p>苹果官方文档如下</p>
+<blockquote>
+<p>Configuring a Silent Notification</p>
+</blockquote>
+<blockquote>
+<p>The aps dictionary can also contain the content-available property. The content-available property with a value of 1 lets the remote notification act as a silent notification. When a silent notification arrives, iOS wakes up your app in the background so that you can get new data from your server or do background information processing. Users aren’t told about the new or changed information that results from a silent notification, but they can find out about it the next time they open your app.</p>
+</blockquote>
+<blockquote>
+<p>For a silent notification, take care to ensure there is no alert, sound, or badge payload in the aps dictionary. If you don’t follow this guidance, the incorrectly-configured notification might be throttled and not delivered to the app in the background, and instead of being silent is displayed to the user.</p>
+</blockquote>
+<p>静默推送有一定的推送格式要求。首先不能有alert信息，如果有的话就变成普通推送了。其次APNs参数里面要有 <strong>content-available：1</strong></p>
+<p>下图是极光推送后台对静默推送的解释</p>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601163042.png" alt=""></p>
+<p><strong>静默推送和普通推送的区别就是不用用户点击推送信息即可进入didReceiveRemoteNotification方法获取推送信息，无论App是否在后台运行</strong></p>
+<figure class="highlight less"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">-</span> (void)<span class="selector-tag">application</span><span class="selector-pseudo">:(UIApplication</span> *)<span class="selector-tag">application</span> <span class="selector-tag">didReceiveRemoteNotification</span><span class="selector-pseudo">:(NSDictionary</span> *)<span class="selector-tag">userInfo</span> <span class="selector-tag">fetchCompletionHandler</span><span class="selector-pseudo">:(void</span> (^)(UIBackgroundFetchResult))<span class="selector-tag">completionHandler</span> &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>所以无论App是否在后台运行，我们都可以发送一个静默推送去让App处理一些事情。比如资讯类App每天定点推送让App后台静默更新当天的推荐文章。用户打开后不再需要加载就可以观看等等这类需求。</p>
+<p>静默推送收到以后，userInfo结构如下，你可以添加自定义参数去处理一些事情</p>
+<figure class="highlight abnf"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    aps =     &#123;</span><br><span class="line">        alert = <span class="string">""</span><span class="comment">;</span></span><br><span class="line">        <span class="string">"content-available"</span> = <span class="number">1</span><span class="comment">;</span></span><br><span class="line">        <span class="string">"mutable-content"</span> = <span class="number">1</span><span class="comment">;</span></span><br><span class="line">    &#125;<span class="comment">;</span></span><br><span class="line">    //自己自定义的参数</span><br><span class="line">    recall2 = true<span class="comment">;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>那么我自定义recall参数，<strong>当收到的APNs的userInfo中包含recall时候就代表我要清除所有角标和推送信息。这样就达到了“撤回”的效果</strong></p>
+<figure class="highlight less"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">-</span> (void)<span class="selector-tag">application</span><span class="selector-pseudo">:(UIApplication</span> *)<span class="selector-tag">application</span> <span class="selector-tag">didReceiveRemoteNotification</span><span class="selector-pseudo">:(NSDictionary</span> *)<span class="selector-tag">userInfo</span> <span class="selector-tag">fetchCompletionHandler</span><span class="selector-pseudo">:(void</span> (^)(UIBackgroundFetchResult))<span class="selector-tag">completionHandler</span> &#123;</span><br><span class="line">    <span class="selector-tag">if</span> (application.applicationState == UIApplicationStateActive) &#123;</span><br><span class="line">        <span class="selector-tag">NSLog</span>(@<span class="string">"App在前台运行时候收到推送,不处理"</span>);    </span><br><span class="line">        <span class="selector-tag">completionHandler</span>(UIBackgroundFetchResultNewData);</span><br><span class="line">        <span class="selector-tag">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="selector-tag">NSLog</span>(@<span class="string">"在后台运行点击推送或者静默推送"</span>);</span><br><span class="line">    <span class="selector-tag">if</span> ([userInfo <span class="attribute">objectForKey</span>:@<span class="string">"recall"</span>]) &#123;</span><br><span class="line">        <span class="selector-tag">NSLog</span>(@<span class="string">"撤回消息"</span>);</span><br><span class="line">        <span class="comment">//do nothing</span></span><br><span class="line">    &#125;<span class="selector-tag">else</span>&#123;</span><br><span class="line">         <span class="comment">//自己写的推送处理方法</span></span><br><span class="line">        <span class="selector-attr">[self didRegisterFormApnsWithInfo:userInfo]</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//去除角标 去除推送信息</span></span><br><span class="line">    <span class="selector-attr">[application setApplicationIconBadgeNumber:0]</span>;</span><br><span class="line">    <span class="selector-attr">[JPUSHService resetBadge]</span>;</span><br><span class="line">    <span class="selector-attr">[JPUSHService handleRemoteNotification:userInfo]</span>;</span><br><span class="line">    <span class="selector-tag">completionHandler</span>(UIBackgroundFetchResultNewData);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>真机运行，实测在后台运行和Kill掉都可以去除之前的推送信息，包括锁屏状态。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601163058.png" alt=""></p>
+<p>到此我们就实现了推送的“撤回”功能。从此妈妈再也不怕我发错推送啦,公司发错推送以后再也不用实习生背锅啦~</p>
+<blockquote>
+<p>注：以上解决方案只是个人猜想后实现的，如果你有更好的方案或解决机制，欢迎讨论~如果文章对你有帮助，点个赞再走呗🤔</p>
+</blockquote>
+<p>转载请注明出处，谢谢。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/07/17/Apple%E5%BC%80%E5%8F%91%E8%B4%A6%E5%8F%B7%E7%BB%AD%E8%B4%B9%E6%B5%81%E7%A8%8B%E5%8F%8ATips%EF%BC%8817%E5%B9%B47%E6%9C%88%E6%9B%B4%E6%96%B0%EF%BC%89/" rel="prev" title="Apple开发账号续费流程及Tips（17年7月更新）">
+      <i class="fa fa-chevron-left"></i> Apple开发账号续费流程及Tips（17年7月更新）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/05/07/Apple%E5%AE%A1%E6%A0%B8%E9%82%A3%E7%82%B9%E4%BA%8B%EF%BC%9A%E8%A2%AB%E6%8B%92%E5%90%8E%E5%A6%82%E4%BD%95%E7%94%B3%E8%AF%89/" rel="next" title="Apple审核那点事：被拒后如何申诉">
+      Apple审核那点事：被拒后如何申诉 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#猜想其原理"><span class="nav-text">猜想其原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#静默推送"><span class="nav-text">静默推送</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="weican Li"
+      src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/avatar.png">
+  <p class="site-author-name" itemprop="name">weican Li</p>
+  <div class="site-description" itemprop="description">iOS开发者</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/liweican1992" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;liweican1992" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:liweican1992@163.com" title="E-Mail → mailto:liweican1992@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">weican Li</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
