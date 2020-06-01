@@ -416,6 +416,276 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/08/Facebook-iOS-SDK-%E9%80%A0%E6%88%90%E5%A4%A7%E9%9D%A2%E7%A7%AF%E5%B4%A9%E6%BA%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/avatar.png">
+      <meta itemprop="name" content="weican Li">
+      <meta itemprop="description" content="iOS开发者">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="licc">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/05/08/Facebook-iOS-SDK-%E9%80%A0%E6%88%90%E5%A4%A7%E9%9D%A2%E7%A7%AF%E5%B4%A9%E6%BA%83/" class="post-title-link" itemprop="url">Facebook iOS SDK 造成大面积崩溃</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-05-08 14:28:00" itemprop="dateCreated datePublished" datetime="2020-05-08T14:28:00+08:00">2020-05-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-06-01 14:31:48" itemprop="dateModified" datetime="2020-06-01T14:31:48+08:00">2020-06-01</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>  一大早就接到警告，App崩溃率直线上升。赶紧定位错误，发现是崩在了Facebook SDK上面。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601142944.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601143021.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601143043.png" alt=""></p>
+<p>因为我们是海外项目。受影响最大，所以最先接到警告。<br>看了下，应该是Facebook SDK初始化时候就crash了，同时也有用户反馈App一启动就闪退。</p>
+<p>但是今天再测试（2020.05.08 北京时间），无法复现问题，看来已经被修复了。<br>去Github上围观了一下，影响范围可谓是巨大</p>
+<blockquote>
+<p>详见issue:<br><a href="https://github.com/facebook/facebook-ios-sdk/issues/1373" target="_blank" rel="noopener">https://github.com/facebook/facebook-ios-sdk/issues/1373</a><br><a href="https://github.com/facebook/facebook-ios-sdk/issues/1374" target="_blank" rel="noopener">https://github.com/facebook/facebook-ios-sdk/issues/1374</a></p>
+</blockquote>
+<p>官方也承认是SDK的问题。<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601143102.png" alt=""></p>
+<p>有人猜测是将Bool值放入了字典中<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601143112.png" alt=""></p>
+<p>问题已经解决，但是教训还是比较深刻的。任何改动上线前，一定要进行灰度测试。</p>
+<p>只是可惜了我们App的99.9%的稳定性 :(<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601143129.png" alt=""><br>参考链接 ：</p>
+<p><a href="https://www.theverge.com/2020/5/7/21250689/facebook-sdk-bug-ios-app-crash-apple-spotify-venmo-tiktok-tinder" target="_blank" rel="noopener">Why a small Facebook bug wreaked havoc on some of the most popular iOS apps
+</a><br><a href="https://www.thepaper.cn/newsDetail_forward_7301372" target="_blank" rel="noopener">小扎的Facebook，搞炸了几十万个iOS应用程序</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/iOS%E4%BD%BF%E7%94%A8Public-Link-%E8%BF%9B%E8%A1%8C%E5%A4%96%E9%83%A8%E6%B5%8B%E8%AF%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/avatar.png">
+      <meta itemprop="name" content="weican Li">
+      <meta itemprop="description" content="iOS开发者">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="licc">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/13/iOS%E4%BD%BF%E7%94%A8Public-Link-%E8%BF%9B%E8%A1%8C%E5%A4%96%E9%83%A8%E6%B5%8B%E8%AF%95/" class="post-title-link" itemprop="url">iOS使用Public Link 进行外部测试</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-03-13 14:33:00" itemprop="dateCreated datePublished" datetime="2020-03-13T14:33:00+08:00">2020-03-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-06-01 14:40:48" itemprop="dateModified" datetime="2020-06-01T14:40:48+08:00">2020-06-01</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>public link 是Apple 2018年推出的新功能，可以很低成本的进行外部灰度测试，并且可以零成本的测试内购功能</p>
+</blockquote>
+<p>  最近负责的项目进行了重大改版，准备申请Apple推荐。想先发个Beta版本给Apple的编辑人员看一下，也小范围的进行下灰度测试。最方便的办法就是通过Testflight进行测试。</p>
+<p>  还记得2017年时候申请推荐，发外部测试还需要手动的把Apple工作人员的邮箱添加进去。Apple在2018年推出的public link很好的解决了这个问题。</p>
+<blockquote>
+<p>公共链接可让您与开发团队外部的人员共享您的应用程序，而无需电子邮件或其他联系信息。您可以在社交媒体，消息传递平台，电子邮件活动等上共享公共链接，以扩大Beta测试的可见性。如果您没有一组成熟的外部测试人员，则使用公共链接可能是增加应用程序覆盖面并扩大测试受众的有效方法。</p>
+</blockquote>
+<p>具体的步骤其实都是官网可查，这里简单说一下</p>
+<ul>
+<li><h4 id="创建public-link"><a href="#创建public-link" class="headerlink" title="创建public link"></a>创建public link</h4></li>
+</ul>
+<p>打包上传到App Store后，等处理完成。去Testflight页面。创建一个新群组</p>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601143338.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601143428.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601143440.png" alt=""></p>
+<p>填写完审核信息后，就可以提交审核了。和平时发版的审核时间差不多。</p>
+<p>审核通过后就可以启用public link<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601143457.png" alt=""></p>
+<p>启用后可以设置最大测试人数，上限为10000人<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601143513.png" alt=""></p>
+<ul>
+<li><h4 id="分发public-link"><a href="#分发public-link" class="headerlink" title="分发public link"></a>分发public link</h4>拿到public link后，就可以发放给用户了</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601143609.png" alt=""></p>
+<p>用户点击开始测试，就会去往Testflight。如果没装会去Testflight下载页面。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601143634.png" alt=""></p>
+<p>用户接受后就可以正常安装了。同时在Testflight后台，能看到当前接受邀请人员的Apple ID</p>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601143656.png" alt=""></p>
+<ul>
+<li><h4 id="内购测试"><a href="#内购测试" class="headerlink" title="内购测试"></a>内购测试</h4></li>
+</ul>
+<p>如果你的App有内购项目，或者部分功能需要内购才能使用。分发链接时候要谨慎。<br>我们在内部Testflight测试时候，可以使用沙盒账户进行内购购买，当你使用public link进行外部测试时候。这个时候内购环境是一种特殊的内购环境。</p>
+<blockquote>
+<p>public link环境下，用户可以使用自己真实的Apple ID进行内购购买，且不会进行扣费。订阅项目同样不会进行续订</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601143722.png" alt=""></p>
+<blockquote>
+<p>参考资料:<br><a href="https://developer.apple.com/videos/play/wwdc2018/301/" target="_blank" rel="noopener">What’s New in App Store Connect</a><br><a href="https://developer.apple.com/testflight/" target="_blank" rel="noopener">使用TestFlight简化Beta测试</a><br><a href="https://help.apple.com/app-store-connect/#/dev859139543" target="_blank" rel="noopener">邀请外部测试员</a></p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/21/IAP-iOS%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E4%BF%83%E9%94%80%E4%BB%A3%E7%A0%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/avatar.png">
+      <meta itemprop="name" content="weican Li">
+      <meta itemprop="description" content="iOS开发者">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="licc">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/08/21/IAP-iOS%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E4%BF%83%E9%94%80%E4%BB%A3%E7%A0%81/" class="post-title-link" itemprop="url">[IAP]iOS如何使用促销代码</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-08-21 14:41:00" itemprop="dateCreated datePublished" datetime="2019-08-21T14:41:00+08:00">2019-08-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-06-01 14:46:09" itemprop="dateModified" datetime="2020-06-01T14:46:09+08:00">2020-06-01</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>最近项目上线了Vip订阅功能，包含连续包月和连续包年。上线后市场和运营同事问能不能给一些资深用户送几个月的会员，或者搞活动送会员。因为是海外项目，内购不需要用户系统（我们也没有用户系统）完全依赖Apple购买凭证。所以不能使用国内App那种服务端生成兑换码的做法。</p>
+</blockquote>
+<p>因为完全依赖Apple，所以还是要从Apple这边下手。自然而然想到了Apple的促销代码。<br>先看看什么是促销代码 <a href="https://help.apple.com/app-store-connect/#/dev50869de4a" target="_blank" rel="noopener">官方文档戳这里</a></p>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601144252.png" alt=""></p>
+<p>可以看到，促销代码是可以兑换内购项目的，并且订购一个自动续期的订阅并不会自动续费。</p>
+<ul>
+<li><h3 id="申请"><a href="#申请" class="headerlink" title="申请"></a>申请</h3>在App Store Connect后台找到了促销代码，点击你所需要兑换的内购项目，新增即可<br>具体的还是看 <a href="https://help.apple.com/app-store-connect/#/dev1e322b132" target="_blank" rel="noopener">官方文档</a></li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601144324.png" alt=""></p>
+<p>注意下申请出来的代码有时间限制，28天之内不用就会过期。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601144348.png" alt=""></p>
+<p>申请以后从历史记录中就可以看到代码，把这个神秘代码发给用户即可。<br>当然，一般用户都会一脸懵逼，不知道如何兑换</p>
+<ul>
+<li><h3 id="兑换"><a href="#兑换" class="headerlink" title="兑换"></a>兑换</h3><p>首先打开手机上的App Store，选中App那一栏，拖到底，点击兑换<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601144419.png" alt=""></p>
+<p>然后输入密码什么的一直继续</p>
+</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601144446.png" alt=""></p>
+<p>选中手动输入，输入之前申请的促销码</p>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601144515.png" alt=""></p>
+<p>用户如果之前下载过，就可以直接打开，未下载这里就是下载按钮。<br>打开App后发现会员已经生效，看日志确实收到了购买成功的回调。并且上报的购买价格是0</p>
+<blockquote>
+<p>这个方法同样可以测试线上的购买流程，上线后想回测下又舍不得花钱或者报销麻烦，都可以用这种方法测试</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/12/Widget%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -475,6 +745,112 @@
             </div>
           <!--/noindex-->
         
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/28/UIActivityViewController-%E5%9C%A8iOS11%E4%B8%8A%E7%9A%84%E5%9D%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/avatar.png">
+      <meta itemprop="name" content="weican Li">
+      <meta itemprop="description" content="iOS开发者">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="licc">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/11/28/UIActivityViewController-%E5%9C%A8iOS11%E4%B8%8A%E7%9A%84%E5%9D%91/" class="post-title-link" itemprop="url">UIActivityViewController 在iOS11上的坑</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-11-28 14:48:00" itemprop="dateCreated datePublished" datetime="2017-11-28T14:48:00+08:00">2017-11-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-06-01 14:51:39" itemprop="dateModified" datetime="2020-06-01T14:51:39+08:00">2020-06-01</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>最近在做针对国外用户的App，考虑到国外都是Facebook和Twitter等社交平台，所以考虑使用iOS系统中的原生分享。但是在iOS11上面遇到一些坑，遂记录一下。</p>
+</blockquote>
+<p>在iOS11以下的版本中，系统默认集成了社交账号的功能。但是在iOS11中内置的社交账号被移除了。并且在iOS11中废弃了一些方法。</p>
+<figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line">SOCIAL_EXTERN NSString *<span class="keyword">const</span> SLServiceTypeTwitter NS_DEPRECATED(<span class="number">10</span>_8, <span class="number">10</span>_13, <span class="number">6</span>_0, <span class="number">11</span>_0);</span><br><span class="line">SOCIAL_EXTERN NSString *<span class="keyword">const</span> SLServiceTypeFacebook NS_DEPRECATED(<span class="number">10</span>_8, <span class="number">10</span>_13, <span class="number">6</span>_0, <span class="number">11</span>_0);</span><br><span class="line">SOCIAL_EXTERN NSString *<span class="keyword">const</span> SLServiceTypeSinaWeibo NS_DEPRECATED(<span class="number">10</span>_8, <span class="number">10</span>_13, <span class="number">6</span>_0, <span class="number">11</span>_0);</span><br><span class="line">SOCIAL_EXTERN NSString *<span class="keyword">const</span> SLServiceTypeTencentWeibo NS_DEPRECATED(<span class="number">10</span>_8, <span class="number">10</span>_13, <span class="number">6</span>_0, <span class="number">11</span>_0);</span><br><span class="line">SOCIAL_EXTERN NSString *<span class="keyword">const</span> SLServiceTypeLinkedIn NS_DEPRECATED(<span class="number">10</span>_8, <span class="number">10</span>_13, <span class="number">6</span>_0, <span class="number">11</span>_0);</span><br></pre></td></tr></table></figure>
+<p>使用系统分享可以使用<code>UIActivityViewController</code>和<code>SLComposeViewController</code>。但是在iOS11中<code>SLComposeViewController</code>已经无法使用。</p>
+<figure class="highlight arduino"><table><tr><td class="code"><pre><span class="line">BOOL <span class="built_in">available</span> = [SLComposeViewController isAvailableForServiceType:SLServiceTypeSinaWeibo];</span><br><span class="line">  <span class="comment">//iOS11系统中使用这个方法应该所有平台都是NO</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="built_in">available</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>所以只能使用<code>UIActivityViewController</code>。使用系统的分享SDK好处还是很多的。不用再各个平台上申请账号，申请Key，设置白名单等等，只需几行代码就能优雅的实现分享功能。</p>
+<figure class="highlight objectivec"><table><tr><td class="code"><pre><span class="line"><span class="built_in">NSString</span> *textToShare = <span class="string">@"test titile"</span>;</span><br><span class="line"><span class="built_in">UIImage</span>* imageShare = [<span class="built_in">UIImage</span> imageNamed:<span class="string">@"logo"</span>];</span><br><span class="line"><span class="built_in">NSURL</span> *urlShare = [<span class="built_in">NSURL</span> URLWithString:<span class="string">@"https://www.youdao.com"</span>];</span><br><span class="line"><span class="built_in">NSArray</span> *activityItems = @[textToShare, imageShare, urlShare];</span><br><span class="line"><span class="built_in">UIActivityViewController</span> *actVC = [[<span class="built_in">UIActivityViewController</span> alloc] initWithActivityItems:activityItems applicationActivities:<span class="literal">nil</span>];</span><br><span class="line"><span class="comment">//excludedActivityTypes 是排除那些分享功能，数组里面的都不显示</span></span><br><span class="line">actVC.excludedActivityTypes = @[<span class="built_in">UIActivityTypeMessage</span>,<span class="built_in">UIActivityTypePrint</span>,<span class="built_in">UIActivityTypeSaveToCameraRoll</span>,<span class="built_in">UIActivityTypeAddToReadingList</span>,<span class="built_in">UIActivityTypePostToFlickr</span>,<span class="built_in">UIActivityTypePostToVimeo</span>,<span class="built_in">UIActivityTypeAirDrop</span>];</span><br><span class="line"><span class="comment">//区分iPad 和 iPhone</span></span><br><span class="line"><span class="keyword">if</span> (<span class="built_in">UI_USER_INTERFACE_IDIOM</span>() == <span class="built_in">UIUserInterfaceIdiomPad</span>) &#123;</span><br><span class="line">    actVC.popoverPresentationController.sourceView = <span class="keyword">self</span>.view;</span><br><span class="line">      [<span class="keyword">self</span> presentViewController:actVC animated:<span class="literal">YES</span> completion:<span class="literal">nil</span>];</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      [<span class="keyword">self</span> presentViewController:actVC animated:<span class="literal">YES</span> completion:<span class="literal">nil</span>];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  actVC.completionWithItemsHandler = ^(<span class="built_in">UIActivityType</span>  _Nullable activityType, <span class="built_in">BOOL</span> completed, <span class="built_in">NSArray</span> * _Nullable returnedItems, <span class="built_in">NSError</span> * _Nullable activityError) &#123;</span><br><span class="line">      <span class="built_in">NSLog</span>(<span class="string">@"===%@"</span>,returnedItems);</span><br><span class="line">  &#125;;</span><br></pre></td></tr></table></figure>
+
+
+<p>excludedActivityTypes是剔除那些分享功能，枚举如下</p>
+<figure class="highlight objectivec"><table><tr><td class="code"><pre><span class="line"><span class="built_in">UIKIT_EXTERN</span> <span class="built_in">NSString</span> *<span class="keyword">const</span> <span class="built_in">UIActivityTypePostToFacebook</span>     <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">6</span>_0) __TVOS_PROHIBITED;    <span class="comment">//发送到Facebook</span></span><br><span class="line"><span class="built_in">UIKIT_EXTERN</span> <span class="built_in">NSString</span> *<span class="keyword">const</span> <span class="built_in">UIActivityTypePostToTwitter</span>      <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">6</span>_0) __TVOS_PROHIBITED;    <span class="comment">//发送到Twitter</span></span><br><span class="line"><span class="built_in">UIKIT_EXTERN</span> <span class="built_in">NSString</span> *<span class="keyword">const</span> <span class="built_in">UIActivityTypePostToWeibo</span>        <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">6</span>_0) __TVOS_PROHIBITED;    <span class="comment">//发送到新浪微博</span></span><br><span class="line"><span class="built_in">UIKIT_EXTERN</span> <span class="built_in">NSString</span> *<span class="keyword">const</span> <span class="built_in">UIActivityTypeMessage</span>            <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">6</span>_0) __TVOS_PROHIBITED;    <span class="comment">//短信</span></span><br><span class="line"><span class="built_in">UIKIT_EXTERN</span> <span class="built_in">NSString</span> *<span class="keyword">const</span> <span class="built_in">UIActivityTypeMail</span>               <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">6</span>_0) __TVOS_PROHIBITED;    <span class="comment">//邮件</span></span><br><span class="line"><span class="built_in">UIKIT_EXTERN</span> <span class="built_in">NSString</span> *<span class="keyword">const</span> <span class="built_in">UIActivityTypePrint</span>              <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">6</span>_0) __TVOS_PROHIBITED;    <span class="comment">//打印</span></span><br><span class="line"><span class="built_in">UIKIT_EXTERN</span> <span class="built_in">NSString</span> *<span class="keyword">const</span> <span class="built_in">UIActivityTypeCopyToPasteboard</span>   <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">6</span>_0) __TVOS_PROHIBITED;    <span class="comment">//拷贝</span></span><br><span class="line"><span class="built_in">UIKIT_EXTERN</span> <span class="built_in">NSString</span> *<span class="keyword">const</span> <span class="built_in">UIActivityTypeAssignToContact</span>    <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">6</span>_0) __TVOS_PROHIBITED;    <span class="comment">//指定给联系人</span></span><br><span class="line"><span class="built_in">UIKIT_EXTERN</span> <span class="built_in">NSString</span> *<span class="keyword">const</span> <span class="built_in">UIActivityTypeSaveToCameraRoll</span>   <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">6</span>_0) __TVOS_PROHIBITED;    <span class="comment">//保存至相机胶卷</span></span><br><span class="line"><span class="built_in">UIKIT_EXTERN</span> <span class="built_in">NSString</span> *<span class="keyword">const</span> <span class="built_in">UIActivityTypeAddToReadingList</span>   <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">7</span>_0) __TVOS_PROHIBITED;    <span class="comment">//添加至阅读列表</span></span><br><span class="line"><span class="built_in">UIKIT_EXTERN</span> <span class="built_in">NSString</span> *<span class="keyword">const</span> <span class="built_in">UIActivityTypePostToFlickr</span>       <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">7</span>_0) __TVOS_PROHIBITED;    <span class="comment">//发送到Flickr(雅虎旗下图片分享网站)</span></span><br><span class="line"><span class="built_in">UIKIT_EXTERN</span> <span class="built_in">NSString</span> *<span class="keyword">const</span> <span class="built_in">UIActivityTypePostToVimeo</span>        <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">7</span>_0) __TVOS_PROHIBITED;    <span class="comment">//发送到Vimeo</span></span><br><span class="line"><span class="built_in">UIKIT_EXTERN</span> <span class="built_in">NSString</span> *<span class="keyword">const</span> <span class="built_in">UIActivityTypePostToTencentWeibo</span> <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">7</span>_0) __TVOS_PROHIBITED;    <span class="comment">//发送到腾讯微博</span></span><br><span class="line"><span class="built_in">UIKIT_EXTERN</span> <span class="built_in">NSString</span> *<span class="keyword">const</span> <span class="built_in">UIActivityTypeAirDrop</span>            <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">7</span>_0) __TVOS_PROHIBITED;    <span class="comment">//AirDrop</span></span><br><span class="line"><span class="built_in">UIKIT_EXTERN</span> <span class="built_in">NSString</span> *<span class="keyword">const</span> <span class="built_in">UIActivityTypeOpenInIBooks</span>       <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">9</span>_0) __TVOS_PROHIBITED;    <span class="comment">//在iBooks中打开</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>如果是iOS11以下的系统，上面的分享功能应该没什么问题。但是在iOS11上面出现了Twitter和Facebook都不能分享的问题（微信、微博等正常）。</p>
+</blockquote>
+<p>在iOS11上面分享这两个平台点击logo以后没有任何反应。下面开始排查问题。</p>
+<ul>
+<li><h5 id="猜想一：系统移除掉内置社交平台后，Twitter和Facebook的App没有更新"><a href="#猜想一：系统移除掉内置社交平台后，Twitter和Facebook的App没有更新" class="headerlink" title="猜想一：系统移除掉内置社交平台后，Twitter和Facebook的App没有更新"></a>猜想一：系统移除掉内置社交平台后，Twitter和Facebook的App没有更新</h5><p>升级手机中这两个App，<strong>更新后无效</strong>。但是找到了一些资料<br><a href="https://twittercommunity.com/t/bug-in-ios-11/91490/9" target="_blank" rel="noopener">Twitter - Developers:Bug in iOS 11?</a><br>Twitter 官方说已经针对iOS11进行了更新适配</p>
+</li>
+<li><h5 id="猜想二：国内特供版？接口封掉了"><a href="#猜想二：国内特供版？接口封掉了" class="headerlink" title="猜想二：国内特供版？接口封掉了"></a>猜想二：国内特供版？接口封掉了</h5><p>iOS10上面一切正常，但是考虑到iOS11系统的改变，所以删掉中国App Store下载的App，登录美国App Store 账号下载这两个App。打开后依旧。<strong>无效</strong></p>
+<blockquote>
+<p>此时发现系统相册中的分享，点击Facebook和Twitter也无反应。所以应该和App无关</p>
+</blockquote>
+</li>
+<li><h5 id="猜想三：Great-Wall"><a href="#猜想三：Great-Wall" class="headerlink" title="猜想三：Great Wall"></a>猜想三：Great Wall</h5><p>香港的朋友试试他的手机。<strong>依旧无解</strong></p>
+</li>
+<li><h5 id="猜想四：iOS11系统版本bug，没更新"><a href="#猜想四：iOS11系统版本bug，没更新" class="headerlink" title="猜想四：iOS11系统版本bug，没更新"></a>猜想四：iOS11系统版本bug，没更新</h5><p>都更新到最新的iOS11.1.2(正式版)。<strong>问题依旧</strong></p>
+</li>
+<li><h5 id="猜想五：手机的原因，因为是国行"><a href="#猜想五：手机的原因，因为是国行" class="headerlink" title="猜想五：手机的原因，因为是国行"></a>猜想五：手机的原因，因为是国行</h5><p>以上几种情况使用了不同的机型测试，但是都是国行手机。但是现在都是全网通并且国外卖的手机也都是大陆产的，所以一开始就没考虑这个。以上猜想都否决以后开始想到这个原因。<br>找了一圈，最后测试发现</p>
+<blockquote>
+<p>印度买的iPhone 5S在iOS11上分享Facebook和Twitter 成功<br>日本买的iPhone 8 Plus 在iOS11上面分享成功<br>并且iOS11的系统有11.1.2和11.1.0的</p>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<p>所以最后结论是在iOS11上面移除掉了系统内置分享后，国行手机对Facebook 和Twitter 的原生分享都失效了。但是除了国行以外的手机应该都没问题。</p>
+</blockquote>
+<h5 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h5><p>只有自己接入Facebook和Twitter的SDK，去官网注册key不再使用系统的。<br>但是考虑到我们的用户群都是外国人，国行手机占有率很低，所以我们忽略了这个Bug(如果是Bug的话)，毕竟国内常用的微信、微博、QQ一切正常。</p>
+<p>这个问题我会持续追踪，看看后期系统更新会不会解决这个问题。另外我也在Twitter官网上提问了。目前为止还没有回应。</p>
+<p><a href="https://twittercommunity.com/t/in-ios11-use-uiactivityviewcontroller-to-share-have-no-reaction/97486" target="_blank" rel="noopener">In iOS11,Use UIActivityViewController to share have no reaction</a></p>
+
       
     </div>
 
@@ -636,7 +1012,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">9</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
