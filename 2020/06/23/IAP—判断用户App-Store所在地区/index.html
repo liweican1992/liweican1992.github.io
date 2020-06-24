@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="最近一年的工作重心都在海外订阅项目上。ROI数据还不错，所以AB测试越做越多。近期要实现一个根据国家和地区来下发不同的SKU的需求。记录一下。  判断用户的国家和地区可以简化为判断用户Apple ID的地区，也就是App Store地区。 上次和Apple交流，问了这个为问题。告知并没有提供相关API，原因是你App所选的销售地区就是你内购提供的地区，用户可以转区，转区后所订阅的项目也能在新地区">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SKStorefront—判断用户App Store所在地区">
+<meta property="og:url" content="http://yoursite.com/2020/06/23/IAP%E2%80%94%E5%88%A4%E6%96%AD%E7%94%A8%E6%88%B7App-Store%E6%89%80%E5%9C%A8%E5%9C%B0%E5%8C%BA/index.html">
+<meta property="og:site_name" content="licc">
+<meta property="og:description" content="最近一年的工作重心都在海外订阅项目上。ROI数据还不错，所以AB测试越做越多。近期要实现一个根据国家和地区来下发不同的SKU的需求。记录一下。  判断用户的国家和地区可以简化为判断用户Apple ID的地区，也就是App Store地区。 上次和Apple交流，问了这个为问题。告知并没有提供相关API，原因是你App所选的销售地区就是你内购提供的地区，用户可以转区，转区后所订阅的项目也能在新地区">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200623231316.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200623232654.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200624111003.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200624161049.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200624151437.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200624161330.png">
+<meta property="article:published_time" content="2020-06-23T12:53:36.000Z">
+<meta property="article:modified_time" content="2020-06-24T08:29:04.325Z">
+<meta property="article:author" content="weican Li">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200623231316.png">
+
+<link rel="canonical" href="http://yoursite.com/2020/06/23/IAP%E2%80%94%E5%88%A4%E6%96%AD%E7%94%A8%E6%88%B7App-Store%E6%89%80%E5%9C%A8%E5%9C%B0%E5%8C%BA/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>SKStorefront—判断用户App Store所在地区 | licc</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="licc" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">licc</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">我心有猛虎 细嗅蔷薇</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/23/IAP%E2%80%94%E5%88%A4%E6%96%AD%E7%94%A8%E6%88%B7App-Store%E6%89%80%E5%9C%A8%E5%9C%B0%E5%8C%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/avatar.png">
+      <meta itemprop="name" content="weican Li">
+      <meta itemprop="description" content="iOS开发者">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="licc">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SKStorefront—判断用户App Store所在地区
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-06-23 20:53:36" itemprop="dateCreated datePublished" datetime="2020-06-23T20:53:36+08:00">2020-06-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-06-24 16:29:04" itemprop="dateModified" datetime="2020-06-24T16:29:04+08:00">2020-06-24</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>最近一年的工作重心都在海外订阅项目上。ROI数据还不错，所以AB测试越做越多。<br>近期要实现一个根据国家和地区来下发不同的SKU的需求。记录一下。</p>
+</blockquote>
+<p>判断用户的国家和地区可以简化为判断用户Apple ID的地区，也就是App Store地区。</p>
+<p>上次和Apple交流，问了这个为问题。告知并没有提供相关API，原因是你App所选的销售地区就是你内购提供的地区，用户可以转区，转区后所订阅的项目也能在新地区提供。</p>
+<p><strong>但是我记得WWDC 2019中，介绍了一个iOS13新增的API，可以监听App Store地区的变化。</strong></p>
+<p>WWDC详见：</p>
+<p><a href="https://developer.apple.com/videos/play/wwdc2019/302/?time=129" target="_blank" rel="noopener">《In-App Purchases and Using Server-to-Server Notifications》
+</a></p>
+<p>新增的API是<code>SKStorefront</code></p>
+<h2 id="SKStorefront"><a href="#SKStorefront" class="headerlink" title="SKStorefront"></a>SKStorefront</h2><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200623231316.png" alt=""></p>
+<p>官方文档见：<br><a href="https://developer.apple.com/documentation/storekit/skstorefront" target="_blank" rel="noopener">https://developer.apple.com/documentation/storekit/skstorefront</a></p>
+<p>获取地区代码</p>
+<figure class="highlight arduino"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="meta">#available(iOS 13.0, *) &#123;</span></span><br><span class="line">    <span class="built_in">print</span>(SKPaymentQueue.<span class="keyword">default</span>().storefront?.countryCode ?? <span class="string">""</span>)</span><br><span class="line"> &#125; <span class="keyword">else</span> &#123;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>注意有可能为nil</p>
+<p>countryCode使用的是ISO 3166-1 Alpha-3代码</p>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200623232654.png" alt=""></p>
+<p>SKStorefront还可以通过<code>paymentQueueDidChangeStorefront</code>监听App Store地区的变化</p>
+<figure class="highlight reasonml"><table><tr><td class="code"><pre><span class="line">func payment<span class="constructor">QueueDidChangeStorefront(<span class="params">_</span> <span class="params">queue</span>: SKPaymentQueue)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> storefront = queue.storefront &#123;</span><br><span class="line">        <span class="comment">// Refresh the displayed products based on the new storefront.</span></span><br><span class="line">        for product <span class="keyword">in</span> storeProducts &#123;</span><br><span class="line">            <span class="keyword">if</span> should<span class="constructor">Show(<span class="params">product</span>.<span class="params">productIdentifier</span>, <span class="params">in</span>: <span class="params">storefront</span>)</span> &#123;</span><br><span class="line">                <span class="comment">// Display this product in your store UI.</span></span><br><span class="line">         &#125;</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Apple官方文档说SKStorefront随时可能变化，甚至是在购买过程中，因此新增了一个代理方法<code>paymentQueue:shouldContinueTransaction:inStorefront:</code><br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200624111003.png" alt=""><br>此方法的作用是在购买时候发生SKStorefront变化,可以判断要不要继续执行这个Transaction。</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="type">SKPaymentQueue</span>.<span class="keyword">default</span>().delegate = <span class="keyword">self</span>  <span class="comment">// Set your object as the SKPaymentQueue delegate.</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">paymentQueue</span><span class="params">(<span class="number">_</span> paymentQueue: SKPaymentQueue,</span></span></span><br><span class="line"><span class="function"><span class="params">                  shouldContinue transaction: SKPaymentTransaction,</span></span></span><br><span class="line"><span class="function"><span class="params">                  <span class="keyword">in</span> newStorefront: SKStorefront)</span></span> -&gt; <span class="type">Bool</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> shouldShow(transaction.payment.productIdentifier, <span class="keyword">in</span>: newStorefront)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果此地区不支持购买<code>paymentQueue:shouldContinueTransaction:inStorefront:</code>返回<code>false</code>。在Transaction回调中就会收到一个<code>SKErrorStoreProductNotAvailable</code>的Error信息</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">paymentQueue</span><span class="params">(<span class="number">_</span> queue: SKPaymentQueue,</span></span></span><br><span class="line"><span class="function"><span class="params">                  updatedTransactions transactions: [SKPaymentTransaction])</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> transaction <span class="keyword">in</span> transactions &#123;</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">let</span> transactionError = transaction.error <span class="keyword">as</span> <span class="type">NSError?</span>,</span><br><span class="line">            transactionError.domain == <span class="type">SKErrorDomain</span></span><br><span class="line">            &amp;&amp; transactionError.code == <span class="type">SKError</span>.storeProductNotAvailable.rawValue &#123;</span><br><span class="line">            <span class="comment">// Show an alert.</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是<code>SKStorefront</code>只支持iOS13+，并不满足我们的需求。因此还要想别的办法。</p>
+<h2 id="通用做法"><a href="#通用做法" class="headerlink" title="通用做法"></a>通用做法</h2><p> 我们的需求是根据国家和地区，下发不同比例的SKU,不存在这个SKU只在这个地区销售的情况。<strong>因为订阅类型的SKU，用户可以在订阅管理里面切换套餐</strong></p>
+<p> 我的做法是从SKU价格处理入手，因为我们是海外项目，在全球销售。所以要要呈现用户所在地区的价格和货币。可以通过<code>NumberFormatter</code>进行转换<br> <figure class="highlight reasonml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> formatter = <span class="module-access"><span class="module"><span class="identifier">NumberFormatter</span>.</span></span>init<span class="literal">()</span></span><br><span class="line">formatter.formatterBehavior = <span class="module-access"><span class="module"><span class="identifier">NumberFormatter</span>.</span><span class="module"><span class="identifier">Behavior</span>.</span></span>behavior10_4</span><br><span class="line">formatter.numberStyle = <span class="module-access"><span class="module"><span class="identifier">NumberFormatter</span>.</span><span class="module"><span class="identifier">Style</span>.</span></span>currency</span><br><span class="line"><span class="comment">//SKProduct中有priceLocale</span></span><br><span class="line">formatter.locale = product!.priceLocale</span><br><span class="line"><span class="keyword">let</span> price :String = formatter.<span class="built_in">string</span>(from: self.product!.price) ?? <span class="string">"$4.99"</span></span><br></pre></td></tr></table></figure></p>
+<p> 从上述代码可以看到，SKProduct中有个<code>priceLocale</code>属性，赋值给NumberFormatter后可以对价格进行处理。</p>
+<p>priceLocale是Local类型（OC中是NSLocal）</p>
+<p> <img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200624161049.png" alt=""></p>
+<p> Local中有<code>identifier</code>、<code>regionCode</code>等属性。<code>regionCode</code>代表的就是地区，可能为nil，<code>identifier</code>是标识符，是一个字符串。</p>
+<p> 下图是App Store切换到澳大利亚地区，打印的结果<br> <img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200624151437.png" alt=""><br> 下图是美国<br> <img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200624161330.png" alt=""></p>
+<p> 但是regionCode可能为nil，所以要做下判断，当regionCode为nil时候使用identifier，或者跟着业务逻辑调整。</p>
+<p> identifier的格式一般是都是固定的，可以根据@符分割，拿到前面的<code>语言_地区</code>的值。</p>
+<blockquote>
+<p>如何快速切换App Store地区可以看我之前写的这篇文章<a href="http://leevcan.com/2016/03/25/iOS%E5%BC%80%E5%8F%91%E4%B8%AD%E4%B8%80%E4%BA%9B%E5%B0%8F%E5%B7%A5%E5%85%B7/" target="_blank" rel="noopener">《iOS开发中一些小工具》</a> 使用Switcher这个工具。安装地址：<a href="http://switchr.imagility.io/" target="_blank" rel="noopener">http://switchr.imagility.io/</a></p>
+</blockquote>
+<p>这个办法必须先获取一个可用的<code>SKProduct</code>,并不能在请求<code>SKProduct</code>之前拿到地区。所以还是有一定的局限性。</p>
+<p>我一般是在<code>productsRequest:didReceiveResponse:</code>回调中，拿到一个<code>SKProduct</code>获取到地区后就存起来。有个这个参数也可以在埋点上报中用到，标明用户的App Store地区。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/05/30/%E4%BB%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90Swift%E5%A4%9A%E7%BA%BF%E7%A8%8B%E2%80%94DispatchGroup/" rel="prev" title="从源码分析Swift多线程—DispatchGroup">
+      <i class="fa fa-chevron-left"></i> 从源码分析Swift多线程—DispatchGroup
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#SKStorefront"><span class="nav-text">SKStorefront</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通用做法"><span class="nav-text">通用做法</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="weican Li"
+      src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/avatar.png">
+  <p class="site-author-name" itemprop="name">weican Li</p>
+  <div class="site-description" itemprop="description">iOS开发者</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/liweican1992" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;liweican1992" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:liweican1992@163.com" title="E-Mail → mailto:liweican1992@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">weican Li</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
