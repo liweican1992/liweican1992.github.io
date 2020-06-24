@@ -20,30 +20,38 @@
     var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="iOS开发者">
-<meta property="og:type" content="website">
-<meta property="og:title" content="licc">
-<meta property="og:url" content="http://yoursite.com/page/2/index.html">
+  <meta name="description" content="iOS10已经发了，最近发现App在iOS10上有一些问题，主要是iOS10的字体变了，一些Label要做适配。还有一些相机权限之类的。更加详细的可以参考这篇文章https:&#x2F;&#x2F;github.com&#x2F;ChenYilong&#x2F;iOS10AdaptationTips   之前一直纠结要不要升级Xcode8，毕竟好多插件都不能用了，还有用Xcode7打包的App在iOS10上运行能不能收到推送，经过一天的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Xcode8 和iOS10 做APNS适配的一些坑">
+<meta property="og:url" content="http://yoursite.com/2016/09/21/Xcode8-%E5%92%8CiOS10-%E5%81%9AAPNS%E9%80%82%E9%85%8D%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9D%91/index.html">
 <meta property="og:site_name" content="licc">
-<meta property="og:description" content="iOS开发者">
+<meta property="og:description" content="iOS10已经发了，最近发现App在iOS10上有一些问题，主要是iOS10的字体变了，一些Label要做适配。还有一些相机权限之类的。更加详细的可以参考这篇文章https:&#x2F;&#x2F;github.com&#x2F;ChenYilong&#x2F;iOS10AdaptationTips   之前一直纠结要不要升级Xcode8，毕竟好多插件都不能用了，还有用Xcode7打包的App在iOS10上运行能不能收到推送，经过一天的">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200624235419.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200624235524.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200624235914.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200625000350.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200625000434.png">
+<meta property="article:published_time" content="2016-09-21T12:50:00.000Z">
+<meta property="article:modified_time" content="2020-06-24T16:05:35.822Z">
 <meta property="article:author" content="weican Li">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200624235419.png">
 
-<link rel="canonical" href="http://yoursite.com/page/2/">
+<link rel="canonical" href="http://yoursite.com/2016/09/21/Xcode8-%E5%92%8CiOS10-%E5%81%9AAPNS%E9%80%82%E9%85%8D%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9D%91/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'en'
   };
 </script>
 
-  <title>licc</title>
+  <title>Xcode8 和iOS10 做APNS适配的一些坑 | licc</title>
   
 
 
@@ -143,165 +151,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/07/Apple%E5%AE%A1%E6%A0%B8%E9%82%A3%E7%82%B9%E4%BA%8B%EF%BC%9A%E8%A2%AB%E6%8B%92%E5%90%8E%E5%A6%82%E4%BD%95%E7%94%B3%E8%AF%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/avatar.png">
-      <meta itemprop="name" content="weican Li">
-      <meta itemprop="description" content="iOS开发者">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="licc">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/05/07/Apple%E5%AE%A1%E6%A0%B8%E9%82%A3%E7%82%B9%E4%BA%8B%EF%BC%9A%E8%A2%AB%E6%8B%92%E5%90%8E%E5%A6%82%E4%BD%95%E7%94%B3%E8%AF%89/" class="post-title-link" itemprop="url">Apple审核那点事：被拒后如何申诉</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2017-05-07 16:02:00" itemprop="dateCreated datePublished" datetime="2017-05-07T16:02:00+08:00">2017-05-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-06-01 16:35:04" itemprop="dateModified" datetime="2020-06-01T16:35:04+08:00">2020-06-01</time>
-              </span>
-
-          
-
-        </div>
-      </header>
 
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>随着Apple审核时间的大大加快，确实造福了我们这些苦逼的开发者。今天主要聊一些审核被拒以后如果中间存在误会什么的，如何向苹果申诉。<br>  关于申诉，我之前的博客就提及过，详见： <a href="http://www.cnblogs.com/cc412/p/5006029.html" target="_blank" rel="noopener">关于审核被拒申诉那点事</a><br>  但是考虑到时间这么久了，有一些规则可能发生变化，就再重新开一篇。</p>
-</blockquote>
-<p>  苹果的审核总是充满了随机性，之前用的好好的一个功能就会忽然告诉你不符合他们的标准了。这次提交审核总共被拒绝了两次，第一次是因为版本号，第二次因为服务器机房挂了。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601160409.png" alt=""></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2017/05/07/Apple%E5%AE%A1%E6%A0%B8%E9%82%A3%E7%82%B9%E4%BA%8B%EF%BC%9A%E8%A2%AB%E6%8B%92%E5%90%8E%E5%A6%82%E4%BD%95%E7%94%B3%E8%AF%89/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/01/iOS-APNs%E7%AF%87%EF%BC%9A%E6%8C%BD%E6%95%91%E6%8E%A8%E9%80%81%E4%BA%8B%E6%95%85%E2%80%94%E2%80%94%E5%A6%82%E4%BD%95%E2%80%9C%E6%92%A4%E5%9B%9E%E2%80%9D%E5%B7%B2%E5%8F%91%E9%80%81%E7%9A%84%E6%8E%A8%E9%80%81%E9%80%9A%E7%9F%A5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/avatar.png">
-      <meta itemprop="name" content="weican Li">
-      <meta itemprop="description" content="iOS开发者">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="licc">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/03/01/iOS-APNs%E7%AF%87%EF%BC%9A%E6%8C%BD%E6%95%91%E6%8E%A8%E9%80%81%E4%BA%8B%E6%95%85%E2%80%94%E2%80%94%E5%A6%82%E4%BD%95%E2%80%9C%E6%92%A4%E5%9B%9E%E2%80%9D%E5%B7%B2%E5%8F%91%E9%80%81%E7%9A%84%E6%8E%A8%E9%80%81%E9%80%9A%E7%9F%A5/" class="post-title-link" itemprop="url">iOS APNs篇：挽救推送事故——如何“撤回”已发送的推送通知</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2017-03-01 16:29:00" itemprop="dateCreated datePublished" datetime="2017-03-01T16:29:00+08:00">2017-03-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-06-01 16:35:11" itemprop="dateModified" datetime="2020-06-01T16:35:11+08:00">2020-06-01</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>简书旧文</p>
-</blockquote>
-<blockquote>
-<p>推送服务在日常运营中至关重要，就算是大厂也经常发生推送事故。相信很多人都收到过名为“test”的推送信息。本篇将介绍如何在推送事故发生时“撤回”已发送的推送通知。</p>
-</blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601163016.png" alt=""></p>
-<p>细心的用户会发现当微信消息被撤回或者视频请求被取消时，相应的推送信息也会消失不见。哪怕是微信没有在后台运行。</p>
-<p>本人很是好奇，网上又没有查到有用的资料，今天花了点时间实现了类似的功能。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2017/03/01/iOS-APNs%E7%AF%87%EF%BC%9A%E6%8C%BD%E6%95%91%E6%8E%A8%E9%80%81%E4%BA%8B%E6%95%85%E2%80%94%E2%80%94%E5%A6%82%E4%BD%95%E2%80%9C%E6%92%A4%E5%9B%9E%E2%80%9D%E5%B7%B2%E5%8F%91%E9%80%81%E7%9A%84%E6%8E%A8%E9%80%81%E9%80%9A%E7%9F%A5/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
@@ -317,10 +170,9 @@
       <meta itemprop="name" content="licc">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/09/21/Xcode8-%E5%92%8CiOS10-%E5%81%9AAPNS%E9%80%82%E9%85%8D%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9D%91/" class="post-title-link" itemprop="url">Xcode8 和iOS10 做APNS适配的一些坑</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          Xcode8 和iOS10 做APNS适配的一些坑
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -350,7 +202,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>iOS10已经发了，最近发现App在iOS10上有一些问题，主要是iOS10的字体变了，一些Label要做适配。还有一些相机权限之类的。更加详细的可以参考这篇文章<br><a href="https://github.com/ChenYilong/iOS10AdaptationTips" target="_blank" rel="noopener">https://github.com/ChenYilong/iOS10AdaptationTips</a></p>
+        <p>iOS10已经发了，最近发现App在iOS10上有一些问题，主要是iOS10的字体变了，一些Label要做适配。还有一些相机权限之类的。更加详细的可以参考这篇文章<br><a href="https://github.com/ChenYilong/iOS10AdaptationTips" target="_blank" rel="noopener">https://github.com/ChenYilong/iOS10AdaptationTips</a></p>
 <p>  之前一直纠结要不要升级Xcode8，毕竟好多插件都不能用了，还有用Xcode7打包的App在iOS10上运行能不能收到推送，经过一天的测试。结果如下：<br>  以下结果是我用极光推送测试的结果（JPush）</p>
 <h4 id="Xcode7打包的App能不能再iOS10上收到推送？"><a href="#Xcode7打包的App能不能再iOS10上收到推送？" class="headerlink" title="Xcode7打包的App能不能再iOS10上收到推送？"></a>Xcode7打包的App能不能再iOS10上收到推送？</h4><p>  答案：可以的，能够收到推送。但是点击推送或者从推送启动App之前的方法不再响应。</p>
 <figure class="highlight less"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">-</span> (void)<span class="selector-tag">application</span><span class="selector-pseudo">:(UIApplication</span> *)<span class="selector-tag">application</span> <span class="selector-tag">didReceiveRemoteNotification</span><span class="selector-pseudo">:(NSDictionary</span> *)<span class="selector-tag">userInfo</span> <span class="selector-tag">fetchCompletionHandler</span><span class="selector-pseudo">:(void</span> (^)(UIBackgroundFetchResult))<span class="selector-tag">completionHandler</span> &#123;</span><br><span class="line">  <span class="comment">//iOS7以后收到推送 推送结果会在这里响应 </span></span><br><span class="line">  <span class="comment">//iOS10 以后不再响应这里</span></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
@@ -385,188 +237,34 @@
 <p>有趣的是iOS10当App正在运行时候也可以在上方弹出推送框</p>
 </blockquote>
 
-      
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/17/Apple%E5%BC%80%E5%8F%91%E8%B4%A6%E5%8F%B7%E7%BB%AD%E8%B4%B9%E6%B5%81%E7%A8%8B%E5%8F%8ATips%EF%BC%8817%E5%B9%B47%E6%9C%88%E6%9B%B4%E6%96%B0%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/avatar.png">
-      <meta itemprop="name" content="weican Li">
-      <meta itemprop="description" content="iOS开发者">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="licc">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/07/17/Apple%E5%BC%80%E5%8F%91%E8%B4%A6%E5%8F%B7%E7%BB%AD%E8%B4%B9%E6%B5%81%E7%A8%8B%E5%8F%8ATips%EF%BC%8817%E5%B9%B47%E6%9C%88%E6%9B%B4%E6%96%B0%EF%BC%89/" class="post-title-link" itemprop="url">Apple开发账号续费流程及Tips（17年7月更新）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2016-07-17 16:47:00" itemprop="dateCreated datePublished" datetime="2016-07-17T16:47:00+08:00">2016-07-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-06-01 14:22:52" itemprop="dateModified" datetime="2020-06-01T14:22:52+08:00">2020-06-01</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>此文为简书旧文</p>
-</blockquote>
-<p>最近公司开发者账号马上到期了，需要进行续费工作。现在记录一下流程和遇到的一些坑。<br>  首先登陆开发者中心<a href="https://developer.apple.com/" target="_blank" rel="noopener">https://developer.apple.com/</a><br>  选择右上方的Account,然后输入账号和密码。<strong><em>进入后如果过期时间小于30天，在首页会给你一个小弹窗告诉你要续费。</em></strong></p>
-<blockquote>
-<p>update<br>补充下图片，当还有一个月过期时候，登录iTunes Connect 或者开发者中心都会有提示信息</p>
-</blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601141646.png" alt=""></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2016/07/17/Apple%E5%BC%80%E5%8F%91%E8%B4%A6%E5%8F%B7%E7%BB%AD%E8%B4%B9%E6%B5%81%E7%A8%8B%E5%8F%8ATips%EF%BC%8817%E5%B9%B47%E6%9C%88%E6%9B%B4%E6%96%B0%EF%BC%89/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
 
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/03/25/iOS%E5%BC%80%E5%8F%91%E4%B8%AD%E4%B8%80%E4%BA%9B%E5%B0%8F%E5%B7%A5%E5%85%B7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/avatar.png">
-      <meta itemprop="name" content="weican Li">
-      <meta itemprop="description" content="iOS开发者">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="licc">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/03/25/iOS%E5%BC%80%E5%8F%91%E4%B8%AD%E4%B8%80%E4%BA%9B%E5%B0%8F%E5%B7%A5%E5%85%B7/" class="post-title-link" itemprop="url">iOS开发中一些小工具</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2016-03-25 16:36:00" itemprop="dateCreated datePublished" datetime="2016-03-25T16:36:00+08:00">2016-03-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-06-02 10:56:22" itemprop="dateModified" datetime="2020-06-02T10:56:22+08:00">2020-06-02</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>做iOS开发已经有几年了，中间也积累下了不少工具<br>做一个总结吧</p>
-<p><strong>一、Mac 菜单栏工具</strong></p>
-<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601163902.png" alt=""></p>
-<ul>
-<li>Bartender</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601163920.png" alt=""></p>
-<p>Barteder是一款优秀的菜单栏管理工具，可以把一些不常用的隐藏起来，将大量的菜单有选择折进 Bartender 的二级菜单，不仅会看起来更整洁，使用起来也不会造成太大的麻烦。配合下面的 <strong><em>iStar Menus</em></strong> 食用更加<br>官网地址：<a href="https://www.macbartender.com/" target="_blank" rel="noopener">https://www.macbartender.com/</a><br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601163937.png" alt=""></p>
-<ul>
-<li>iStar Menus</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601163949.png" alt=""><br>这个工具可以监测Mac的各种性能，并且可以就改样式颜色等。装逼利器之一~</p>
-<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164010.png" alt=""><br>官网地址:<a href="https://bjango.com/mac/istatmenus/" target="_blank" rel="noopener">https://bjango.com/mac/istatmenus/</a></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2016/03/25/iOS%E5%BC%80%E5%8F%91%E4%B8%AD%E4%B8%80%E4%BA%9B%E5%B0%8F%E5%B7%A5%E5%85%B7/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/07/17/Apple%E5%BC%80%E5%8F%91%E8%B4%A6%E5%8F%B7%E7%BB%AD%E8%B4%B9%E6%B5%81%E7%A8%8B%E5%8F%8ATips%EF%BC%8817%E5%B9%B47%E6%9C%88%E6%9B%B4%E6%96%B0%EF%BC%89/" rel="prev" title="Apple开发账号续费流程及Tips（17年7月更新）">
+      <i class="fa fa-chevron-left"></i> Apple开发账号续费流程及Tips（17年7月更新）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/03/01/iOS-APNs%E7%AF%87%EF%BC%9A%E6%8C%BD%E6%95%91%E6%8E%A8%E9%80%81%E4%BA%8B%E6%95%85%E2%80%94%E2%80%94%E5%A6%82%E4%BD%95%E2%80%9C%E6%92%A4%E5%9B%9E%E2%80%9D%E5%B7%B2%E5%8F%91%E9%80%81%E7%9A%84%E6%8E%A8%E9%80%81%E9%80%9A%E7%9F%A5/" rel="next" title="iOS APNs篇：挽救推送事故——如何“撤回”已发送的推送通知">
+      iOS APNs篇：挽救推送事故——如何“撤回”已发送的推送通知 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
       </footer>
+    
   </article>
   
   
   
-
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
-  </nav>
 
 
 
@@ -618,6 +316,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Xcode7打包的App能不能再iOS10上收到推送？"><span class="nav-text">Xcode7打包的App能不能再iOS10上收到推送？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Xcode8升级以后怎么做iOS10适配"><span class="nav-text">Xcode8升级以后怎么做iOS10适配</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-Xcode8的疯狂输出模式"><span class="nav-text">1.Xcode8的疯狂输出模式</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-Push-Notification开关"><span class="nav-text">2.Push Notification开关</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
