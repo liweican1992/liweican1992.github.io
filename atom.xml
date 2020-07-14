@@ -270,6 +270,32 @@
   </entry>
   
   <entry>
+    <title>Xcode使用技巧：代码块的使用</title>
+    <link href="http://yoursite.com/2017/05/30/Xcode%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7%EF%BC%9A%E4%BB%A3%E7%A0%81%E5%9D%97%E7%9A%84%E4%BD%BF%E7%94%A8/"/>
+    <id>http://yoursite.com/2017/05/30/Xcode%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7%EF%BC%9A%E4%BB%A3%E7%A0%81%E5%9D%97%E7%9A%84%E4%BD%BF%E7%94%A8/</id>
+    <published>2017-05-30T08:57:00.000Z</published>
+    <updated>2020-07-14T09:07:21.806Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>代码块是Xcode中很便利的一个功能，你可以自定义不同的代码块，特别是对于一些需要重复写的代码，使用代码块可以大大的提高效率。</p></blockquote><p><strong>代码块介绍</strong></p><p> 代码块这个功能大家其实都用过，当你在写一些代码时候，代码提示功能就会显示出一些系统定义好的代码块。如图就是系统定义好的if else的代码块。<br>    <img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714165733.png" alt=""><br>    代码块在右侧边栏的下方，在这里你可以看到系统定义的代码块也可以自定义你自己的代码块。<br>    <img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714165820.png" alt=""></p><pre><code>下图就是系统定义好的dispathc_once_t的代码块。</code></pre><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714165857.png" alt=""></p><p><strong>定义自己的代码块</strong></p><p>定义自己的代码块有很多好处，你可以随心所欲的根据自己的项目和喜好定义自己的代码块。<br>比如一些@property属性，一些三方的统计功能等等。下面我们来定义一个代码块，来快速定    义@property 修饰符为nonatomic和strong</p><p>首先在任意一个类下面声明如下的属性 type 和 name 为提示语<br>    <figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">@<span class="keyword">property</span><span class="title"> </span>(nonatomic,strong) <span class="keyword">type</span> name;</span><br></pre></td></tr></table></figure><br><strong>然后把type 和 name 上分别改为&lt;#type#&gt; 和 &lt;#name#&gt;</strong></p><pre><code>你会发现 type 和name 都变成了高亮状态，你可以按Tab键来切换。</code></pre><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714170047.png" alt=""><br>  是不是发现变成和系统的一样了？你可以很方便的在高亮地方写入你需要的代码，然后按Tab键来回切换。<br>  <img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714170116.png" alt=""><br>   然后全选你刚刚写的那行代码，拖拽到代码块界面所在的区域。<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714170138.png" alt=""><br>然后会弹出一个界面，在这里填写你的代码块的信息。<br>Title就是在代码块管理区域显示的名称。重要的下面的Completion Shortcut，这就是你的代码块的快捷键，<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714170203.png" alt=""><br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714170223.png" alt=""></p><p>然后点击Done。你的代码块就会出现在列表中了。去代码区试一下<br>输入@ps 就会出现你的代码块提示，按回车后刚刚定义的代码就出现了~<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714170247.png" alt=""></p><p>代码块的好处是不言而喻的，绝对是提高效率的利器。比如我们之前的项目要接入好多第三方的统计功能，然而每个界面挨个复制挨个改很浪费时间（当然也可以使用runtime直接在Viewcontroller 的load方法写，但是就不能自定义一些东西了）。使用代码块后就会很方便的完成这些工作啦。<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714170305.png" alt=""></p><p>再举个栗子。Xcode8以后禁用了第三方插件，之前使用的多行注释插件(就是喵神写的那个)也被废弃了。虽然Xcode8提供了系统的，但是不太好用，你也可以使用代码块来自定义多行注释。<br>（快捷键定义为 “///“ 并不会按回车就会出来，而是需要按esc才能提示，所以我用了“ccc”）</p><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714170324.png" alt=""></p><p><strong>代码块的存放路径为 ~/Library/Developer/Xcode/UserData/CodeSnippets</strong></p><p>大家可以从网上下载一些大神写好的，也可以自己写完以后备份，防止丢失。<br>上个地址吧，我自己定义的一些，没怎么管理，有点乱</p><p><a href="https://github.com/liweican1992/XcodeCodeSnippets.git" target="_blank" rel="noopener">https://github.com/liweican1992/XcodeCodeSnippets.git</a></p><p>PS：关于统计埋点，我自己根据Runtime写了一些统计功能，回头补上。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;blockquote&gt;
+&lt;p&gt;代码块是Xcode中很便利的一个功能，你可以自定义不同的代码块，特别是对于一些需要重复写的代码，使用代码块可以大大的提高效率。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;代码块介绍&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt; 代码块这个功能大
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>Apple审核那点事：被拒后如何申诉</title>
     <link href="http://yoursite.com/2017/05/07/Apple%E5%AE%A1%E6%A0%B8%E9%82%A3%E7%82%B9%E4%BA%8B%EF%BC%9A%E8%A2%AB%E6%8B%92%E5%90%8E%E5%A6%82%E4%BD%95%E7%94%B3%E8%AF%89/"/>
     <id>http://yoursite.com/2017/05/07/Apple%E5%AE%A1%E6%A0%B8%E9%82%A3%E7%82%B9%E4%BA%8B%EF%BC%9A%E8%A2%AB%E6%8B%92%E5%90%8E%E5%A6%82%E4%BD%95%E7%94%B3%E8%AF%89/</id>

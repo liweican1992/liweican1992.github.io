@@ -20,26 +20,31 @@
     var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="update:2020.07.10 FaceBook SDK 又双叒叕崩溃了。这次貌似比上次还严重。通过这两次大范围崩溃，充分暴露了Facebook内部流程出现了很大的问题。这次问题的原因又是SDK远程下方配置文件造成的。  详见: https:&#x2F;&#x2F;github.com&#x2F;facebook&#x2F;facebook-ios-sdk&#x2F;issues&#x2F;1427https:&#x2F;&#x2F;developers.faceboo">
+  <meta name="description" content="代码块是Xcode中很便利的一个功能，你可以自定义不同的代码块，特别是对于一些需要重复写的代码，使用代码块可以大大的提高效率。  代码块介绍  代码块这个功能大家其实都用过，当你在写一些代码时候，代码提示功能就会显示出一些系统定义好的代码块。如图就是系统定义好的if else的代码块。        代码块在右侧边栏的下方，在这里你可以看到系统定义的代码块也可以自定义你自己的代码块。     下">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Facebook iOS SDK 造成大面积崩溃">
-<meta property="og:url" content="http://yoursite.com/2020/05/08/Facebook-iOS-SDK-%E9%80%A0%E6%88%90%E5%A4%A7%E9%9D%A2%E7%A7%AF%E5%B4%A9%E6%BA%83/index.html">
+<meta property="og:title" content="Xcode使用技巧：代码块的使用">
+<meta property="og:url" content="http://yoursite.com/2017/05/30/Xcode%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7%EF%BC%9A%E4%BB%A3%E7%A0%81%E5%9D%97%E7%9A%84%E4%BD%BF%E7%94%A8/index.html">
 <meta property="og:site_name" content="licc">
-<meta property="og:description" content="update:2020.07.10 FaceBook SDK 又双叒叕崩溃了。这次貌似比上次还严重。通过这两次大范围崩溃，充分暴露了Facebook内部流程出现了很大的问题。这次问题的原因又是SDK远程下方配置文件造成的。  详见: https:&#x2F;&#x2F;github.com&#x2F;facebook&#x2F;facebook-ios-sdk&#x2F;issues&#x2F;1427https:&#x2F;&#x2F;developers.faceboo">
+<meta property="og:description" content="代码块是Xcode中很便利的一个功能，你可以自定义不同的代码块，特别是对于一些需要重复写的代码，使用代码块可以大大的提高效率。  代码块介绍  代码块这个功能大家其实都用过，当你在写一些代码时候，代码提示功能就会显示出一些系统定义好的代码块。如图就是系统定义好的if else的代码块。        代码块在右侧边栏的下方，在这里你可以看到系统定义的代码块也可以自定义你自己的代码块。     下">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601142944.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601143021.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601143043.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601143102.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601143112.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601143129.png">
-<meta property="article:published_time" content="2020-05-08T06:28:00.000Z">
-<meta property="article:modified_time" content="2020-07-13T08:57:34.580Z">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714165733.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714165820.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714165857.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714170047.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714170116.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714170138.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714170203.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714170223.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714170247.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714170305.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714170324.png">
+<meta property="article:published_time" content="2017-05-30T08:57:00.000Z">
+<meta property="article:modified_time" content="2020-07-14T09:07:21.806Z">
 <meta property="article:author" content="weican Li">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601142944.png">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714165733.png">
 
-<link rel="canonical" href="http://yoursite.com/2020/05/08/Facebook-iOS-SDK-%E9%80%A0%E6%88%90%E5%A4%A7%E9%9D%A2%E7%A7%AF%E5%B4%A9%E6%BA%83/">
+<link rel="canonical" href="http://yoursite.com/2017/05/30/Xcode%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7%EF%BC%9A%E4%BB%A3%E7%A0%81%E5%9D%97%E7%9A%84%E4%BD%BF%E7%94%A8/">
 
 
 <script id="page-configurations">
@@ -52,7 +57,7 @@
   };
 </script>
 
-  <title>Facebook iOS SDK 造成大面积崩溃 | licc</title>
+  <title>Xcode使用技巧：代码块的使用 | licc</title>
   
 
 
@@ -159,7 +164,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/08/Facebook-iOS-SDK-%E9%80%A0%E6%88%90%E5%A4%A7%E9%9D%A2%E7%A7%AF%E5%B4%A9%E6%BA%83/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/30/Xcode%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7%EF%BC%9A%E4%BB%A3%E7%A0%81%E5%9D%97%E7%9A%84%E4%BD%BF%E7%94%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/avatar.png">
@@ -172,7 +177,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Facebook iOS SDK 造成大面积崩溃
+          Xcode使用技巧：代码块的使用
         </h1>
 
         <div class="post-meta">
@@ -182,14 +187,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2020-05-08 14:28:00" itemprop="dateCreated datePublished" datetime="2020-05-08T14:28:00+08:00">2020-05-08</time>
+              <time title="Created: 2017-05-30 16:57:00" itemprop="dateCreated datePublished" datetime="2017-05-30T16:57:00+08:00">2017-05-30</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-07-13 16:57:34" itemprop="dateModified" datetime="2020-07-13T16:57:34+08:00">2020-07-13</time>
+                <time title="Modified: 2020-07-14 17:07:21" itemprop="dateModified" datetime="2020-07-14T17:07:21+08:00">2020-07-14</time>
               </span>
 
           
@@ -204,28 +209,23 @@
 
       
         <blockquote>
-<p>update:2020.07.10 FaceBook SDK 又双叒叕崩溃了。这次貌似比上次还严重。通过这两次大范围崩溃，充分暴露了Facebook内部流程出现了很大的问题。这次问题的原因又是SDK远程下方配置文件造成的。</p>
+<p>代码块是Xcode中很便利的一个功能，你可以自定义不同的代码块，特别是对于一些需要重复写的代码，使用代码块可以大大的提高效率。</p>
 </blockquote>
-<p>详见:</p>
-<p><a href="https://github.com/facebook/facebook-ios-sdk/issues/1427" target="_blank" rel="noopener">https://github.com/facebook/facebook-ios-sdk/issues/1427</a><br><a href="https://developers.facebook.com/support/bugs/329763701368293/" target="_blank" rel="noopener">https://developers.facebook.com/support/bugs/329763701368293/</a></p>
-<hr>
-<p>一大早就接到警告，App崩溃率直线上升。赶紧定位错误，发现是崩在了Facebook SDK上面。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601142944.png" alt=""></p>
-<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601143021.png" alt=""></p>
-<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601143043.png" alt=""></p>
-<p>因为我们是海外项目。受影响最大，所以最先接到警告。<br>看了下，应该是Facebook SDK初始化时候就crash了，同时也有用户反馈App一启动就闪退。</p>
-<a id="more"></a>
-
-<p>但是今天再测试（2020.05.08 北京时间），无法复现问题，看来已经被修复了。<br>去Github上围观了一下，影响范围可谓是巨大</p>
-<blockquote>
-<p>详见issue:<br><a href="https://github.com/facebook/facebook-ios-sdk/issues/1373" target="_blank" rel="noopener">https://github.com/facebook/facebook-ios-sdk/issues/1373</a><br><a href="https://github.com/facebook/facebook-ios-sdk/issues/1374" target="_blank" rel="noopener">https://github.com/facebook/facebook-ios-sdk/issues/1374</a></p>
-</blockquote>
-<p>官方也承认是SDK的问题。<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601143102.png" alt=""></p>
-<p>有人猜测是将Bool值放入了字典中<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601143112.png" alt=""></p>
-<p>问题已经解决，但是教训还是比较深刻的。任何改动上线前，一定要进行灰度测试。</p>
-<p>只是可惜了我们App的99.9%的稳定性 :(<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601143129.png" alt=""><br>参考链接 ：</p>
-<p><a href="https://www.theverge.com/2020/5/7/21250689/facebook-sdk-bug-ios-app-crash-apple-spotify-venmo-tiktok-tinder" target="_blank" rel="noopener">Why a small Facebook bug wreaked havoc on some of the most popular iOS apps
-</a><br><a href="https://www.thepaper.cn/newsDetail_forward_7301372" target="_blank" rel="noopener">小扎的Facebook，搞炸了几十万个iOS应用程序</a></p>
+<p><strong>代码块介绍</strong></p>
+<p> 代码块这个功能大家其实都用过，当你在写一些代码时候，代码提示功能就会显示出一些系统定义好的代码块。如图就是系统定义好的if else的代码块。<br>    <img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714165733.png" alt=""><br>    代码块在右侧边栏的下方，在这里你可以看到系统定义的代码块也可以自定义你自己的代码块。<br>    <img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714165820.png" alt=""></p>
+<pre><code>下图就是系统定义好的dispathc_once_t的代码块。</code></pre><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714165857.png" alt=""></p>
+<p><strong>定义自己的代码块</strong></p>
+<p>定义自己的代码块有很多好处，你可以随心所欲的根据自己的项目和喜好定义自己的代码块。<br>比如一些@property属性，一些三方的统计功能等等。下面我们来定义一个代码块，来快速定    义@property 修饰符为nonatomic和strong</p>
+<p>首先在任意一个类下面声明如下的属性 type 和 name 为提示语<br>    <figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">@<span class="keyword">property</span><span class="title"> </span>(nonatomic,strong) <span class="keyword">type</span> name;</span><br></pre></td></tr></table></figure><br><strong>然后把type 和 name 上分别改为&lt;#type#&gt; 和 &lt;#name#&gt;</strong></p>
+<pre><code>你会发现 type 和name 都变成了高亮状态，你可以按Tab键来切换。</code></pre><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714170047.png" alt=""><br>  是不是发现变成和系统的一样了？你可以很方便的在高亮地方写入你需要的代码，然后按Tab键来回切换。<br>  <img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714170116.png" alt=""><br>   然后全选你刚刚写的那行代码，拖拽到代码块界面所在的区域。<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714170138.png" alt=""><br>然后会弹出一个界面，在这里填写你的代码块的信息。<br>Title就是在代码块管理区域显示的名称。重要的下面的Completion Shortcut，这就是你的代码块的快捷键，<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714170203.png" alt=""><br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714170223.png" alt=""></p>
+<p>然后点击Done。你的代码块就会出现在列表中了。去代码区试一下<br>输入@ps 就会出现你的代码块提示，按回车后刚刚定义的代码就出现了~<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714170247.png" alt=""></p>
+<p>代码块的好处是不言而喻的，绝对是提高效率的利器。比如我们之前的项目要接入好多第三方的统计功能，然而每个界面挨个复制挨个改很浪费时间（当然也可以使用runtime直接在Viewcontroller 的load方法写，但是就不能自定义一些东西了）。使用代码块后就会很方便的完成这些工作啦。<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714170305.png" alt=""></p>
+<p>再举个栗子。Xcode8以后禁用了第三方插件，之前使用的多行注释插件(就是喵神写的那个)也被废弃了。虽然Xcode8提供了系统的，但是不太好用，你也可以使用代码块来自定义多行注释。<br>（快捷键定义为 “///“ 并不会按回车就会出来，而是需要按esc才能提示，所以我用了“ccc”）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20200714170324.png" alt=""></p>
+<p><strong>代码块的存放路径为 ~/Library/Developer/Xcode/UserData/CodeSnippets</strong></p>
+<p>大家可以从网上下载一些大神写好的，也可以自己写完以后备份，防止丢失。<br>上个地址吧，我自己定义的一些，没怎么管理，有点乱</p>
+<p><a href="https://github.com/liweican1992/XcodeCodeSnippets.git" target="_blank" rel="noopener">https://github.com/liweican1992/XcodeCodeSnippets.git</a></p>
+<p>PS：关于统计埋点，我自己根据Runtime写了一些统计功能，回头补上。</p>
 
     </div>
 
@@ -241,12 +241,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/03/13/iOS%E4%BD%BF%E7%94%A8Public-Link-%E8%BF%9B%E8%A1%8C%E5%A4%96%E9%83%A8%E6%B5%8B%E8%AF%95/" rel="prev" title="iOS使用Public Link 进行外部测试">
-      <i class="fa fa-chevron-left"></i> iOS使用Public Link 进行外部测试
+    <a href="/2017/05/07/Apple%E5%AE%A1%E6%A0%B8%E9%82%A3%E7%82%B9%E4%BA%8B%EF%BC%9A%E8%A2%AB%E6%8B%92%E5%90%8E%E5%A6%82%E4%BD%95%E7%94%B3%E8%AF%89/" rel="prev" title="Apple审核那点事：被拒后如何申诉">
+      <i class="fa fa-chevron-left"></i> Apple审核那点事：被拒后如何申诉
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/05/15/%E8%BD%AC%E7%A7%BB%E7%AE%80%E4%B9%A6%E5%88%B0Github/" rel="next" title="转移简书到Github">
-      转移简书到Github <i class="fa fa-chevron-right"></i>
+    <a href="/2017/11/28/UIActivityViewController-%E5%9C%A8iOS11%E4%B8%8A%E7%9A%84%E5%9D%91/" rel="next" title="UIActivityViewController 在iOS11上的坑">
+      UIActivityViewController 在iOS11上的坑 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
