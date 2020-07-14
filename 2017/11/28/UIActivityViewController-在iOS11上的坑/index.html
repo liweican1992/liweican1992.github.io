@@ -186,6 +186,27 @@
               </span>
 
           
+            <span id="/2017/11/28/UIActivityViewController-%E5%9C%A8iOS11%E4%B8%8A%E7%9A%84%E5%9D%91/" class="post-meta-item leancloud_visitors" data-flag-title="UIActivityViewController 在iOS11上的坑" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2017/11/28/UIActivityViewController-%E5%9C%A8iOS11%E4%B8%8A%E7%9A%84%E5%9D%91/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2017/11/28/UIActivityViewController-%E5%9C%A8iOS11%E4%B8%8A%E7%9A%84%E5%9D%91/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
 
         </div>
       </header>
@@ -275,6 +296,7 @@
 
           </div>
           
+    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -436,6 +458,35 @@
   
 
   
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '4osMtdQXI5uafSEoPxSSJGaD-gzGzoHsz',
+      appKey     : 'O7QgWOYtO7pd9d63QtdUqRY0',
+      placeholder: "再次输入留言",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
 
 </body>
 </html>

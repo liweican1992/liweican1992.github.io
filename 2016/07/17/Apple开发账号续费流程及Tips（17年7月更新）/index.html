@@ -201,6 +201,27 @@
               </span>
 
           
+            <span id="/2016/07/17/Apple%E5%BC%80%E5%8F%91%E8%B4%A6%E5%8F%B7%E7%BB%AD%E8%B4%B9%E6%B5%81%E7%A8%8B%E5%8F%8ATips%EF%BC%8817%E5%B9%B47%E6%9C%88%E6%9B%B4%E6%96%B0%EF%BC%89/" class="post-meta-item leancloud_visitors" data-flag-title="Apple开发账号续费流程及Tips（17年7月更新）" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2016/07/17/Apple%E5%BC%80%E5%8F%91%E8%B4%A6%E5%8F%B7%E7%BB%AD%E8%B4%B9%E6%B5%81%E7%A8%8B%E5%8F%8ATips%EF%BC%8817%E5%B9%B47%E6%9C%88%E6%9B%B4%E6%96%B0%EF%BC%89/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2016/07/17/Apple%E5%BC%80%E5%8F%91%E8%B4%A6%E5%8F%B7%E7%BB%AD%E8%B4%B9%E6%B5%81%E7%A8%8B%E5%8F%8ATips%EF%BC%8817%E5%B9%B47%E6%9C%88%E6%9B%B4%E6%96%B0%EF%BC%89/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
 
         </div>
       </header>
@@ -289,6 +310,7 @@
 
           </div>
           
+    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -449,6 +471,35 @@
   
 
   
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '4osMtdQXI5uafSEoPxSSJGaD-gzGzoHsz',
+      appKey     : 'O7QgWOYtO7pd9d63QtdUqRY0',
+      placeholder: "再次输入留言",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
 
 </body>
 </html>
