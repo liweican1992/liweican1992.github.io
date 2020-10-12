@@ -149,6 +149,103 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/28/UIActivityViewController-%E5%9C%A8iOS11%E4%B8%8A%E7%9A%84%E5%9D%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/avatar.png">
+      <meta itemprop="name" content="weican Li">
+      <meta itemprop="description" content="iOS开发者">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="licc">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/11/28/UIActivityViewController-%E5%9C%A8iOS11%E4%B8%8A%E7%9A%84%E5%9D%91/" class="post-title-link" itemprop="url">UIActivityViewController 在iOS11上的坑</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-11-28 14:48:00" itemprop="dateCreated datePublished" datetime="2017-11-28T14:48:00+08:00">2017-11-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-06-01 16:34:51" itemprop="dateModified" datetime="2020-06-01T16:34:51+08:00">2020-06-01</time>
+              </span>
+
+          
+            <span id="/2017/11/28/UIActivityViewController-%E5%9C%A8iOS11%E4%B8%8A%E7%9A%84%E5%9D%91/" class="post-meta-item leancloud_visitors" data-flag-title="UIActivityViewController 在iOS11上的坑" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2017/11/28/UIActivityViewController-%E5%9C%A8iOS11%E4%B8%8A%E7%9A%84%E5%9D%91/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2017/11/28/UIActivityViewController-%E5%9C%A8iOS11%E4%B8%8A%E7%9A%84%E5%9D%91/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>最近在做针对国外用户的App，考虑到国外都是Facebook和Twitter等社交平台，所以考虑使用iOS系统中的原生分享。但是在iOS11上面遇到一些坑，遂记录一下。</p>
+</blockquote>
+<p>在iOS11以下的版本中，系统默认集成了社交账号的功能。但是在iOS11中内置的社交账号被移除了。并且在iOS11中废弃了一些方法。</p>
+<figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line">SOCIAL_EXTERN NSString *<span class="keyword">const</span> SLServiceTypeTwitter NS_DEPRECATED(<span class="number">10</span>_8, <span class="number">10</span>_13, <span class="number">6</span>_0, <span class="number">11</span>_0);</span><br><span class="line">SOCIAL_EXTERN NSString *<span class="keyword">const</span> SLServiceTypeFacebook NS_DEPRECATED(<span class="number">10</span>_8, <span class="number">10</span>_13, <span class="number">6</span>_0, <span class="number">11</span>_0);</span><br><span class="line">SOCIAL_EXTERN NSString *<span class="keyword">const</span> SLServiceTypeSinaWeibo NS_DEPRECATED(<span class="number">10</span>_8, <span class="number">10</span>_13, <span class="number">6</span>_0, <span class="number">11</span>_0);</span><br><span class="line">SOCIAL_EXTERN NSString *<span class="keyword">const</span> SLServiceTypeTencentWeibo NS_DEPRECATED(<span class="number">10</span>_8, <span class="number">10</span>_13, <span class="number">6</span>_0, <span class="number">11</span>_0);</span><br><span class="line">SOCIAL_EXTERN NSString *<span class="keyword">const</span> SLServiceTypeLinkedIn NS_DEPRECATED(<span class="number">10</span>_8, <span class="number">10</span>_13, <span class="number">6</span>_0, <span class="number">11</span>_0);</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017/11/28/UIActivityViewController-%E5%9C%A8iOS11%E4%B8%8A%E7%9A%84%E5%9D%91/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/30/Xcode%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7%EF%BC%9A%E4%BB%A3%E7%A0%81%E5%9D%97%E7%9A%84%E4%BD%BF%E7%94%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -841,7 +938,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-count">17</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
