@@ -277,6 +277,29 @@
   </entry>
   
   <entry>
+    <title>NSAssert详解及C语言assert的一些坑</title>
+    <link href="http://yoursite.com/2018/10/13/C%E8%AF%AD%E8%A8%80assert%E5%9C%A8Xcode%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9D%91/"/>
+    <id>http://yoursite.com/2018/10/13/C%E8%AF%AD%E8%A8%80assert%E5%9C%A8Xcode%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9D%91/</id>
+    <published>2018-10-13T02:53:00.000Z</published>
+    <updated>2020-10-13T12:19:54.248Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20201013152501.png" alt=""><br>assert大家都不陌生，在开发阶段用断言函数可以很好的进行调试。</p><p>一般OC中，我们使用的是<code>NSAssert</code>。在Xcode4.2以后，Xcode会在release环境下自动把NSAssert忽略掉，确保release环境不会出错。</p><p>先说一些坑</p><p>最近遇到一个问题，线上Crash定位在了一个pod库中的<code>assert</code>方法，在OC里面调用<code>assert</code>是用的C语言的<code>assert</code>。结果在release环境下也生效了，直接造成了Crash。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20201013152501.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;assert大家都不陌生，在开发阶段用断言函数可以很好的进行调试。&lt;/p&gt;
+&lt;p&gt;一
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>UIActivityViewController 在iOS11上的坑</title>
     <link href="http://yoursite.com/2017/11/28/UIActivityViewController-%E5%9C%A8iOS11%E4%B8%8A%E7%9A%84%E5%9D%91/"/>
     <id>http://yoursite.com/2017/11/28/UIActivityViewController-%E5%9C%A8iOS11%E4%B8%8A%E7%9A%84%E5%9D%91/</id>
