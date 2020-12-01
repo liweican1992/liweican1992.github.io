@@ -180,7 +180,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-10-19 15:18:02" itemprop="dateModified" datetime="2020-10-19T15:18:02+08:00">2020-10-19</time>
+                <time title="Modified: 2020-12-01 01:48:59" itemprop="dateModified" datetime="2020-12-01T01:48:59+08:00">2020-12-01</time>
               </span>
 
           
@@ -258,6 +258,17 @@
 <li><code>-handleFailureInMethod:object:file:lineNumber:description:</code>  NSAssert/NAParamterAssert调用</li>
 <li><code>-handleFailureInFunction:file:lineNumber:description:</code> NSCAssert/NACParamterAssert调用</li>
 </ul>
+<p>Xcode的开关在<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20201201014436.png" alt=""></p>
+<p>我们也可以自定义NSAssert</p>
+<p>继承NSAssertionHandler，重写<code>handleFailureInFunction:file:lineNumber:description</code>和<code>handleFailureInMethod:object:file:lineNumber:description:</code><br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20201201014548.png" alt=""></p>
+<p>在AppDelegate中注册</p>
+<figure class="highlight objectivec"><table><tr><td class="code"><pre><span class="line">- (<span class="built_in">BOOL</span>)application:(<span class="built_in">UIApplication</span> *)application didFinishLaunchingWithOptions:(<span class="built_in">NSDictionary</span> *)launchOptions &#123;</span><br><span class="line">    <span class="comment">// Override point for customization after application launch.</span></span><br><span class="line">    <span class="built_in">NSAssertionHandler</span> *handler = [[UDTestAssertHandler alloc] init];</span><br><span class="line">    [[[<span class="built_in">NSThread</span> currentThread] threadDictionary] setValue:handler</span><br><span class="line">                                                   forKey:<span class="built_in">NSAssertionHandlerKey</span>];</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">YES</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="NSAssert的坑"><a href="#NSAssert的坑" class="headerlink" title="NSAssert的坑"></a>NSAssert的坑</h2><p>NSAssert在OC中，会存在循环引用问题</p>
+<figure class="highlight objectivec"><table><tr><td class="code"><pre><span class="line">- (<span class="keyword">IBAction</span>)buttonAction:(<span class="built_in">UIButton</span> *)sender &#123;</span><br><span class="line">    TestMode *mode = [TestMode new];</span><br><span class="line">    <span class="keyword">self</span>.mode = mode;</span><br><span class="line"><span class="comment">//    @weakify(self);</span></span><br><span class="line">    mode.textBlock = ^&#123;</span><br><span class="line"><span class="comment">//        @strongify(self);</span></span><br><span class="line">        <span class="keyword">int</span> k = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">NSParameterAssert</span>(k == <span class="number">0</span>);</span><br><span class="line">        <span class="built_in">NSLog</span>(<span class="string">@"123"</span>);</span><br><span class="line"></span><br><span class="line">    &#125;;</span><br><span class="line">    mode.textBlock();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>循环引用的根源在于NSAssert定义中使用了self</p>
+<figure class="highlight less"><table><tr><td class="code"><pre><span class="line"><span class="selector-id">#if</span> !<span class="selector-tag">defined</span>(_NSAssertBody)</span><br><span class="line"><span class="selector-id">#define</span> <span class="selector-tag">NSAssert</span>(condition, desc, ...)	\</span><br><span class="line">    <span class="selector-tag">do</span> &#123;				\</span><br><span class="line">	<span class="selector-tag">__PRAGMA_PUSH_NO_EXTRA_ARG_WARNINGS</span> \</span><br><span class="line">	<span class="selector-tag">if</span> (__builtin_expect(!(condition), <span class="number">0</span>)) &#123;		\</span><br><span class="line">	    <span class="selector-attr">[[NSAssertionHandler currentHandler]</span> <span class="selector-tag">handleFailureInMethod</span><span class="selector-pseudo">:_cmd</span> \</span><br><span class="line">		<span class="selector-tag">object</span><span class="selector-pseudo">:self</span> <span class="selector-tag">file</span>:@(__FILE_NAME__) \</span><br><span class="line">	    	<span class="selector-tag">lineNumber</span><span class="selector-pseudo">:__LINE__</span> <span class="selector-tag">description</span><span class="selector-pseudo">:(desc)</span>, #<span class="selector-id">#__VA_ARGS__</span>]; \</span><br><span class="line">	&#125;				\</span><br><span class="line">        <span class="selector-tag">__PRAGMA_POP_NO_EXTRA_ARG_WARNINGS</span> \</span><br><span class="line">    &#125; <span class="selector-tag">while</span>(<span class="number">0</span>)</span><br><span class="line"><span class="selector-id">#endif</span></span><br></pre></td></tr></table></figure>
+<p>我们可以试用@weakself 和 @strongself来解决。不过在release环境下，assert并不会调用。所以推荐试用<code>NSCAssert</code>和 <code>NSParameterAssert</code></p>
 
       
     </div>
