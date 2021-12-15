@@ -180,7 +180,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-12-15 16:52:32" itemprop="dateModified" datetime="2021-12-15T16:52:32+08:00">2021-12-15</time>
+                <time title="Modified: 2021-12-15 17:02:10" itemprop="dateModified" datetime="2021-12-15T17:02:10+08:00">2021-12-15</time>
               </span>
 
           
@@ -216,7 +216,7 @@
 
       
           <blockquote>
-<p>上篇详见：<a href="https://kms.netease.com/article/45514" target="_blank" rel="noopener">iOS XCTest实战—解决国际化开发测试痛点（上）</a></p>
+<p>上篇详见：<a href="http://leevcan.com/2021/10/15/iOS-XCTest实战—解决国际化开发测试痛点（上）/" target="_blank" rel="noopener">iOS XCTest实战—解决国际化开发测试痛点（上）</a></p>
 </blockquote>
 <h1 id="4-StoreKit-Configuration-File（无订阅需求可略过）"><a href="#4-StoreKit-Configuration-File（无订阅需求可略过）" class="headerlink" title="4. StoreKit Configuration File（无订阅需求可略过）"></a>4. StoreKit Configuration File（无订阅需求可略过）</h1><p>因为我们是海外订阅类App，这个测试脚本最初的目的就是为了测试订阅页以及整个购买流程，因此要对主要国家的货币和价格进行测试。<br>但是在Xcode12中，模拟器并不能读取线上的<code>SKProuduct</code>信息（Xcode13已经修复）。而真机测试也只能每次手动切换沙盒账户来切换国际和货币币种。<br>如下图所示，订阅页需要适配一些超长的货币（一般坦桑尼亚货币最长）。<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215163909.png" alt=""><br>通过<code>StoreKit</code>可以很方便的解决这个问题。<br>Apple 在 Xcode12 中引入了本地 StoreKit 测试，无需连接到 App Store 服务器即可测试不同的 IAP 场景。<br>更多信息详见：<a href="https://developer.apple.com/documentation/xcode/setting-up-storekit-testing-in-xcode#Overview" target="_blank" rel="noopener">《Setting Up StoreKit Testing in Xcode》</a></p>
 <h2 id="i-创建StoreKit-Configuration-File"><a href="#i-创建StoreKit-Configuration-File" class="headerlink" title="i.创建StoreKit Configuration File"></a>i.创建StoreKit Configuration File</h2><p>创建方式很简单，在新建文件中找到<code>StoreKit Configuration File</code><br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215163923.png" alt=""><br>点击加号，新增一个自动续期SKU,当然也可以用来测试消耗类内购。<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215163934.png" alt=""></p>
@@ -339,7 +339,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-12-15 16:59:47" itemprop="dateModified" datetime="2021-12-15T16:59:47+08:00">2021-12-15</time>
+                <time title="Modified: 2021-12-15 17:02:26" itemprop="dateModified" datetime="2021-12-15T17:02:26+08:00">2021-12-15</time>
               </span>
 
           
@@ -435,7 +435,7 @@
 <blockquote>
 <p>到目前为止，我们得到了一个初步的测试方案，可以用XCTest写完页面截图逻辑后，使用Test Plans批量运行多个语言。下一章会介绍如何解决订阅中多币种的适配、如何快速导出测试截图以及最终用xcodebuild和shell脚本自动化所有操作。</p>
 </blockquote>
-<h1 id="4-iOS-XCTest实战—解决国际化开发测试痛点（下）"><a href="#4-iOS-XCTest实战—解决国际化开发测试痛点（下）" class="headerlink" title="4.iOS XCTest实战—解决国际化开发测试痛点（下）"></a>4.iOS XCTest实战—解决国际化开发测试痛点（下）</h1><p>下篇详见：<a href="https://kms.netease.com/article/45612" target="_blank" rel="noopener">iOS XCTest实战—解决国际化开发测试痛点（下）</a></p>
+<h1 id="4-iOS-XCTest实战—解决国际化开发测试痛点（下）"><a href="#4-iOS-XCTest实战—解决国际化开发测试痛点（下）" class="headerlink" title="4.iOS XCTest实战—解决国际化开发测试痛点（下）"></a>4.iOS XCTest实战—解决国际化开发测试痛点（下）</h1><p>下篇详见：<a href="http://leevcan.com/2021/10/15/iOS-XCTest实战—解决国际化开发测试痛点（下）/" target="_blank" rel="noopener">iOS XCTest实战—解决国际化开发测试痛点（下）</a></p>
 
       
     </div>

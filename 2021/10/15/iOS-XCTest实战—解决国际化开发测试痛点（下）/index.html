@@ -43,7 +43,7 @@
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215164442.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215164459.png">
 <meta property="article:published_time" content="2021-10-15T04:11:00.000Z">
-<meta property="article:modified_time" content="2021-12-15T08:52:32.904Z">
+<meta property="article:modified_time" content="2021-12-15T09:02:10.862Z">
 <meta property="article:author" content="weican Li">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215163909.png">
@@ -198,7 +198,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-12-15 16:52:32" itemprop="dateModified" datetime="2021-12-15T16:52:32+08:00">2021-12-15</time>
+                <time title="Modified: 2021-12-15 17:02:10" itemprop="dateModified" datetime="2021-12-15T17:02:10+08:00">2021-12-15</time>
               </span>
 
           
@@ -234,7 +234,7 @@
 
       
         <blockquote>
-<p>上篇详见：<a href="https://kms.netease.com/article/45514" target="_blank" rel="noopener">iOS XCTest实战—解决国际化开发测试痛点（上）</a></p>
+<p>上篇详见：<a href="http://leevcan.com/2021/10/15/iOS-XCTest实战—解决国际化开发测试痛点（上）/" target="_blank" rel="noopener">iOS XCTest实战—解决国际化开发测试痛点（上）</a></p>
 </blockquote>
 <h1 id="4-StoreKit-Configuration-File（无订阅需求可略过）"><a href="#4-StoreKit-Configuration-File（无订阅需求可略过）" class="headerlink" title="4. StoreKit Configuration File（无订阅需求可略过）"></a>4. StoreKit Configuration File（无订阅需求可略过）</h1><p>因为我们是海外订阅类App，这个测试脚本最初的目的就是为了测试订阅页以及整个购买流程，因此要对主要国家的货币和价格进行测试。<br>但是在Xcode12中，模拟器并不能读取线上的<code>SKProuduct</code>信息（Xcode13已经修复）。而真机测试也只能每次手动切换沙盒账户来切换国际和货币币种。<br>如下图所示，订阅页需要适配一些超长的货币（一般坦桑尼亚货币最长）。<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215163909.png" alt=""><br>通过<code>StoreKit</code>可以很方便的解决这个问题。<br>Apple 在 Xcode12 中引入了本地 StoreKit 测试，无需连接到 App Store 服务器即可测试不同的 IAP 场景。<br>更多信息详见：<a href="https://developer.apple.com/documentation/xcode/setting-up-storekit-testing-in-xcode#Overview" target="_blank" rel="noopener">《Setting Up StoreKit Testing in Xcode》</a></p>
 <h2 id="i-创建StoreKit-Configuration-File"><a href="#i-创建StoreKit-Configuration-File" class="headerlink" title="i.创建StoreKit Configuration File"></a>i.创建StoreKit Configuration File</h2><p>创建方式很简单，在新建文件中找到<code>StoreKit Configuration File</code><br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215163923.png" alt=""><br>点击加号，新增一个自动续期SKU,当然也可以用来测试消耗类内购。<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215163934.png" alt=""></p>
