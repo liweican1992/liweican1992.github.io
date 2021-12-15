@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="海外项目一定离不开国际化适配，而国际化文案的展示&amp;机型适配一直是开发和测试中的痛点。本人负责的项目一直深耕海外，目前支持13种国际化语言包括R2L的阿拉伯语。作为订阅类App，需要进行大量的订阅页AB测试。本文主要介绍了在项目中如何利用XCTest、Test Plan、StoreKit Configuration、xcodebuild命令、Shell脚本进行快速UI走查的。  0.国际化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS XCTest实战—解决国际化开发测试痛点（上）">
+<meta property="og:url" content="http://yoursite.com/2021/10/11/iOS-XCTest%E5%AE%9E%E6%88%98%E2%80%94%E8%A7%A3%E5%86%B3%E5%9B%BD%E9%99%85%E5%8C%96%E5%BC%80%E5%8F%91%E6%B5%8B%E8%AF%95%E7%97%9B%E7%82%B9/index.html">
+<meta property="og:site_name" content="licc">
+<meta property="og:description" content="海外项目一定离不开国际化适配，而国际化文案的展示&amp;机型适配一直是开发和测试中的痛点。本人负责的项目一直深耕海外，目前支持13种国际化语言包括R2L的阿拉伯语。作为订阅类App，需要进行大量的订阅页AB测试。本文主要介绍了在项目中如何利用XCTest、Test Plan、StoreKit Configuration、xcodebuild命令、Shell脚本进行快速UI走查的。  0.国际化">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215160447.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215165931.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215160349.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215160550.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215160607.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215160630.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215160655.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215160726.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215160746.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215160807.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215161029.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215161044.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215161113.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215161123.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215161136.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215161152.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215161209.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215161224.png">
+<meta property="article:published_time" content="2021-10-11T07:34:00.000Z">
+<meta property="article:modified_time" content="2021-12-15T08:59:47.040Z">
+<meta property="article:author" content="weican Li">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215160447.png">
+
+<link rel="canonical" href="http://yoursite.com/2021/10/11/iOS-XCTest%E5%AE%9E%E6%88%98%E2%80%94%E8%A7%A3%E5%86%B3%E5%9B%BD%E9%99%85%E5%8C%96%E5%BC%80%E5%8F%91%E6%B5%8B%E8%AF%95%E7%97%9B%E7%82%B9/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>iOS XCTest实战—解决国际化开发测试痛点（上） | licc</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="licc" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">licc</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">我心有猛虎 细嗅蔷薇</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/10/11/iOS-XCTest%E5%AE%9E%E6%88%98%E2%80%94%E8%A7%A3%E5%86%B3%E5%9B%BD%E9%99%85%E5%8C%96%E5%BC%80%E5%8F%91%E6%B5%8B%E8%AF%95%E7%97%9B%E7%82%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/avatar.png">
+      <meta itemprop="name" content="weican Li">
+      <meta itemprop="description" content="iOS开发者">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="licc">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          iOS XCTest实战—解决国际化开发测试痛点（上）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-10-11 15:34:00" itemprop="dateCreated datePublished" datetime="2021-10-11T15:34:00+08:00">2021-10-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-15 16:59:47" itemprop="dateModified" datetime="2021-12-15T16:59:47+08:00">2021-12-15</time>
+              </span>
+
+          
+            <span id="/2021/10/11/iOS-XCTest%E5%AE%9E%E6%88%98%E2%80%94%E8%A7%A3%E5%86%B3%E5%9B%BD%E9%99%85%E5%8C%96%E5%BC%80%E5%8F%91%E6%B5%8B%E8%AF%95%E7%97%9B%E7%82%B9/" class="post-meta-item leancloud_visitors" data-flag-title="iOS XCTest实战—解决国际化开发测试痛点（上）" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2021/10/11/iOS-XCTest%E5%AE%9E%E6%88%98%E2%80%94%E8%A7%A3%E5%86%B3%E5%9B%BD%E9%99%85%E5%8C%96%E5%BC%80%E5%8F%91%E6%B5%8B%E8%AF%95%E7%97%9B%E7%82%B9/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/10/11/iOS-XCTest%E5%AE%9E%E6%88%98%E2%80%94%E8%A7%A3%E5%86%B3%E5%9B%BD%E9%99%85%E5%8C%96%E5%BC%80%E5%8F%91%E6%B5%8B%E8%AF%95%E7%97%9B%E7%82%B9/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>海外项目一定离不开国际化适配，而国际化文案的展示&amp;机型适配一直是开发和测试中的痛点。<br>本人负责的项目一直深耕海外，目前支持13种国际化语言包括R2L的阿拉伯语。作为订阅类App，需要进行大量的订阅页AB测试。本文主要介绍了在项目中如何利用<code>XCTest</code>、<code>Test Plan</code>、<code>StoreKit Configuration</code>、<code>xcodebuild</code>命令、<code>Shell</code>脚本进行快速UI走查的。</p>
+</blockquote>
+<h1 id="0-国际化痛点"><a href="#0-国际化痛点" class="headerlink" title="0.国际化痛点"></a>0.国际化痛点</h1><p>在国际化日常开发中，国际化文案适配是一个难题，除了开发需要考虑各种换行和边界问题等，测试同学也要花精力挨个语种和机型进行走查。尤其是订阅页面各个国家的货币展示页不相同。<br>下图列举了一些国际化常见的问题：<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215160447.png" alt=""><br>⬆️换行后依旧无法展示<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215165931.png" alt=""><br>⬆️文案过长，小屏幕机型展示问题<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215160349.png" alt=""><br>⬆️货币价格过长，需要额外适配</p>
+<hr>
+<p>这些问题都需要开发自测或UI走查才能发现，下面我们一起来解决这些痛点。</p>
+<h1 id="1-需求梳理"><a href="#1-需求梳理" class="headerlink" title="1.需求梳理"></a>1.需求梳理</h1><p>开始之前先梳理一下需求，通过平时我自测的痛点以及和测试同学的沟通，如果用脚本进行测试需要达到以下效果：</p>
+<ol>
+<li>所有国际化文案和主要机型都要覆盖</li>
+<li>以页面截图为准，人工过一下，方便发现问题和报bug，最重要的是方便后期UI Debug。</li>
+<li>对订阅功能，可以方便切换不同国家展示不同的货币</li>
+<li>脚本要方便使用，可以方便配置不同的机型、国际化语言和货币币种，后期方便部署到Jenkins</li>
+<li>结果呈现要分机型、iOS系统，通过截图名称可以知道是哪个页面</li>
+</ol>
+<h1 id="2-XCTest"><a href="#2-XCTest" class="headerlink" title="2.XCTest"></a>2.XCTest</h1><p><code>XCTest</code>是Xocde的原生测试框架。相对于<a href="https://github.com/kiwi-bdd/Kiwi" target="_blank" rel="noopener">Kiwi</a>、<a href="https://github.com/specta/specta" target="_blank" rel="noopener">Specta</a>、<a href="https://github.com/specta/expecta" target="_blank" rel="noopener">Expecta</a>等第三方框架更容易上手。而选择<code>XCTest</code>还有一个重要的原因是Apple在2019 WWDC推出的<code>Test Plans</code>对国际化测试非常友好。</p>
+<p>(详见：<a href="https://developer.apple.com/videos/play/wwdc2019/413/" target="_blank" rel="noopener">Testing in Xcode</a>，下文也会详细介绍）</p>
+<p>Xcode在创建项目时候一般会自动创建Test和UITest工程，因为只需要测试UI，使用UITest即可。<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215160550.png" alt=""><br>具体的XCTest文档详见<a href="https://developer.apple.com/documentation/xctest/user_interface_tests" target="_blank" rel="noopener">User Interface Tests</a>，这里就不展开讲了。</p>
+<p>在开始写测试脚本之前，我们需要解决以下几个问题：</p>
+<h2 id="i-对页面进行截图"><a href="#i-对页面进行截图" class="headerlink" title="i.对页面进行截图"></a>i.对页面进行截图</h2><p>截图方法很简单，封装成一个方法如下：</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">takeAScreenshot</span><span class="params">(<span class="number">_</span> name: String)</span></span> &#123;</span><br><span class="line">      <span class="keyword">let</span> screenshot = <span class="type">XCUIScreen</span>.main.screenshot()</span><br><span class="line">      <span class="keyword">let</span> screenshotAttachment = <span class="type">XCTAttachment</span>(</span><br><span class="line">          uniformTypeIdentifier: <span class="string">"public.png"</span>,</span><br><span class="line">          name: <span class="string">"Screenshot-\(UIDevice.current.name)-\(name).png"</span>,</span><br><span class="line">          payload: screenshot.pngRepresentation,</span><br><span class="line">          userInfo: <span class="literal">nil</span>)</span><br><span class="line"></span><br><span class="line">      screenshotAttachment.lifetime = .keepAlways</span><br><span class="line">      add(screenshotAttachment)</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>还可以指定截图的质量，比如我们工程运行一次脚本需要截图500+，就需要指定低质量了。经过测试低质量的图片占用大小比高质量能压缩近20倍左右。但是需要注意，在M1芯片的Mac上，指定质量的截图方法会报错，应该是Xcode的适配问题。</p>
+<figure class="highlight reasonml"><table><tr><td class="code"><pre><span class="line">func take<span class="constructor">AScreenshot(<span class="params">_</span> <span class="params">name</span>: String)</span> &#123;</span><br><span class="line">      <span class="keyword">let</span> screenshot = <span class="module-access"><span class="module"><span class="identifier">XCUIScreen</span>.</span></span>main.screenshot<span class="literal">()</span></span><br><span class="line">      <span class="keyword">let</span> screenshotAttachment = <span class="module-access"><span class="module"><span class="identifier">XCTAttachment</span>.</span></span>init(screenshot: screenshot, quality: .low)</span><br><span class="line">      screenshotAttachment.name = <span class="string">"\(UIDevice.current.name)-\(name).jpeg"</span></span><br><span class="line">      screenshotAttachment.lifetime = .keepAlways</span><br><span class="line">      add(screenshotAttachment)</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>测试完成后，截图可以在Xcode中查看<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215160607.png" alt=""></p>
+<h2 id="ii-国际化适配"><a href="#ii-国际化适配" class="headerlink" title="ii. 国际化适配"></a>ii. 国际化适配</h2><p>在XCTest中，我们可以模拟用户的操作，比如点击一个按钮，点击一个Label等，而找到控件的方式一般是按Button文本或者Label的Text.<br>比如我页面有一个Button，title是“testButton”</p>
+<figure class="highlight reasonml"><table><tr><td class="code"><pre><span class="line">func test<span class="constructor">Example()</span> throws &#123;</span><br><span class="line">     <span class="comment">// UI tests must launch the application that they test.</span></span><br><span class="line">     <span class="keyword">let</span> btn = app.buttons<span class="literal">["<span class="identifier">testButton</span>"]</span></span><br><span class="line">     <span class="constructor">XCTAssertTrue(<span class="params">btn</span>.<span class="params">exists</span>)</span></span><br><span class="line">     <span class="comment">//tap btn</span></span><br><span class="line">     btn.tap<span class="literal">()</span></span><br><span class="line">     sleep(<span class="number">2</span>)</span><br><span class="line">     take<span class="constructor">AScreenshot(<span class="string">"button"</span>)</span></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>但是当我开启国际化后，按钮文案是跟随系统语言变化的，那上述代码就会执行失败。<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215160630.png" alt=""></p>
+<p>解决办法是为控件设置<code>accessibilityIdentifier</code>属性。<code>accessibilityIdentifier</code>是专为UITest设计的。可以方便的找到需要的元素。</p>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="comment">//为btn设置accessibilityIdentifier</span></span><br><span class="line">btn<span class="selector-class">.accessibilityIdentifier</span> = <span class="string">"myTestButton"</span></span><br><span class="line">        </span><br><span class="line"><span class="comment">//在XCTest中 按accessibilityIdentifier查找</span></span><br><span class="line">let btn = app<span class="selector-class">.buttons</span>[<span class="string">"myTestButton"</span>]</span><br></pre></td></tr></table></figure>
+
+<h2 id="iii-主App开启测试环境"><a href="#iii-主App开启测试环境" class="headerlink" title="iii. 主App开启测试环境"></a>iii. 主App开启测试环境</h2><p>XCTest每次运行都会重新运行App，一般主App启动入口会有很多业务逻辑，对测试会造成影响。我们需要判断本次启动是从XCTest启动的，这样可以开启测试环境，去掉一些无关的逻辑。<br>在UITest中可以向<code>launchArguments</code>中加入自定义参数。</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UITestDemoUITests</span>: <span class="title">XCTestCase</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> app: <span class="type">XCUIApplication!</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">setUpWithError</span><span class="params">()</span></span> <span class="keyword">throws</span> &#123;</span><br><span class="line"></span><br><span class="line">        continueAfterFailure = <span class="literal">false</span></span><br><span class="line">        app = <span class="type">XCUIApplication</span>()</span><br><span class="line">        <span class="comment">//向主App传递参数 也可以写在测试方法中</span></span><br><span class="line">        app.launchArguments.append(<span class="string">"UDUIXCTestConfig#SubscribePage"</span>)</span><br><span class="line">        app.launch()</span><br><span class="line">      &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在<code>Appdelegate</code>的<code>didFinishLaunchingWithOptions</code>中判断，可以指定根据字符串指定需要测试的场景。</p>
+<figure class="highlight reasonml"><table><tr><td class="code"><pre><span class="line">    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: <span class="literal">[UIA<span class="identifier">pplication</span>.L<span class="identifier">aunchOptionsKey</span>: A<span class="identifier">ny</span>]</span>?) -&gt; Bool &#123;</span><br><span class="line">    ...</span><br><span class="line">      for subArgue: String <span class="keyword">in</span> <span class="module-access"><span class="module"><span class="identifier">CommandLine</span>.</span></span>arguments &#123;</span><br><span class="line">            <span class="keyword">if</span> subArgue.has<span class="constructor">Prefix(<span class="string">"UDUIXCTestConfig"</span>)</span> &#123;</span><br><span class="line">                <span class="comment">//开启测试模式</span></span><br><span class="line">                <span class="module-access"><span class="module"><span class="identifier">UDXCTestManager</span>.</span></span>share<span class="constructor">Instance()</span>.argument = subArgue</span><br><span class="line">                <span class="module-access"><span class="module"><span class="identifier">UDXCTestManager</span>.</span></span>share<span class="constructor">Instance()</span>.testModeOn = <span class="literal">true</span></span><br><span class="line">                break</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="iv-Demo"><a href="#iv-Demo" class="headerlink" title="iv. Demo"></a>iv. Demo</h2><blockquote>
+<p>开启上述步骤后，已经可以初步进行UI测试了，通过设置测试环境，确保启动后进入待测试页面。合理利用for循环以及截图。需要注意接入前如果涉及页面跳转等，要用sleep()函数等待页面渲染完后再截图</p>
+</blockquote>
+<p>比如我们工程中一个测试方法</p>
+<figure class="highlight reasonml"><table><tr><td class="code"><pre><span class="line">func test<span class="constructor">SubscribePage()</span> throws &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> #available(iOS <span class="number">14.0</span>, *) &#123;</span><br><span class="line">          <span class="keyword">let</span> session = <span class="keyword">try</span>? <span class="module-access"><span class="module"><span class="identifier">SKTestSession</span>.</span></span>init(configurationFileNamed: <span class="string">"Configuration"</span>)</span><br><span class="line">          session?.disableDialogs = <span class="literal">true</span></span><br><span class="line">          session?.clear<span class="constructor">Transactions()</span></span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line"></span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      app.launchArguments.append(<span class="string">"UDUIXCTestConfig#SubscribePage"</span>)</span><br><span class="line">      app.launch<span class="literal">()</span></span><br><span class="line"></span><br><span class="line">      <span class="keyword">let</span> TypeList = <span class="literal">["S", "T", "U", "V", "V3"]</span></span><br><span class="line">      for sub <span class="keyword">in</span> TypeList &#123;</span><br><span class="line">          <span class="keyword">let</span> typeElement = app.tables.staticTexts<span class="literal">[<span class="identifier">sub</span>]</span></span><br><span class="line">          <span class="constructor">XCTAssertTrue(<span class="params">typeElement</span>.<span class="params">exists</span>)</span></span><br><span class="line">          typeElement.tap<span class="literal">()</span></span><br><span class="line">          sleep(<span class="number">2</span>)</span><br><span class="line">          self.take<span class="constructor">AScreenshot(<span class="string">"\(sub) List"</span>)</span></span><br><span class="line"></span><br><span class="line">          <span class="comment">//测试子页面</span></span><br><span class="line">          <span class="keyword">let</span> <span class="built_in">list</span> = <span class="literal">["<span class="identifier">weekly_free</span>", "<span class="identifier">monthly_free</span>", "<span class="identifier">yearly_free</span>"]</span></span><br><span class="line">          for sublist <span class="keyword">in</span> <span class="built_in">list</span> &#123;</span><br><span class="line">              sleep(<span class="number">2</span>)</span><br><span class="line">              <span class="keyword">let</span> subtypeElement = app.tables.staticTexts<span class="literal">[<span class="identifier">sublist</span>]</span></span><br><span class="line">              <span class="constructor">XCTAssertTrue(<span class="params">subtypeElement</span>.<span class="params">exists</span>)</span></span><br><span class="line">              <span class="comment">//进入待测试页</span></span><br><span class="line">              subtypeElement.tap<span class="literal">()</span></span><br><span class="line">              sleep(<span class="number">2</span>)</span><br><span class="line">              self.take<span class="constructor">AScreenshot(<span class="string">"\(sub)-\(sublist)-1"</span>)</span></span><br><span class="line">              sleep(<span class="number">1</span>)</span><br><span class="line">              <span class="keyword">if</span> sub<span class="operator"> == </span><span class="string">"S"</span><span class="operator"> || </span>sub<span class="operator"> == </span><span class="string">"T"</span> &#123;</span><br><span class="line">                  <span class="comment">//滚动到底部</span></span><br><span class="line">                  app.swipe<span class="constructor">Up()</span></span><br><span class="line">                  sleep(<span class="number">1</span>)</span><br><span class="line">                  <span class="comment">//对底部截图 无法滚动的页面可以考虑过滤掉</span></span><br><span class="line">                  self.take<span class="constructor">AScreenshot(<span class="string">"\(sub)-\(sublist)-2"</span>)</span></span><br><span class="line">                  sleep(<span class="number">3</span>)</span><br><span class="line">              &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                  sleep(<span class="number">4</span>)</span><br><span class="line">              &#125;</span><br><span class="line"></span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">          <span class="comment">//返回上一页面</span></span><br><span class="line">          <span class="keyword">let</span> backButton = <span class="constructor">XCUIApplication()</span>.navigationBars.buttons<span class="literal">["<span class="identifier">backButton</span>"]</span></span><br><span class="line">          <span class="constructor">XCTAssert(<span class="params">backButton</span>.<span class="params">exists</span>)</span></span><br><span class="line">          backButton.tap<span class="literal">()</span></span><br><span class="line">          sleep(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="3-TestPlans"><a href="#3-TestPlans" class="headerlink" title="3.TestPlans"></a>3.TestPlans</h1><p>上述方案每次只能测试一个国际化语言，每次切换语言后需要重新运行。在<code>TestPlans</code>推出之前需要我们自己写<code>xcodebuild</code>命令来指定国际化语言或者在Schemes中配置App Langauge<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215160655.png" alt=""></p>
+<p><code>TestPlans</code>是Apple在2019年WWDC推出的测试工具，详细信息详见<a href="https://developer.apple.com/videos/play/wwdc2019/413/" target="_blank" rel="noopener">《Testing in Xcode》</a>, 推出后可以更方便的进行国际化语言以及其余配置的切换。</p>
+<p>开启方式也很简单，在“Edit Scheme..”—&gt; “Test” —&gt; “Covert to use Test Plans”<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215160726.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215160746.png" alt=""><br>选择放到主工程中，设置成Default<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215160807.png" alt=""></p>
+<h2 id="i-配置Configuration"><a href="#i-配置Configuration" class="headerlink" title="i. 配置Configuration"></a>i. 配置Configuration</h2><p>在主工程中找到<code>.xctestplan</code>后缀的文件。<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215161029.png" alt=""><br>可以发现在Configuration中可以设置语言、地区、开启<code>Code Coverage</code>等功能。</p>
+<p>可以点击加号加新的配置文件，默认的配置是读取Share Settings的配置。<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215161044.png" alt=""><br>比如我们的工程，配置了主要适配的语言。<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215161113.png" alt=""></p>
+<h2 id="ii-选择测试方法、开启并行"><a href="#ii-选择测试方法、开启并行" class="headerlink" title="ii. 选择测试方法、开启并行"></a>ii. 选择测试方法、开启并行</h2><p>在Test面板，可以看到所有测试方法，可以勾选需要测试的方法，勾选多个会按着从上到下的顺序执行。在Options中打开<code>Execute in parallel</code>。打开后可以在资源允许的情况下，开启多个克隆的模拟器，提高测试速度。</p>
+<blockquote>
+<p>比如执行Phone X机型的一个测试方法，在Configuration中配置了6个配置文件，资源允许情况下会开启3个iPhone X模拟器，每个模拟器跑2个配置，速度提高了3倍。</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215161123.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215161136.png" alt=""></p>
+<h2 id="iii-运行Test-Plans"><a href="#iii-运行Test-Plans" class="headerlink" title="iii.  运行Test Plans"></a>iii.  运行Test Plans</h2><p><code>Test Plans</code>的运行方式和之前一样，找到之前的方法入口，点击运行或者按右键只运行部分配置<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215161152.png" alt=""></p>
+<h2 id="iv-查看结果"><a href="#iv-查看结果" class="headerlink" title="iv. 查看结果"></a>iv. 查看结果</h2><p>Test Plans运行完后可以在Xcode中查看结果，如果运行多个配置，每个配置的结果都会单独呈现<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215161209.png" alt=""></p>
+<blockquote>
+<p>国际化测试需要注意，在Configuration中有<code>Localization Screenshots</code>选型，默认是<code>On</code>，只要本页面文件进行了国际化（使用<code>NSLocalizedString</code>）都会自动截图，如不需要可以关闭。</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215161224.png" alt=""></p>
+<blockquote>
+<p>到目前为止，我们得到了一个初步的测试方案，可以用XCTest写完页面截图逻辑后，使用Test Plans批量运行多个语言。下一章会介绍如何解决订阅中多币种的适配、如何快速导出测试截图以及最终用xcodebuild和shell脚本自动化所有操作。</p>
+</blockquote>
+<h1 id="4-iOS-XCTest实战—解决国际化开发测试痛点（下）"><a href="#4-iOS-XCTest实战—解决国际化开发测试痛点（下）" class="headerlink" title="4.iOS XCTest实战—解决国际化开发测试痛点（下）"></a>4.iOS XCTest实战—解决国际化开发测试痛点（下）</h1><p>下篇详见：<a href="https://kms.netease.com/article/45612" target="_blank" rel="noopener">iOS XCTest实战—解决国际化开发测试痛点（下）</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/10/12/iOS%E5%9B%BD%E9%99%85%E5%8C%96%E2%80%94Xliff%E5%BD%95%E5%85%A5%E8%84%9A%E6%9C%AC/" rel="prev" title="iOS国际化—XLIFF批量录入脚本(一键操作)">
+      <i class="fa fa-chevron-left"></i> iOS国际化—XLIFF批量录入脚本(一键操作)
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/10/15/iOS-XCTest%E5%AE%9E%E6%88%98%E2%80%94%E8%A7%A3%E5%86%B3%E5%9B%BD%E9%99%85%E5%8C%96%E5%BC%80%E5%8F%91%E6%B5%8B%E8%AF%95%E7%97%9B%E7%82%B9%EF%BC%88%E4%B8%8B%EF%BC%89/" rel="next" title="iOS XCTest实战—解决国际化开发测试痛点（下）">
+      iOS XCTest实战—解决国际化开发测试痛点（下） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0-国际化痛点"><span class="nav-text">0.国际化痛点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-需求梳理"><span class="nav-text">1.需求梳理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-XCTest"><span class="nav-text">2.XCTest</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#i-对页面进行截图"><span class="nav-text">i.对页面进行截图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ii-国际化适配"><span class="nav-text">ii. 国际化适配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iii-主App开启测试环境"><span class="nav-text">iii. 主App开启测试环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iv-Demo"><span class="nav-text">iv. Demo</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-TestPlans"><span class="nav-text">3.TestPlans</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#i-配置Configuration"><span class="nav-text">i. 配置Configuration</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ii-选择测试方法、开启并行"><span class="nav-text">ii. 选择测试方法、开启并行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iii-运行Test-Plans"><span class="nav-text">iii.  运行Test Plans</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iv-查看结果"><span class="nav-text">iv. 查看结果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-iOS-XCTest实战—解决国际化开发测试痛点（下）"><span class="nav-text">4.iOS XCTest实战—解决国际化开发测试痛点（下）</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="weican Li"
+      src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/avatar.png">
+  <p class="site-author-name" itemprop="name">weican Li</p>
+  <div class="site-description" itemprop="description">iOS开发者</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/liweican1992" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;liweican1992" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:liweican1992@163.com" title="E-Mail → mailto:liweican1992@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">weican Li</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : true,
+      appId      : '2vtATvMKrRqHP269UUtJOy6L-MdYXbMMI',
+      appKey     : 'zHsuq1nT4cg9Vse62lvSHrUq',
+      placeholder: "在此输入留言",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

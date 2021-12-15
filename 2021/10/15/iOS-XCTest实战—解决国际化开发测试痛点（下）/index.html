@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="上篇详见：iOS XCTest实战—解决国际化开发测试痛点（上）  4. StoreKit Configuration File（无订阅需求可略过）因为我们是海外订阅类App，这个测试脚本最初的目的就是为了测试订阅页以及整个购买流程，因此要对主要国家的货币和价格进行测试。但是在Xcode12中，模拟器并不能读取线上的SKProuduct信息（Xcode13已经修复）。而真机测试也只能每次手动切换">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS XCTest实战—解决国际化开发测试痛点（下）">
+<meta property="og:url" content="http://yoursite.com/2021/10/15/iOS-XCTest%E5%AE%9E%E6%88%98%E2%80%94%E8%A7%A3%E5%86%B3%E5%9B%BD%E9%99%85%E5%8C%96%E5%BC%80%E5%8F%91%E6%B5%8B%E8%AF%95%E7%97%9B%E7%82%B9%EF%BC%88%E4%B8%8B%EF%BC%89/index.html">
+<meta property="og:site_name" content="licc">
+<meta property="og:description" content="上篇详见：iOS XCTest实战—解决国际化开发测试痛点（上）  4. StoreKit Configuration File（无订阅需求可略过）因为我们是海外订阅类App，这个测试脚本最初的目的就是为了测试订阅页以及整个购买流程，因此要对主要国家的货币和价格进行测试。但是在Xcode12中，模拟器并不能读取线上的SKProuduct信息（Xcode13已经修复）。而真机测试也只能每次手动切换">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215163909.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215163923.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215163934.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215163946.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215164022.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215164039.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215164057.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215164137.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215164204.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215164212.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215164226.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215164352.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215164427.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215164442.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215164459.png">
+<meta property="article:published_time" content="2021-10-15T04:11:00.000Z">
+<meta property="article:modified_time" content="2021-12-15T08:52:32.904Z">
+<meta property="article:author" content="weican Li">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215163909.png">
+
+<link rel="canonical" href="http://yoursite.com/2021/10/15/iOS-XCTest%E5%AE%9E%E6%88%98%E2%80%94%E8%A7%A3%E5%86%B3%E5%9B%BD%E9%99%85%E5%8C%96%E5%BC%80%E5%8F%91%E6%B5%8B%E8%AF%95%E7%97%9B%E7%82%B9%EF%BC%88%E4%B8%8B%EF%BC%89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>iOS XCTest实战—解决国际化开发测试痛点（下） | licc</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="licc" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">licc</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">我心有猛虎 细嗅蔷薇</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/10/15/iOS-XCTest%E5%AE%9E%E6%88%98%E2%80%94%E8%A7%A3%E5%86%B3%E5%9B%BD%E9%99%85%E5%8C%96%E5%BC%80%E5%8F%91%E6%B5%8B%E8%AF%95%E7%97%9B%E7%82%B9%EF%BC%88%E4%B8%8B%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/avatar.png">
+      <meta itemprop="name" content="weican Li">
+      <meta itemprop="description" content="iOS开发者">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="licc">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          iOS XCTest实战—解决国际化开发测试痛点（下）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-10-15 12:11:00" itemprop="dateCreated datePublished" datetime="2021-10-15T12:11:00+08:00">2021-10-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-15 16:52:32" itemprop="dateModified" datetime="2021-12-15T16:52:32+08:00">2021-12-15</time>
+              </span>
+
+          
+            <span id="/2021/10/15/iOS-XCTest%E5%AE%9E%E6%88%98%E2%80%94%E8%A7%A3%E5%86%B3%E5%9B%BD%E9%99%85%E5%8C%96%E5%BC%80%E5%8F%91%E6%B5%8B%E8%AF%95%E7%97%9B%E7%82%B9%EF%BC%88%E4%B8%8B%EF%BC%89/" class="post-meta-item leancloud_visitors" data-flag-title="iOS XCTest实战—解决国际化开发测试痛点（下）" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2021/10/15/iOS-XCTest%E5%AE%9E%E6%88%98%E2%80%94%E8%A7%A3%E5%86%B3%E5%9B%BD%E9%99%85%E5%8C%96%E5%BC%80%E5%8F%91%E6%B5%8B%E8%AF%95%E7%97%9B%E7%82%B9%EF%BC%88%E4%B8%8B%EF%BC%89/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/10/15/iOS-XCTest%E5%AE%9E%E6%88%98%E2%80%94%E8%A7%A3%E5%86%B3%E5%9B%BD%E9%99%85%E5%8C%96%E5%BC%80%E5%8F%91%E6%B5%8B%E8%AF%95%E7%97%9B%E7%82%B9%EF%BC%88%E4%B8%8B%EF%BC%89/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>上篇详见：<a href="https://kms.netease.com/article/45514" target="_blank" rel="noopener">iOS XCTest实战—解决国际化开发测试痛点（上）</a></p>
+</blockquote>
+<h1 id="4-StoreKit-Configuration-File（无订阅需求可略过）"><a href="#4-StoreKit-Configuration-File（无订阅需求可略过）" class="headerlink" title="4. StoreKit Configuration File（无订阅需求可略过）"></a>4. StoreKit Configuration File（无订阅需求可略过）</h1><p>因为我们是海外订阅类App，这个测试脚本最初的目的就是为了测试订阅页以及整个购买流程，因此要对主要国家的货币和价格进行测试。<br>但是在Xcode12中，模拟器并不能读取线上的<code>SKProuduct</code>信息（Xcode13已经修复）。而真机测试也只能每次手动切换沙盒账户来切换国际和货币币种。<br>如下图所示，订阅页需要适配一些超长的货币（一般坦桑尼亚货币最长）。<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215163909.png" alt=""><br>通过<code>StoreKit</code>可以很方便的解决这个问题。<br>Apple 在 Xcode12 中引入了本地 StoreKit 测试，无需连接到 App Store 服务器即可测试不同的 IAP 场景。<br>更多信息详见：<a href="https://developer.apple.com/documentation/xcode/setting-up-storekit-testing-in-xcode#Overview" target="_blank" rel="noopener">《Setting Up StoreKit Testing in Xcode》</a></p>
+<h2 id="i-创建StoreKit-Configuration-File"><a href="#i-创建StoreKit-Configuration-File" class="headerlink" title="i.创建StoreKit Configuration File"></a>i.创建StoreKit Configuration File</h2><p>创建方式很简单，在新建文件中找到<code>StoreKit Configuration File</code><br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215163923.png" alt=""><br>点击加号，新增一个自动续期SKU,当然也可以用来测试消耗类内购。<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215163934.png" alt=""></p>
+<p>按着真实的线上SKU进行配置，还能配置推介促销优惠、促销优惠、家庭共享等功能。价格这里只需要填写金额<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215163946.png" alt=""><br>在Schemes设置中，添加刚刚配置的StoreKit Configuration<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215164022.png" alt=""></p>
+<p>重新运行项目，就能在获取<code>SKProductsRequestDelegate</code>的<code>productsRequest</code>方法中拿到模拟的SKU了，金额默认是美元。</p>
+<p>而更改货币也很方便，在项目中选中StoreKit Configuration文件，在Xcode中的<code>Editor</code>—&gt;<code>Default Storefront</code>中进行选择相应的币种。<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215164039.png" alt=""><br>只需要在StoreKit Configuration中更改价格就行了，会自动读取设置的Storefront币种。<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215164057.png" alt=""></p>
+<p>更改Storefront本质上就是更改<code>SKProduct</code>的<code>priceLocale</code>,注意最终价格的呈现方式要用系统提供的<code>NumberFormatter</code>来计算</p>
+<figure class="highlight reasonml"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> formatter = <span class="module-access"><span class="module"><span class="identifier">NumberFormatter</span>.</span></span>init<span class="literal">()</span></span><br><span class="line">formatter.formatterBehavior = <span class="module-access"><span class="module"><span class="identifier">NumberFormatter</span>.</span><span class="module"><span class="identifier">Behavior</span>.</span></span>behavior10_4</span><br><span class="line">formatter.numberStyle = <span class="module-access"><span class="module"><span class="identifier">NumberFormatter</span>.</span><span class="module"><span class="identifier">Style</span>.</span></span>currency</span><br><span class="line">formatter.locale = product.priceLocale</span><br><span class="line">self.price = formatter.<span class="built_in">string</span>(from: product.price) ?? <span class="string">""</span></span><br></pre></td></tr></table></figure>
+<h2 id="ii-在XCTest中使用StoreKit-Configuration-File"><a href="#ii-在XCTest中使用StoreKit-Configuration-File" class="headerlink" title="ii. 在XCTest中使用StoreKit Configuration File"></a>ii. 在XCTest中使用StoreKit Configuration File</h2><p>刚刚的配置只是在<code>Schemes</code>的<code>Run</code>环境下配置了StoreKit Configuration<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215164137.png" alt=""><br>而在我们需要的<code>Test</code>环境下并没有配置入口<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215164204.png" alt=""></p>
+<p>因此需要用代码来解决</p>
+<p>首先找到StoreKit Configuration，把文件共享给UITests Target<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215164212.png" alt=""></p>
+<p>然后在需要用到StoreKit Configuration的test方法中，根据新建name新建<code>SKTestSession</code><br>更多信息请参考：<a href="https://developer.apple.com/documentation/storekittest/sktestsession" target="_blank" rel="noopener">《SKTestSession | Apple Developer Documentation》</a></p>
+<blockquote>
+<p>注意：想要在自动化测试中使用StoreKit Configuration，需要用到SKTestSession，只有iOS14以上才支持。</p>
+</blockquote>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">testSubscribePage</span><span class="params">()</span></span> <span class="keyword">throws</span> &#123;</span><br><span class="line">       <span class="keyword">if</span> #available(iOS <span class="number">14.0</span>, *) &#123;</span><br><span class="line">           <span class="keyword">let</span> session = <span class="keyword">try</span>? <span class="type">SKTestSession</span>.<span class="keyword">init</span>(configurationFileNamed: <span class="string">"Configuration"</span>)</span><br><span class="line">           session?.disableDialogs = <span class="literal">true</span></span><br><span class="line">           session?.clearTransactions()</span><br><span class="line">       &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">           ....</span><br><span class="line">       &#125;</span><br><span class="line">       .....</span><br></pre></td></tr></table></figure>
+
+<h1 id="5-xcodebuild"><a href="#5-xcodebuild" class="headerlink" title="5. xcodebuild"></a>5. xcodebuild</h1><p>执行完上述步骤，已经可以对单个模拟器或真机执行Test Plans。如果想一次执行多个机型，就需要用到<code>xcodebuild</code>命令了。<br>熟悉Jenkins打包的同学应该对<code>xcodebuild</code>很熟悉，其实我们每次在Xcode进行的<code>Run</code>、<code>Build</code>、<code>Archive</code>等操作本质上都是执行相应的<code>xcodebuild</code>命令。<br>使用<code>xcodebuild</code>命令运行Test Plans命令如下</p>
+<figure class="highlight objectivec"><table><tr><td class="code"><pre><span class="line"><span class="comment">//使用了pod的话就需要执行xxx.xcworkspace</span></span><br><span class="line"><span class="comment">//scheme 选择UITest</span></span><br><span class="line">xcodebuild test -workspace <span class="built_in">UITestDemo</span>.xcworkspace -scheme <span class="built_in">UITestDemoUITests</span> -destination <span class="string">'platform=iOS Simulator,name=iPhone 12 Pro Max,OS=14.5'</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="i-同时运行多个模拟器和真机"><a href="#i-同时运行多个模拟器和真机" class="headerlink" title="i. 同时运行多个模拟器和真机"></a>i. 同时运行多个模拟器和真机</h2><p>一次运行多个模拟器也是可以的，还可以真机模拟器一起运行，支持不同iOS版本的模拟器同时运行。</p>
+<figure class="highlight nix"><table><tr><td class="code"><pre><span class="line">xcodebuild test -workspace UITestDemo.xcworkspace -scheme UITestDemoUITests </span><br><span class="line">-destination '<span class="attr">platform=iOS</span> Simulator,<span class="attr">name=iPhone</span> <span class="number">12</span> Pro Max,<span class="attr">OS=14.5'</span> </span><br><span class="line">-destination '<span class="attr">platform=iOS</span> Simulator,<span class="attr">name=iPhone</span> <span class="number">12</span>,<span class="attr">OS=14.5'</span></span><br><span class="line"> -destination '<span class="attr">platform=iOS</span> Simulator,<span class="attr">name=iPhone</span> <span class="number">8</span> Plus,<span class="attr">OS=14.5'</span> </span><br><span class="line">-destination '<span class="attr">platform=iOS</span> Simulator,<span class="attr">name=iPhone</span> <span class="number">8</span>,<span class="attr">OS=14.5'</span> </span><br><span class="line">-destination '<span class="attr">platform=iOS</span> Simulator,<span class="attr">name=iPhone</span> SE (<span class="number">2</span>nd generation),<span class="attr">OS=14.5'</span></span><br><span class="line">-destination '<span class="attr">platform=iOS,name=caniPhone'</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意模拟器和真机的Name必须准确，查看所有可执行的模拟器和真机可以使用<code>xcrun xctrace list devices</code></p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215164226.png" alt=""></p>
+<h2 id="ii-指定derivedDataPath"><a href="#ii-指定derivedDataPath" class="headerlink" title="ii. 指定derivedDataPath"></a>ii. 指定derivedDataPath</h2><p>正常运行Test Plans，运行结果只能在Xcode中查看并且路径很深，也可以使用<code>derivedDataPath</code>指定结果的输出路径</p>
+<figure class="highlight nix"><table><tr><td class="code"><pre><span class="line">xcodebuild test -workspace UITestDemo.xcworkspace -scheme UITestDemoUITests -derivedDataPath '/Users/cc/Desktop/outData'</span><br><span class="line">-destination '<span class="attr">platform=iOS</span> Simulator,<span class="attr">name=iPhone</span> <span class="number">12</span> Pro Max,<span class="attr">OS=14.5'</span> </span><br><span class="line">-destination '<span class="attr">platform=iOS</span> Simulator,<span class="attr">name=iPhone</span> <span class="number">12</span>,<span class="attr">OS=14.5'</span></span><br><span class="line"> -destination '<span class="attr">platform=iOS</span> Simulator,<span class="attr">name=iPhone</span> <span class="number">8</span> Plus,<span class="attr">OS=14.5'</span> </span><br><span class="line">-destination '<span class="attr">platform=iOS</span> Simulator,<span class="attr">name=iPhone</span> <span class="number">8</span>,<span class="attr">OS=14.5'</span> </span><br><span class="line">-destination '<span class="attr">platform=iOS</span> Simulator,<span class="attr">name=iPhone</span> SE (<span class="number">2</span>nd generation),<span class="attr">OS=14.5'</span></span><br><span class="line">-destination '<span class="attr">platform=iOS,name=caniPhone'</span></span><br></pre></td></tr></table></figure>
+<h2 id="iii-开启parallel"><a href="#iii-开启parallel" class="headerlink" title="iii. 开启parallel"></a>iii. 开启parallel</h2><p>在<a href="https://kms.netease.com/article/45514" target="_blank" rel="noopener">iOS XCTest实战—解决国际化开发测试痛点（上）</a>中Test Plans栏目介绍了为设备开启parallel testing。在xcode build中同样可以使用<code>-parallel-testing-enabled YES -parallelize-tests-among-destinations</code>开启（不过同时运行多个不同的模拟器，一般没有额外资源对同一个模拟器再开启parallel testing）</p>
+<figure class="highlight nix"><table><tr><td class="code"><pre><span class="line">xcodebuild test -workspace UITestDemo.xcworkspace -scheme UITestDemoUITests -derivedDataPath '/Users/cc/Desktop/outData'</span><br><span class="line">-parallel-testing-enabled YES -parallelize-tests-among-destinations</span><br><span class="line">-destination '<span class="attr">platform=iOS</span> Simulator,<span class="attr">name=iPhone</span> <span class="number">12</span> Pro Max,<span class="attr">OS=14.5'</span> </span><br><span class="line">-destination '<span class="attr">platform=iOS</span> Simulator,<span class="attr">name=iPhone</span> <span class="number">12</span>,<span class="attr">OS=14.5'</span></span><br><span class="line"> -destination '<span class="attr">platform=iOS</span> Simulator,<span class="attr">name=iPhone</span> <span class="number">8</span> Plus,<span class="attr">OS=14.5'</span> </span><br><span class="line">-destination '<span class="attr">platform=iOS</span> Simulator,<span class="attr">name=iPhone</span> <span class="number">8</span>,<span class="attr">OS=14.5'</span> </span><br><span class="line">-destination '<span class="attr">platform=iOS</span> Simulator,<span class="attr">name=iPhone</span> SE (<span class="number">2</span>nd generation),<span class="attr">OS=14.5'</span></span><br><span class="line">-destination '<span class="attr">platform=iOS,name=caniPhone'</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>系统会按照可用资源同时并行运行多个模拟器(一般是5个)，当你指定超过5个，最开始运行结束的模拟器会自动关闭然后运行下一个。</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215164352.png" alt=""></p>
+<p>更多的xcodebuild详见:</p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">man xcodebuild</span></span><br></pre></td></tr></table></figure>
+<h1 id="6-从xcresult中提取截图"><a href="#6-从xcresult中提取截图" class="headerlink" title="6. 从xcresult中提取截图"></a>6. 从xcresult中提取截图</h1><p>上面提到过要看Test Plans运行完后的截图，只能在Xcode中查看，并且每次只能查看一个配置，图片也只能一次查看一张。<br>在Xcode中找到测试结果，在Finder中显示可以看到结果是以<code>.xcresult</code>结尾的文件<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215164427.png" alt=""><br>点击显示包内容后发现结果也无法读取。<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215164442.png" alt=""></p>
+<p>通过查阅官方文档：<a href="https://help.apple.com/xcode/mac/current/#/devc38fc7392" target="_blank" rel="noopener">《View and share test results》</a>得知，可以使用<code>xcrun xcresulttool</code>命令来导出结果。<br>更多命令请查看</p>
+<figure class="highlight stata"><table><tr><td class="code"><pre><span class="line">xcrun xcresulttool --<span class="keyword">help</span> </span><br><span class="line"><span class="comment">//or</span></span><br><span class="line"><span class="keyword">man</span> xcresulttool</span><br></pre></td></tr></table></figure>
+<h2 id="i-xcparse"><a href="#i-xcparse" class="headerlink" title="i.xcparse"></a>i.xcparse</h2><p>但是其实不用这么麻烦，因为在Github上有很好用的开源库：<a href="https://github.com/ChargePoint/xcparse" target="_blank" rel="noopener">xcparse</a></p>
+<p>通过<code>brew</code>安装后，运行xcparse命令即可</p>
+<figure class="highlight jboss-cli"><table><tr><td class="code"><pre><span class="line"><span class="string">//install</span>  xcparse</span><br><span class="line">brew install chargepoint/xcparse/xcparse</span><br><span class="line"></span><br><span class="line"><span class="string">//run</span> xcparse</span><br><span class="line">xcparse screenshots <span class="params">--os</span> <span class="params">--model</span> <span class="params">--test-plan-config</span> <span class="string">/path/to/Test.xcresult</span> <span class="string">/path/to/outputDirectory</span></span><br></pre></td></tr></table></figure>
+<p>得到的结果就会按机型、语言分组展示，清晰明了。<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20211215164459.png" alt=""></p>
+<h1 id="7-最终方案Shell脚本"><a href="#7-最终方案Shell脚本" class="headerlink" title="7. 最终方案Shell脚本"></a>7. 最终方案Shell脚本</h1><p>做完上述所有操作，就已经基本满足需求了。但是还是差那么点意思，目前还存在以下问题：</p>
+<ul>
+<li>每次改模拟器，都需要修改xcodebuild命令</li>
+<li>输出path要手动指定，如果存在也不会覆盖会一直增加</li>
+<li>运行完xcodebuild命令后，要导出图片还要手动执行xcparse命令</li>
+<li>无法部署到Jenkins等让非开发人员去测试<br>….</li>
+</ul>
+<p>所以我用了一段时间后，决定要shell脚本封装一下，做到一键操作。只需要一个命令，就可以自动执行<code>Test Plans</code>,拿到<code>xcresult</code>后自动执行<code>xcparse</code>命令导出到指定路径。</p>
+<p>因为所有的难题之前已经解决了，脚本也是水到渠成。逻辑也很简单</p>
+<h2 id="i-脚本"><a href="#i-脚本" class="headerlink" title="i.脚本"></a>i.脚本</h2><ul>
+<li><p>先指定scheme名字</p>
+</li>
+<li><p>指定xcresult输出目录和xcparse图片输出目录，之前存在就覆盖</p>
+</li>
+<li><p>配置模拟器和真机List</p>
+</li>
+<li><p>test plans运行完毕后拿到xcresult，用xcparse导出图片</p>
+</li>
+</ul>
+<p>代码如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#  UITest.sh</span></span><br><span class="line"><span class="comment">#  UDictionary</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#  Created by 李伟灿 on 2021/8/24.</span></span><br><span class="line"><span class="comment">#  Copyright © 2021 com.youdao. All rights reserved.</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#chmod +x UITest.sh</span></span><br><span class="line"><span class="comment">#./UITest.sh</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"=========开始执行========="</span></span><br><span class="line"></span><br><span class="line">path=$(<span class="built_in">pwd</span>)</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"path is <span class="variable">$path</span>"</span></span><br><span class="line"></span><br><span class="line">scheme=<span class="string">"UDictionary"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#输出目录</span></span><br><span class="line">outPath=<span class="string">"<span class="variable">$HOME</span>/Desktop/outData"</span></span><br><span class="line">resultPath=<span class="string">"<span class="variable">$HOME</span>/Desktop/outResult"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#XCUITest function</span></span><br><span class="line"><span class="function"><span class="title">xcUITestFunc</span></span>()&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">test</span> -e <span class="variable">$scheme</span>.xcodeproj</span><br><span class="line">    <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">'=========Xcode Project存在'</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">'=========Xcode Project不存在 请检查执行路径'</span></span><br><span class="line">        <span class="built_in">exit</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">test</span> -e <span class="variable">$outPath</span></span><br><span class="line">    <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"=========outPath existed, clean outPath"</span></span><br><span class="line">        rm -rf <span class="variable">$outPath</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">    mkdir <span class="variable">$outPath</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"=========outPath mkdir"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#Get All Devices</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#xcrun xctrace list devices</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#兼容真机和模拟器 不过最好模拟器一起跑 真机一起跑</span></span><br><span class="line">    simulators=(</span><br><span class="line">                <span class="comment">#iPhone</span></span><br><span class="line">                <span class="string">"platform=iOS Simulator,name=iPhone 12 Pro Max,OS=15.0"</span></span><br><span class="line">                <span class="string">"platform=iOS Simulator,name=iPhone 12,OS=15.0"</span></span><br><span class="line">                <span class="string">"platform=iOS Simulator,name=iPhone 8 Plus,OS=15.0"</span></span><br><span class="line">                <span class="string">"platform=iOS Simulator,name=iPhone 8,OS=15.0"</span></span><br><span class="line">                <span class="string">"platform=iOS Simulator,name=iPhone SE (2nd generation),OS=15.0"</span></span><br><span class="line">                </span><br><span class="line">                <span class="comment">#iPad</span></span><br><span class="line">                <span class="string">"platform=iOS Simulator,name=iPad (9th generation),OS=15.0"</span></span><br><span class="line">                <span class="string">"platform=iOS Simulator,name=iPad mini (6th generation),OS=15.0"</span></span><br><span class="line">                <span class="string">"platform=iOS Simulator,name=iPad Air (4th generation),OS=15.0"</span></span><br><span class="line">                <span class="string">"platform=iOS Simulator,name=iPad Pro (9.7-inch),OS=15.0"</span></span><br><span class="line">                <span class="string">"platform=iOS Simulator,name=iPad Pro (11-inch) (3rd generation),OS=15.0"</span></span><br><span class="line">                <span class="string">"platform=iOS Simulator,name=iPad Pro (12.9-inch) (5th generation),OS=15.0"</span></span><br><span class="line">                )</span><br><span class="line"></span><br><span class="line">    destinationStr=<span class="string">""</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> subSimulator <span class="keyword">in</span> <span class="string">"<span class="variable">$&#123;simulators[@]&#125;</span>"</span></span><br><span class="line">    <span class="keyword">do</span></span><br><span class="line">        tmpStr=<span class="string">"-destination '<span class="variable">$subSimulator</span>' "</span></span><br><span class="line">        destinationStr=<span class="variable">$destinationStr</span><span class="variable">$tmpStr</span></span><br><span class="line">    <span class="keyword">done</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="variable">$destinationStr</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#拼接命令</span></span><br><span class="line">    commandStr=<span class="string">"xcodebuild test -workspace <span class="variable">$scheme</span>.xcworkspace -scheme <span class="variable">$scheme</span> -derivedDataPath '<span class="variable">$outPath</span>' <span class="variable">$destinationStr</span>"</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">echo</span> <span class="variable">$commandStr</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#执行命令</span></span><br><span class="line">    <span class="built_in">eval</span> <span class="variable">$commandStr</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"=========XCTestPlan执行结束========="</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"----------------------------------"</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"----------------------------------"</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">getAllScreenShots</span></span>()&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">test</span> -e <span class="variable">$resultPath</span></span><br><span class="line">    <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"=========resultPath existed, clean resultPath"</span></span><br><span class="line">        rm -rf <span class="variable">$resultPath</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#find xcresult</span></span><br><span class="line">    xcresultpath=$(find <span class="variable">$outPath</span>/Logs/Test -name <span class="string">"*.xcresult"</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"=========即将输出图片到<span class="variable">$resultPath</span>"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#Install xcparse</span></span><br><span class="line">    <span class="comment">#brew install chargepoint/xcparse/xcparse</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#执行xcparse</span></span><br><span class="line">    commandStr=<span class="string">"xcparse screenshots --os --model --test-plan-config <span class="variable">$xcresultpath</span> <span class="variable">$resultPath</span>"</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="variable">$commandStr</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#执行命令</span></span><br><span class="line">    <span class="built_in">eval</span> <span class="variable">$commandStr</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"=========xcparse执行结束========="</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">xcUITestFunc</span><br><span class="line"></span><br><span class="line">getAllScreenShots</span><br></pre></td></tr></table></figure>
+<h2 id="ii-运行脚本"><a href="#ii-运行脚本" class="headerlink" title="ii.运行脚本"></a>ii.运行脚本</h2><p>运行方式也很简单，在Terminal中找到工程目录，执行Shell脚本，比如我们Shell脚本为UITest.sh</p>
+<figure class="highlight reasonml"><table><tr><td class="code"><pre><span class="line">chmod +x <span class="module-access"><span class="module"><span class="identifier">UITest</span>.</span></span>sh</span><br><span class="line">./<span class="module-access"><span class="module"><span class="identifier">UITest</span>.</span></span>sh</span><br></pre></td></tr></table></figure>
+
+<h1 id="8-结语"><a href="#8-结语" class="headerlink" title="8.结语"></a>8.结语</h1><p>至此，UI自动走查方案已经全部完成了。有了这个脚本后，我们工程每个版本开发自测和测试平均节省了<code>5/人/天</code>的工作量。特别是后来我们开启了iPad适配后。而UI走查也能看到最终结果的真实呈现。目前已经稳定运行了4个多月，后续还会根据需求继续优化。<br>本方案设计到很多技术点，比如<code>XCTest</code>、<code>Test Plans</code>、<code>xcodebuild</code>、<code>StoreKit Configuration</code>等等，每一部分单独拎出来说都可以单独写一篇。<br>所以本文很多地方都一笔带过，主要讲方案的选择和融合。如果哪方面有疑问欢迎大家联系我进行讨论和交流。</p>
+<h2 id="联系方式："><a href="#联系方式：" class="headerlink" title="联系方式："></a>联系方式：</h2><blockquote>
+<p>李伟灿<br>网易有道 国际词典项目组<br><a href="https://github.com/liweican1992" target="_blank" rel="noopener">Github</a><br>liweican#corp.netease.com<br>liweican1992#163.com</p>
+</blockquote>
+<p>感谢您的阅读~</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/10/11/iOS-XCTest%E5%AE%9E%E6%88%98%E2%80%94%E8%A7%A3%E5%86%B3%E5%9B%BD%E9%99%85%E5%8C%96%E5%BC%80%E5%8F%91%E6%B5%8B%E8%AF%95%E7%97%9B%E7%82%B9/" rel="prev" title="iOS XCTest实战—解决国际化开发测试痛点（上）">
+      <i class="fa fa-chevron-left"></i> iOS XCTest实战—解决国际化开发测试痛点（上）
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#4-StoreKit-Configuration-File（无订阅需求可略过）"><span class="nav-text">4. StoreKit Configuration File（无订阅需求可略过）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#i-创建StoreKit-Configuration-File"><span class="nav-text">i.创建StoreKit Configuration File</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ii-在XCTest中使用StoreKit-Configuration-File"><span class="nav-text">ii. 在XCTest中使用StoreKit Configuration File</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-xcodebuild"><span class="nav-text">5. xcodebuild</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#i-同时运行多个模拟器和真机"><span class="nav-text">i. 同时运行多个模拟器和真机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ii-指定derivedDataPath"><span class="nav-text">ii. 指定derivedDataPath</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iii-开启parallel"><span class="nav-text">iii. 开启parallel</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-从xcresult中提取截图"><span class="nav-text">6. 从xcresult中提取截图</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#i-xcparse"><span class="nav-text">i.xcparse</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-最终方案Shell脚本"><span class="nav-text">7. 最终方案Shell脚本</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#i-脚本"><span class="nav-text">i.脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ii-运行脚本"><span class="nav-text">ii.运行脚本</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-结语"><span class="nav-text">8.结语</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#联系方式："><span class="nav-text">联系方式：</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="weican Li"
+      src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/avatar.png">
+  <p class="site-author-name" itemprop="name">weican Li</p>
+  <div class="site-description" itemprop="description">iOS开发者</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/liweican1992" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;liweican1992" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:liweican1992@163.com" title="E-Mail → mailto:liweican1992@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">weican Li</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : true,
+      appId      : '2vtATvMKrRqHP269UUtJOy6L-MdYXbMMI',
+      appKey     : 'zHsuq1nT4cg9Vse62lvSHrUq',
+      placeholder: "在此输入留言",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
