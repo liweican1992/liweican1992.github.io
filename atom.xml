@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2021-12-15T09:12:26.367Z</updated>
+  <updated>2021-12-20T07:20:38.309Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>jsdelivr节点出现故障</title>
+    <link href="http://yoursite.com/2021/12/20/jsdelivr%E8%8A%82%E7%82%B9%E5%87%BA%E7%8E%B0%E6%95%85%E9%9A%9C/"/>
+    <id>http://yoursite.com/2021/12/20/jsdelivr%E8%8A%82%E7%82%B9%E5%87%BA%E7%8E%B0%E6%95%85%E9%9A%9C/</id>
+    <published>2021-12-20T07:19:25.000Z</published>
+    <updated>2021-12-20T07:20:38.309Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>2021.12.20 jsdelivr节点出现故障，详见：<a href="https://github.com/jsdelivr/jsdelivr/issues/18348" target="_blank" rel="noopener">https://github.com/jsdelivr/jsdelivr/issues/18348</a></p></blockquote><p>本博客使用了jsdelivr作为图床CDN，目前图片无法访问，恢复时间待定</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;blockquote&gt;
+&lt;p&gt;2021.12.20 jsdelivr节点出现故障，详见：&lt;a href=&quot;https://github.com/jsdelivr/jsdelivr/issues/18348&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
   
   <entry>
     <title>iOS XCTest实战—解决国际化开发测试痛点（下）</title>
@@ -485,37 +508,6 @@
 &lt;p&gt;update&lt;br&gt;补充下图片，当还有一个月过期时候，登录iTunes Connect 或者开发者中心都会有提示信息&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601141646.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>iOS开发中一些小工具</title>
-    <link href="http://yoursite.com/2016/03/25/iOS%E5%BC%80%E5%8F%91%E4%B8%AD%E4%B8%80%E4%BA%9B%E5%B0%8F%E5%B7%A5%E5%85%B7/"/>
-    <id>http://yoursite.com/2016/03/25/iOS%E5%BC%80%E5%8F%91%E4%B8%AD%E4%B8%80%E4%BA%9B%E5%B0%8F%E5%B7%A5%E5%85%B7/</id>
-    <published>2016-03-25T08:36:00.000Z</published>
-    <updated>2020-06-02T02:56:22.595Z</updated>
-    
-    <content type="html"><![CDATA[<p>做iOS开发已经有几年了，中间也积累下了不少工具<br>做一个总结吧</p><p><strong>一、Mac 菜单栏工具</strong></p><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601163902.png" alt=""></p><ul><li>Bartender</li></ul><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601163920.png" alt=""></p><p>Barteder是一款优秀的菜单栏管理工具，可以把一些不常用的隐藏起来，将大量的菜单有选择折进 Bartender 的二级菜单，不仅会看起来更整洁，使用起来也不会造成太大的麻烦。配合下面的 <strong><em>iStar Menus</em></strong> 食用更加<br>官网地址：<a href="https://www.macbartender.com/" target="_blank" rel="noopener">https://www.macbartender.com/</a><br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601163937.png" alt=""></p><ul><li>iStar Menus</li></ul><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601163949.png" alt=""><br>这个工具可以监测Mac的各种性能，并且可以就改样式颜色等。装逼利器之一~</p><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164010.png" alt=""><br>官网地址:<a href="https://bjango.com/mac/istatmenus/" target="_blank" rel="noopener">https://bjango.com/mac/istatmenus/</a></p><a id="more"></a><ul><li>Alfred2<br>神兵利器，工作流典范</li></ul><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164023.png" alt=""></p><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164043.png" alt=""><br>总之，只有你想不到没有你做不到<br>网上教程较多，有很多其他人写好的workflow，可以直接拿来使用<br>官方地址：<a href="https://www.alfredapp.com/" target="_blank" rel="noopener">https://www.alfredapp.com/</a></p><p><strong><em>二、实用类 开发工具</em></strong></p><ul><li>Switcher<br>可以方便的切换各个国家的App Store，看在各区的排名和评论。国际化项目的开发利器</li></ul><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164112.png" alt=""><br>安装地址：<a href="http://switchr.imagility.io/" target="_blank" rel="noopener">http://switchr.imagility.io/</a><br>浏览器打开，保存至桌面即可</p><ul><li>Sourcetree<br>git界面化工具，使用最多的软件了没啥好讲的</li></ul><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164128.png" alt=""></p><ul><li>kaleidoscope</li></ul><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164140.png" alt=""><br>配合Sourcetree使用用于多人开发时解决冲突使用，我会单独写一篇博客介绍其安装和使用</p><ul><li>PostMan</li></ul><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164152.png" alt=""><br>Chorme插件<br>接口调试利器 ，发送各种请求，看接口的返回样式等等等<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164216.png" alt=""><br>安装： chorme应用商店搜索postman</p><p><strong><em>需翻墙！！！<br>选择扩展程序那个安装</em></strong><br>下面有翻墙软件 往后翻<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164243.png" alt=""></p><ul><li>Lantern</li></ul><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164256.png" alt=""><br>长城的存在是保护外国人的（笑），奈何做开发还是需要翻墙的<br>免费的！你懂得</p><ul><li>MarkMan<br>淘宝，鹅厂都在用的工具，取色量取尺寸神器，60软妹币一年，当然你可以不付费，不付费除了不能保存一切都一样。</li></ul><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164307.png" alt=""></p><ul><li>Hex color picker<br>Xcode颜色神器，上面介绍了markman的取色功能，那么在开发中用代码赋值颜色多麻烦啊。因为我使用storyboard比较多，所以Hex color picker用到的比较多。<br>先放一个下载地址 <a href="https://pan.baidu.com/s/1dFM92Kx" target="_blank" rel="noopener">https://pan.baidu.com/s/1dFM92Kx</a></li></ul><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164323.png" alt=""><br>恩，大概就是这个样子，可以在storyboard中直接用16进制颜色赋值。<br>安装办法：把整个文件夹copy到资源库中（需要输入本机密码），文件夹命名为ColorPickers，然后重启Xcode即可</p><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164340.png" alt=""></p><ul><li>Chrales<br>抓包神器，不管是调试接口还是想看其他App的接口数据，都很好用（https加密暂时还没解密出来，目前只能看http接口）</li></ul><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164350.png" alt=""><br>设置很简单，看你当前电脑本机IP，然后打开手机WiFi选项，点击当前连接WiFi后面的感叹号，进入设置界面，在HTTP代理那里选择手动，把电脑本机IP填进去，端口为8888.然后找一个使用http协议的App，看看其他人的接口设计吧~</p><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164417.png" alt=""><br>扔一个下载地址 链接: <a href="http://pan.baidu.com/s/1c27JcKK" target="_blank" rel="noopener">http://pan.baidu.com/s/1c27JcKK</a> 密码: kw27<br>（你懂的）</p><p>Update 2016-10-17</p><ul><li>Tinypng<br>App瘦身利器，当App中的图片资源越来越多时候，App的体积也会越来越大。是时候给你App中内置的图片瘦身了。使用方便，只需拖图片进去在线即可压缩。<br>地址：<a href="https://tinypng.com/" target="_blank" rel="noopener">Tinypng</a></li></ul><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164434.png" alt=""><br>Update 2016-11-04</p><ul><li>Prepo<br>App图标裁剪软件，iOS10 以后图标有新增两个尺寸。不过这个软件依旧可以满足。UI操作简单，一键生成所有尺寸图标。只需让UI出一个<strong><em>1024x1024</em></strong>分辨率的图就好。</li></ul><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164446.png" alt=""><br>上方还可以选择iOS7 +、 iPhoneOnly之类的筛选</p><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164457.png" alt=""><br>然后点击上方的Export导出即可</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;做iOS开发已经有几年了，中间也积累下了不少工具&lt;br&gt;做一个总结吧&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;一、Mac 菜单栏工具&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601163902.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Bartender&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601163920.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;Barteder是一款优秀的菜单栏管理工具，可以把一些不常用的隐藏起来，将大量的菜单有选择折进 Bartender 的二级菜单，不仅会看起来更整洁，使用起来也不会造成太大的麻烦。配合下面的 &lt;strong&gt;&lt;em&gt;iStar Menus&lt;/em&gt;&lt;/strong&gt; 食用更加&lt;br&gt;官网地址：&lt;a href=&quot;https://www.macbartender.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.macbartender.com/&lt;/a&gt;&lt;br&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601163937.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;iStar Menus&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601163949.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;这个工具可以监测Mac的各种性能，并且可以就改样式颜色等。装逼利器之一~&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601164010.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;官网地址:&lt;a href=&quot;https://bjango.com/mac/istatmenus/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://bjango.com/mac/istatmenus/&lt;/a&gt;&lt;/p&gt;
     
     </summary>
     
