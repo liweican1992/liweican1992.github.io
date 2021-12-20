@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2021-12-20T07:31:35.504Z</updated>
+  <updated>2021-12-20T09:45:12.420Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="http://yoursite.com/2021/12/20/jsdelivr%E8%8A%82%E7%82%B9%E5%87%BA%E7%8E%B0%E6%95%85%E9%9A%9C/"/>
     <id>http://yoursite.com/2021/12/20/jsdelivr%E8%8A%82%E7%82%B9%E5%87%BA%E7%8E%B0%E6%95%85%E9%9A%9C/</id>
     <published>2021-12-20T07:19:25.000Z</published>
-    <updated>2021-12-20T07:31:35.504Z</updated>
+    <updated>2021-12-20T09:45:12.420Z</updated>
     
-    <content type="html"><![CDATA[<blockquote><p>2021.12.20 jsdelivr节点出现故障，详见：<a href="https://github.com/jsdelivr/jsdelivr/issues/18348" target="_blank" rel="noopener">https://github.com/jsdelivr/jsdelivr/issues/18348</a></p></blockquote><p>本博客使用了jsdelivr作为图床CDN，目前图片无法访问，恢复时间待定<br>看了一下好像是大陆用的网宿科技节点，然后证书挂错了（19年那次是证书过期了…）</p>]]></content>
+    <content type="html"><![CDATA[<blockquote><p>2021.12.20 jsdelivr节点出现故障，详见：<a href="https://github.com/jsdelivr/jsdelivr/issues/18348" target="_blank" rel="noopener">https://github.com/jsdelivr/jsdelivr/issues/18348</a></p></blockquote><p>本博客使用了jsdelivr作为图床CDN，目前图片无法访问，恢复时间待定<br>看了一下好像是大陆用的网宿科技的节点，然后证书挂错了（19年那次是证书过期了…）</p><blockquote><p>2021.12.20 17：30 测试服务已经恢复…希望不是一年挂一次</p></blockquote>]]></content>
     
     <summary type="html">
     
