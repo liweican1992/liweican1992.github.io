@@ -34,7 +34,7 @@
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20201012172402.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20201012172615.png">
 <meta property="article:published_time" content="2020-10-12T08:19:00.000Z">
-<meta property="article:modified_time" content="2021-11-12T03:09:28.884Z">
+<meta property="article:modified_time" content="2022-08-11T10:09:41.007Z">
 <meta property="article:author" content="weican Li">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20201012164605.png">
@@ -189,7 +189,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-11-12 11:09:28" itemprop="dateModified" datetime="2021-11-12T11:09:28+08:00">2021-11-12</time>
+                <time title="Modified: 2022-08-11 18:09:41" itemprop="dateModified" datetime="2022-08-11T18:09:41+08:00">2022-08-11</time>
               </span>
 
           
@@ -227,6 +227,9 @@
         <blockquote>
 <p>XLIFF（XML Localisation Interchange File Format，即XML本地化交换文件格式）是一种基于XML的交换格式，旨在标准化本地化过程中在工具之间传递可本地化数据的方式，是CAT工具中常用的一种文件格式。XLIFF由结构化信息标准促进组织（OASIS）于2002年标准化，目前规范为2014年8月5日发布的v2.0<br>　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　 ——Wiki</p>
 </blockquote>
+<hr>
+<p>update:升级到Xcode13以后，Export Localizationns 会报错，需要在<code>Build Setting</code>中设置<code>Use Compiler to Extract Swift Strings</code>为<code>NO</code>。多个targert的话每个target都设置即可。</p>
+<hr>
 <p>Apple对国际化文案的管理也是基于<code>XLIFF</code>的，这几年一直负责海外项目。国际化文案翻译和录入是必不可免的。XLIFF是业内的通用做法。</p>
 <p>如果你对XLIFF不了解，可以参考WWDC Session 401:<br><a href="https://developer.apple.com/videos/play/wwdc2017/401" target="_blank" rel="noopener">《Localizing with Xcode 9》</a></p>
 <p>Apple在2018年升级了国际化文案管理方式，从<code>XLIFF</code>升级到了<code>Localization Catalog</code>。不过本质上文案管理还是XLIFF。<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/20201012164605.png" alt=""></p>
