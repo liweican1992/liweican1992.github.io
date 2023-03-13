@@ -41,6 +41,29 @@
   </entry>
   
   <entry>
+    <title>iOS投放归因—SKAN3.0实战</title>
+    <link href="http://yoursite.com/2022/08/19/iOS%E6%8A%95%E6%94%BE%E5%BD%92%E5%9B%A0%E2%80%94SKAN3-0%E5%AE%9E%E6%88%98/"/>
+    <id>http://yoursite.com/2022/08/19/iOS%E6%8A%95%E6%94%BE%E5%BD%92%E5%9B%A0%E2%80%94SKAN3-0%E5%AE%9E%E6%88%98/</id>
+    <published>2022-08-19T14:34:00.000Z</published>
+    <updated>2023-03-13T14:59:15.117Z</updated>
+    
+    <content type="html"><![CDATA[<p>背景</p><p>在iOS14.5以后Apple启用ATT（AppTransparencyTracking）。ATT 意味着，如果你的应用程序收集有关最终用户的数据并与其他公司共享以跨应用程序和网站进行跟踪（IDFA），则必须使用 ATT 同意提示并在发布商和广告商应用程序中获得用户同意。如果不跟踪，则无需显示提示。<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202303132252093.png" alt=""></p><p>ATT政策正在加速移动广告行业跃变，用于广告追踪的 IDFA 或将逐渐淡出历史舞台，至此iOS进入后IDFA时代。</p><p>Apple给出的解决方案正是SKAdNetWork(SKAN),但是SKAN并不是iOS14.5之后才发布的，SKAN 1.0是Apple于2018年推出的API，在iOS14.5推出ATT后推出2.0。后续更新到了3.0版本，在iOS16.1后推出了全新的SKAN 4.0版本。</p><p>大规模的使用是在SKAN 3.0版本，我们也是在3.0版本开始接入。下面先简单介绍下SKAN归因的原理。</p><p>SKAN3.0归因流程</p><p>下面是归因的流程图，看不懂没关系，先搞明白几个概念。</p><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202303132254060.png" alt=""></p><p>1.Conversion value (CV)</p><p>上图有2个方法registerAppforAdNetworkattribution()和updateConversionValue(:_)</p><p>updateConversionValue(:_)提到了ConversionValue就是归因的重点。</p><p>你可以理解成Apple最后回传给广告主的就是这个CV值，取值范围在0-63之间。</p><p>为什么是0-63呢，因为这个CV是一个6bit的值，在二进制中取值范围中就是0-63之间。</p><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202303132254389.png" alt=""></p><p>SKAN的重点就是合理利用这个64个数</p><p>CV值是可以更新的，调用updateConversionValue即可更新。但是新的值必须比旧的大，否则不生效。</p><p>2.计时器挑战</p><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202303132255621.png" alt=""></p><p>Apple在SKAN中设计了一个计时器功能，App首次安装时候首先调用registerAppforAdNetworkattribution()</p><p>开发者可以在24小时的循环周期内反复调用updateConversionValue： 去更新转化数值。</p><p>调用此方法有两个目的： </p><p>产生一个安装通知,是一个加密签名的数据包,用于验证是否来自广告</p><p>应用提供或更新一个转化数值</p><p>每次更新CV值成功，计时器延迟24个小时。</p><p>如果24小时内CV都没更新，则确定了最终的CV值，最终值确定后，又会在24小时之内把CV值回传给广告平台。</p><p>也就是说安装激活转化值在最快会在24-48小时内回传给广告主。</p><p>如何理解？安装的CV值都是0，用户安装24小时都没有触发CV值更新，24小时后计时器停止，最终CV值就是0，而Apple又会在24小时内postback，也就是再加0-24小时之间的时间，那就是24-48小时。</p><p>这在用习惯IDFA归因看来简直效率低下，之前IDFA归因广告投放后用户安装后立刻就能知道，而使用SKAN最快也要24-48小时之后才知道安装数（还不包括后续CV更新，只看激活数）</p><p>举个极端例子，如果CV值对应的转换事件设置不恰当，用户从0一直更新到63，那么你要在60多天后才拿到这个用户最终的CV值。</p><p>3.隐私阈值</p><p>看了上面的计时器觉得SKAN已经很难用了吧，别慌，还有一个更坏的消息。CV值最终是否传递给广告主还要看用户的行为是否满足Apple的隐私阈值。</p><p>这是阈值具体是什么呢？抱歉，Apple没说，一切都是黑盒。</p><p>（在我们接入过程中有广告主试了下，得出的大概结论是每个广告系列平均每天安装120个以上才符合，但是很快Apple又调整了隐私阈值）</p><p>如果不符合阈值呢，那Apple会回传给你一个Null。</p><p>而经过我们测试，新开的广告系列或者效果一般的广告，不符合隐私阈值拿到CV值为null的占比高达90%</p><p><img src="/images/pasted-4.png" alt="upload successful"></p><p>SKAN技巧及坑</p><p>了解了SKAN的原理，那么说一下SKNA的优缺点。</p><p>Apple说优点有很多，我都放下面这个图里了，在隐私越来越严格的背景下，可以预见SKAN在很久一段时间都会是常态。<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202303132255620.png" alt=""></p><p>缺点呢，有很多，最重要的一条就是时效性太差太差。</p><p>这对整个团队也是一种考验，作为研发人员，你不但要深入了解SKNA原理，还需要了解各个广告平台，MMP平台的SKNA解决方案（每个平台方案都不同），还要让投放、产品、市场都了解和使用SKAN,合理利用64个CV值的映射，这无疑也是个挑战。</p><p>1.使用MMP平台</p><p>广告归因平台(Mobile Measurement Partner,简称MMP)，SKAN归因特别复杂，所以一般都使用MMP平台来集成，MMP平台去对接各大广告平台，和各大广告平台的SKAN方案做桥接可以做到只设置一个CV映射表对应所有广告平台。</p><p>拿我们使用的AppsFlyer平台举例，他们的CV映射方案如下：<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202303132255755.png" alt=""></p><p>具体来讲有分为几个大的维度<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202303132256914.png" alt=""></p><p>更多信息可以去对应的MMP平台查看。</p><p>下面是整个MMP平台和广告平台归因流程。</p><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202303132256514.png" alt=""></p><p>2.合理设置CV值</p><p>在MMP平台，可以设置CV映射表，一般就是应用内事件、订阅收入等。</p><p>那么如何理解CV值的，拿下图来说，我们统计了</p><p>1.收入价值，分了4个范围（对接FB要求必须4个范围，实际可能用不到这么多）</p><p>2.应用内事件subs_success</p><p>3.归因窗口期<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202303132256726.png" alt=""><br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202303132257744.png" alt=""></p><p>我们会在subs_success事件上报一个事件价值（价值是取平均值，比如你上报的价值落在0-20之间，MMP平台统一统计为10美金），那么CV值=6就代表：用户在激活后0-12小时之内订阅了，产生了subs_success事件，事件价值10美金。<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202303132257355.png" alt=""></p><p>那么7就代表用户在激活后0-12小时之内订阅了，产生了subs_success事件，产生了（20+40）/ 2 = 30美金的价值。</p><p>3.各广告平台事件映射</p><p>MMP和各个广告平台对接方式都不一样，这里不再展开讲，需要注意的就是CV映射值的调整，在部分平台同步生效需要36-48小时不等，更改CV映射表期间应该暂停广告并且新旧映射表交替时候数据会有部分混乱。</p><p>具体看MMP平台文档。</p><p>另外还配到一些映射不上，无法拉取成本等等问题，有些是广告平台的问题，需要督促MMP平台找广告平台解决。</p><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202303132257738.png" alt=""></p><p>这里补充下，MMP平台和广告平台CV值怎么同步的问题。</p><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202303132257413.png" alt=""></p><p>重点就是你在Google投放的广告，Apple会把最终CV值给Google，比如CV=6,Google要么会从MMP拉取一份你配置的CV映射表，要么回去MMP问CV=6代表什么。同时把CV=6发送给MMP,MMP再在面板上展示数据。</p><p>还有提醒一下，MMP平台的SKAN策略和广告平台的会不一致，拿Google来说，Google后台可以Apple给的CV值，但是Google还有自归因逻辑，存在null的情况下GG会自归因判断是否激活。CV值和MMP最终对不上。</p><p>那么有的同学就发现这里存在漏洞，既然是Apple给广告平台，广告平台再给MMP，广告平台会不会篡改CV值呢。</p><p>因为有些平台结算是按激活量的。这个就是下面要提的交叉验证了。</p><p>4.MMP交叉验证</p><p>Apple在iOS15推出了新功能，可以在发送CV值给广告平台时候，同步发送给另外一个地址。这样就杜绝了广告平台欺诈的情况。</p><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202303132257160.png" alt=""></p><p>4.成绩</p><p>其实对SKAN的介绍要想说透彻必须单开一篇文章来讲了。</p><p>下面说下我们的成绩，截止到SKAN4.0之前，SKAN的归因数据肯定不真实的，为什么?因为隐私阈值的存在，数据相当于抽样。</p><p>但是每个平台都抽样，只看绝对值还是能对比那个广告渠道转换和收益好的。</p><p>期间也经历了MMP平台CV值混乱bug等等，但是总体来说SKAN是目前最优解决方案。</p><p>目前我们一个订阅上报10美金价值，数据去除隐私阈值的损耗，看整体趋势也能和Apple后台数据对得上。</p><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202303132257124.png" alt=""></p><p>除了SKAN，还可以使用Apple官方的ASM(App Store Search Marketing )又名 ASA(Apple Search Ads)。ASM并不使用SKAN，而是传统的归因（果然好东西还是留给自己平台）。</p><p>关于更多SKAN4.0的信息，我会单独开一篇来讲。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;背景&lt;/p&gt;
+&lt;p&gt;在iOS14.5以后Apple启用ATT（AppTransparencyTracking）。ATT 意味着，如果你的应用程序收集有关最终用户的数据并与其他公司共享以跨应用程序和网站进行跟踪（IDFA），则必须使用 ATT 同意提示并在发布商和广告商应用程
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>iOS XCTest实战—解决国际化开发测试痛点（下）</title>
     <link href="http://yoursite.com/2021/10/15/iOS-XCTest%E5%AE%9E%E6%88%98%E2%80%94%E8%A7%A3%E5%86%B3%E5%9B%BD%E9%99%85%E5%8C%96%E5%BC%80%E5%8F%91%E6%B5%8B%E8%AF%95%E7%97%9B%E7%82%B9%EF%BC%88%E4%B8%8B%EF%BC%89/"/>
     <id>http://yoursite.com/2021/10/15/iOS-XCTest%E5%AE%9E%E6%88%98%E2%80%94%E8%A7%A3%E5%86%B3%E5%9B%BD%E9%99%85%E5%8C%96%E5%BC%80%E5%8F%91%E6%B5%8B%E8%AF%95%E7%97%9B%E7%82%B9%EF%BC%88%E4%B8%8B%EF%BC%89/</id>
@@ -486,32 +509,6 @@
       
         &lt;p&gt;iOS10已经发了，最近发现App在iOS10上有一些问题，主要是iOS10的字体变了，一些Label要做适配。还有一些相机权限之类的。更加详细的可以参考这篇文章&lt;br&gt;&lt;a href=&quot;https://github.com/ChenYilong/iOS10Adaptati
       
-    
-    </summary>
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Apple开发账号续费流程及Tips（17年7月更新）</title>
-    <link href="http://yoursite.com/2016/07/17/Apple%E5%BC%80%E5%8F%91%E8%B4%A6%E5%8F%B7%E7%BB%AD%E8%B4%B9%E6%B5%81%E7%A8%8B%E5%8F%8ATips%EF%BC%8817%E5%B9%B47%E6%9C%88%E6%9B%B4%E6%96%B0%EF%BC%89/"/>
-    <id>http://yoursite.com/2016/07/17/Apple%E5%BC%80%E5%8F%91%E8%B4%A6%E5%8F%B7%E7%BB%AD%E8%B4%B9%E6%B5%81%E7%A8%8B%E5%8F%8ATips%EF%BC%8817%E5%B9%B47%E6%9C%88%E6%9B%B4%E6%96%B0%EF%BC%89/</id>
-    <published>2016-07-17T08:47:00.000Z</published>
-    <updated>2020-06-01T06:22:52.882Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><p>此文为简书旧文</p></blockquote><p>最近公司开发者账号马上到期了，需要进行续费工作。现在记录一下流程和遇到的一些坑。<br>  首先登陆开发者中心<a href="https://developer.apple.com/" target="_blank" rel="noopener">https://developer.apple.com/</a><br>  选择右上方的Account,然后输入账号和密码。<strong><em>进入后如果过期时间小于30天，在首页会给你一个小弹窗告诉你要续费。</em></strong></p><blockquote><p>update<br>补充下图片，当还有一个月过期时候，登录iTunes Connect 或者开发者中心都会有提示信息</p></blockquote><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601141646.png" alt=""></p><a id="more"></a><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601141702.png" alt=""></p><p>点击任意入口。登录开发者账号，会进入到付款界面</p><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601141713.png" alt=""><br>选择VISA还是MasterCard。国内银联当然是不支持啦，但是这里要注意，招商银行VISA全币卡（就是黑色那张）是不能用的！</p><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601141723.png" alt=""><br>  后来查了下，说要去招行官网开通什么结算通道，但是开通以后依旧不行，还有人说要使用VISA和银联双标卡，说苹果关闭了国内银行发行的VISA单标卡的结算通道。总之用不了啊。。。</p><p><strong><em>update</em></strong></p><blockquote><p>评论有小伙伴反应招行Visa单标卡验证失败的原因是<br>可能是因为没有开通：<br>1：网上支付功能<br>2：VISA验证服务</p></blockquote><blockquote><p>我记得当时我有去招行官网开通VISA验证服务，至于网上支付功能这个应该是开通着的，但是时间太久就不得了。如果有小伙伴出现招行单标卡验证失败的情况，请尝试上述两种方法。有结果的话麻烦留言告知一下~</p></blockquote><p>  因为我的招行万事达卡还在申请的路上，所以我也没办法尝试招行的Mastercard能不能用。最后用了同事一张国外的Mastercard付费成功。</p><blockquote><p>update 17年7月<br>发票问题<br>17年税改以后发票报销不能只写公司抬头了，还要写税号。但是苹果给的界面并没有填写入口。但是却说可以电话订购。<br>如果有小伙伴有电话订购的经历，欢迎留言补充。</p></blockquote><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601141846.png" alt=""></p><p>   付费以后过几分钟会收到Apple发的邮件，一个是订单确认邮件一个是电子收据</p><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601141857.png" alt=""></p><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601141942.png" alt=""></p><blockquote><p>update 17年<br>今年续费出现一种新情况，24小时以后再看结果好了</p></blockquote><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601142001.png" alt=""></p><blockquote><p>上面那个挂掉了，说订单失败，重新换了一个信用卡</p></blockquote><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601142017.png" alt=""></p><p>因为写的联系和发票邮箱不是Apple开发者账号那个主邮箱，登录开发者账号主邮箱，会有一封名为“Thank you for purchasing an Apple Developer Program ”的邮件。</p><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601142029.png" alt=""><br>邮件中会告诉你你已经续费成功，并且到期日期也确实更新了。<br>but！！！<br>当我回到开发者中心的MembersShip里面查看<br><strong>到期信息还是依旧！</strong><br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601142055.png" alt=""></p><p>WTF! 然后上网找资料，有人说要去主账号邮箱找一个激活码，用激活码激活，但是里面根本没有这个邮件！<br>因为怕账号到期App被下架，所以我发邮件咨询了苹果官方。具体入口在<br>开发者中心首页-&gt;右上方Support-&gt;右下角Contact Us。然后<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601142105.png" alt=""></p><p>Then<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601142136.png" alt=""></p><p>Ok，过了小半天就收到Apple的回复邮件了</p><p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601142147.png" alt=""></p><p>原来苹果信息更新也是很不及时的，但终究续费成功。<br>Done~</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote&gt;
-&lt;p&gt;此文为简书旧文&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;最近公司开发者账号马上到期了，需要进行续费工作。现在记录一下流程和遇到的一些坑。&lt;br&gt;  首先登陆开发者中心&lt;a href=&quot;https://developer.apple.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://developer.apple.com/&lt;/a&gt;&lt;br&gt;  选择右上方的Account,然后输入账号和密码。&lt;strong&gt;&lt;em&gt;进入后如果过期时间小于30天，在首页会给你一个小弹窗告诉你要续费。&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;update&lt;br&gt;补充下图片，当还有一个月过期时候，登录iTunes Connect 或者开发者中心都会有提示信息&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601141646.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
     
     </summary>
     
