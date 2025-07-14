@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="介绍了如何使用python脚本通过大模型API进行批量文本翻译。本文是对之前Xliff自动录入脚本的补充。  这个脚本是对之前在Xcode上使用的Xliff自动录入脚本的补充。关于如何在Xcode中使用自动导出，批量录入、导入国际化文案，详见：iOS国际化—xliff自动录入脚本 0.背景介绍iOS国际化—xliff自动录入脚本在项目中已经稳定运行了4年，之所以使用云端Excle管理翻译文案是考">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS国际化-大模型自动翻译脚本（GPT+DeepSeek）">
+<meta property="og:url" content="http://yoursite.com/2025/02/14/iOS%E5%9B%BD%E9%99%85%E5%8C%96-%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%87%AA%E5%8A%A8%E7%BF%BB%E8%AF%91%E8%84%9A%E6%9C%AC%EF%BC%88GPT-DeepSeek%EF%BC%89/index.html">
+<meta property="og:site_name" content="licc">
+<meta property="og:description" content="介绍了如何使用python脚本通过大模型API进行批量文本翻译。本文是对之前Xliff自动录入脚本的补充。  这个脚本是对之前在Xcode上使用的Xliff自动录入脚本的补充。关于如何在Xcode中使用自动导出，批量录入、导入国际化文案，详见：iOS国际化—xliff自动录入脚本 0.背景介绍iOS国际化—xliff自动录入脚本在项目中已经稳定运行了4年，之所以使用云端Excle管理翻译文案是考">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202507141958631.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202507141958282.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202507141959685.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202507142000661.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202507142000888.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202507142001911.png">
+<meta property="article:published_time" content="2025-02-14T11:56:00.000Z">
+<meta property="article:modified_time" content="2025-07-14T12:27:35.865Z">
+<meta property="article:author" content="weican Li">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202507141958631.png">
+
+<link rel="canonical" href="http://yoursite.com/2025/02/14/iOS%E5%9B%BD%E9%99%85%E5%8C%96-%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%87%AA%E5%8A%A8%E7%BF%BB%E8%AF%91%E8%84%9A%E6%9C%AC%EF%BC%88GPT-DeepSeek%EF%BC%89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>iOS国际化-大模型自动翻译脚本（GPT+DeepSeek） | licc</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="licc" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">licc</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">心有猛虎 细嗅蔷薇</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2025/02/14/iOS%E5%9B%BD%E9%99%85%E5%8C%96-%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%87%AA%E5%8A%A8%E7%BF%BB%E8%AF%91%E8%84%9A%E6%9C%AC%EF%BC%88GPT-DeepSeek%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/avatar.png">
+      <meta itemprop="name" content="weican Li">
+      <meta itemprop="description" content="iOS Developer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="licc">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          iOS国际化-大模型自动翻译脚本（GPT+DeepSeek）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-02-14 19:56:00" itemprop="dateCreated datePublished" datetime="2025-02-14T19:56:00+08:00">2025-02-14</time>
+            </span>
+
+          
+            <span id="/2025/02/14/iOS%E5%9B%BD%E9%99%85%E5%8C%96-%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%87%AA%E5%8A%A8%E7%BF%BB%E8%AF%91%E8%84%9A%E6%9C%AC%EF%BC%88GPT-DeepSeek%EF%BC%89/" class="post-meta-item leancloud_visitors" data-flag-title="iOS国际化-大模型自动翻译脚本（GPT+DeepSeek）" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2025/02/14/iOS%E5%9B%BD%E9%99%85%E5%8C%96-%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%87%AA%E5%8A%A8%E7%BF%BB%E8%AF%91%E8%84%9A%E6%9C%AC%EF%BC%88GPT-DeepSeek%EF%BC%89/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2025/02/14/iOS%E5%9B%BD%E9%99%85%E5%8C%96-%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%87%AA%E5%8A%A8%E7%BF%BB%E8%AF%91%E8%84%9A%E6%9C%AC%EF%BC%88GPT-DeepSeek%EF%BC%89/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>介绍了如何使用python脚本通过大模型API进行批量文本翻译。本文是对之前Xliff自动录入脚本的补充。</p>
+</blockquote>
+<p>这个脚本是对之前在Xcode上使用的Xliff自动录入脚本的补充。<br>关于如何在Xcode中使用自动导出，批量录入、导入国际化文案，详见：<a href="https://leevcan.com/2020/10/12/iOS%E5%9B%BD%E9%99%85%E5%8C%96%E2%80%94Xliff%E5%BD%95%E5%85%A5%E8%84%9A%E6%9C%AC/" target="_blank" rel="noopener">iOS国际化—xliff自动录入脚本</a></p>
+<h6 id="0-背景介绍"><a href="#0-背景介绍" class="headerlink" title="0.背景介绍"></a>0.背景介绍</h6><p>iOS国际化—xliff自动录入脚本在项目中已经稳定运行了4年，之所以使用云端Excle管理翻译文案是考虑到兼容Android端和Web端等。之前每个版本都需要产品同学归纳新增的文案，并通过翻译引擎手动翻译后填写到Excel中。<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202507141958631.png" alt=""><br>随着GPT的诞生，翻译工具就切换成了GPT，翻译的更地道，更人性化。<br>但是每次通过对话框翻译，拿到结果再粘贴到Excel中明显效率有提升空间，并且随着DeepSeek的爆火，发现DeepSeek R1的翻译还会考虑当地风俗习惯等，并且能看到思考过程。所以直接通过脚本调用API效率会更高。<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202507141958282.png" alt=""></p>
+<h6 id="1-需求分析"><a href="#1-需求分析" class="headerlink" title="1.需求分析"></a>1.需求分析</h6><p>因为是对之前脚本的补充，那么参考之前脚本逻辑。在xliff.py中存在一个Excel语种标题和Xcode中多语言Bundle Name缩写的映射关系。<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202507141959685.png" alt=""><br>Localization.sh中声明需要处理那些语种。<br><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202507142000661.png" alt=""></p>
+<p>那么直接读取本地Excel并批量翻译后生成一个新Excel的方案会更好。这样结合<a href="https://leevcan.com/2020/10/12/iOS%E5%9B%BD%E9%99%85%E5%8C%96%E2%80%94Xliff%E5%BD%95%E5%85%A5%E8%84%9A%E6%9C%AC/" target="_blank" rel="noopener">iOS国际化—xliff自动录入脚本</a>。整个流程都可以实现自动化。</p>
+<p>并且之前尝试使用分隔符批量请求并且让大模型返回json格式的翻译结果，明显会增加大模型幻觉，造成翻译结果错位等。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202507142000888.png" alt=""></p>
+<h6 id="2-脚本实现"><a href="#2-脚本实现" class="headerlink" title="2.脚本实现"></a>2.脚本实现</h6><p>DeepSeek的API可以在官网购买，但是推荐第三方平台接入，毕竟可以白嫖（不是…）。我使用的是siliconflow平台。注册送2000w token。欢迎大家通过我的邀请链接注册，或者填写邀请码：<strong>gdaCaOmO</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202507142001911.png" alt=""></p>
+<p>GPT的话是通过微软Azure平台接入，详见：<a href="https://learn.microsoft.com/en-us/azure/ai-services/openai/chatgpt-quickstart?tabs=command-line%2Ckeyless%2Ctypescript-keyless%2Cpython-new&pivots=programming-language-python" target="_blank" rel="noopener">Quickstart: Get started using GPT-35-Turbo and GPT-4 with Azure OpenAI Service</a></p>
+<p>下面是整个脚本的实现，默认使用GPT进行翻译，也可以指定DeepSeek，支持修改DeepSeek的模型。模型名称详见：<a href="https://docs.siliconflow.cn/cn/api-reference/chat-completions/chat-completions" target="_blank" rel="noopener">Siliconflow API</a>。注意DeepSeek和GPT的payload格式不一样。</p>
+<p>需要提前在本地配置API Key并防止秘钥泄露。</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line"><span class="comment">#这种方式只在当前Terminal中生效 如何全局生效请结合自己操作系统 自行操作！</span></span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">AZURE_OPENAI_API_KEY</span>=<span class="string">"REPLACE_WITH_YOUR_KEY_VALUE_HERE"</span></span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">AZURE_OPENAI_ENDPOINT</span>=<span class="string">"REPLACE_WITH_YOUR_KEY_VALUE_HERE"</span></span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">DEEPSEEK_API_URL</span>=<span class="string">"REPLACE_WITH_YOUR_KEY_VALUE_HERE"</span></span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">DEEPSEEK_API_KEY</span>=<span class="string">"REPLACE_WITH_YOUR_KEY_VALUE_HERE"</span></span><br></pre></td></tr></table></figure>
+
+<p>依赖包安装可以使用pip进行安装</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">pip <span class="keyword">install</span> openpyxl requests openai</span><br></pre></td></tr></table></figure>
+<p>脚本实现：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment">#liweican@corp.netease.com</span></span><br><span class="line"><span class="comment">#支持gpt+deepseek。请自己在本地配置DEEPSEEK_API_URL/DEEPSEEK_API_KEY/AZURE_OPENAI_ENDPOINT/AZURE_OPENAI_API_KEY 防止秘钥泄露</span></span><br><span class="line"><span class="comment">#eg:</span></span><br><span class="line"><span class="comment">#export AZURE_OPENAI_API_KEY="REPLACE_WITH_YOUR_KEY_VALUE_HERE"</span></span><br><span class="line"><span class="comment">#这种方式只在当前Terminal中生效 如何全局生效请结合自己操作系统 自行操作！</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> openpyxl</span><br><span class="line"><span class="keyword">from</span> openpyxl.styles <span class="keyword">import</span> PatternFill</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> openai <span class="keyword">import</span> AzureOpenAI</span><br><span class="line"></span><br><span class="line"><span class="comment"># 样式配置</span></span><br><span class="line">AUTO_TRANSLATE_FILL = PatternFill(</span><br><span class="line">    start_color=<span class="string">"FFD8E4BC"</span>,</span><br><span class="line">    end_color=<span class="string">"FFD8E4BC"</span>,</span><br><span class="line">    fill_type=<span class="string">"solid"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">LANGUAGE_MAPPING = &#123;</span><br><span class="line">    <span class="string">"中文简体"</span>: <span class="string">"Simplified Chinese"</span>,</span><br><span class="line">    <span class="string">"中文繁体"</span>: <span class="string">"Traditional Chinese"</span>,</span><br><span class="line">    <span class="string">"Japanese"</span>: <span class="string">"Japanese"</span>,</span><br><span class="line">    <span class="string">"Spanish"</span>: <span class="string">"Spanish"</span>,</span><br><span class="line">    <span class="string">"Korean"</span>: <span class="string">"Korean"</span>,</span><br><span class="line">    <span class="string">"Thailand"</span>: <span class="string">"Thai"</span>,</span><br><span class="line">    <span class="string">"Indonesia"</span>: <span class="string">"Indonesian"</span>,</span><br><span class="line">    <span class="string">"German"</span>: <span class="string">"German"</span>,</span><br><span class="line">    <span class="string">"French"</span>: <span class="string">"French"</span>,</span><br><span class="line">    <span class="string">"Portuguese"</span>: <span class="string">"Portuguese"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># API配置</span></span><br><span class="line">DEEPSEEK_API_URL = os.getenv(<span class="string">"DEEPSEEK_API_URL"</span>)</span><br><span class="line">DEEPSEEK_API_KEY = os.getenv(<span class="string">"DEEPSEEK_API_KEY"</span>)</span><br><span class="line"><span class="comment">#指定模型名称 蒸馏模型速度更快 价格也低</span></span><br><span class="line">DEEPSEEK_MODEL_NAME = <span class="string">"deepseek-ai/DeepSeek-R1-Distill-Qwen-14B"</span></span><br><span class="line">AZURE_OPENAI_ENDPOINT = os.getenv(<span class="string">"AZURE_OPENAI_ENDPOINT"</span>)</span><br><span class="line">AZURE_OPENAI_API_KEY = os.getenv(<span class="string">"AZURE_OPENAI_API_KEY"</span>)</span><br><span class="line">GPT_API_VERSION = <span class="string">"2024-06-01"</span></span><br><span class="line">BATCH_SIZE = <span class="number">8</span></span><br><span class="line">MAX_TOKENS = <span class="number">4096</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 解析翻译结果</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse_translation_result</span><span class="params">(raw_text, texts)</span>:</span></span><br><span class="line">    translated = []</span><br><span class="line">    pattern = re.compile(<span class="string">r'^\d+\.\s*(.+)$'</span>, re.MULTILINE)</span><br><span class="line">    matches = pattern.findall(raw_text)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> len(matches) == len(texts):</span><br><span class="line">        translated = [m.strip() <span class="keyword">for</span> m <span class="keyword">in</span> matches]</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># 备用方案</span></span><br><span class="line">        translated = [line.split(<span class="string">". "</span>, <span class="number">1</span>)[<span class="number">-1</span>].strip()</span><br><span class="line">                      <span class="keyword">for</span> line <span class="keyword">in</span> raw_text.split(<span class="string">"\n"</span>)</span><br><span class="line">                      <span class="keyword">if</span> line.strip() <span class="keyword">and</span> line[<span class="number">0</span>].isdigit()]</span><br><span class="line">    <span class="keyword">return</span> translated</span><br><span class="line"></span><br><span class="line"><span class="comment"># 批量翻译函数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">batch_translate</span><span class="params">(texts, target_lang, model_choice)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> texts <span class="keyword">or</span> <span class="keyword">not</span> target_lang:</span><br><span class="line">        <span class="keyword">return</span> []</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 构建prompt</span></span><br><span class="line">    numbered_texts = <span class="string">"\n"</span>.join([<span class="string">f"<span class="subst">&#123;i + <span class="number">1</span>&#125;</span>. <span class="subst">&#123;text&#125;</span>"</span> <span class="keyword">for</span> i, text <span class="keyword">in</span> enumerate(texts)])</span><br><span class="line">    <span class="comment"># 避免Python解析占位符</span></span><br><span class="line">    system_prompt = <span class="string">f"""你是一位专业App内文案翻译人员，请将以下英文文本列表准确翻译为<span class="subst">&#123;LANGUAGE_MAPPING[target_lang]&#125;</span>：</span></span><br><span class="line"><span class="string"><span class="subst">&#123;numbered_texts&#125;</span></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">请严格遵循：</span></span><br><span class="line"><span class="string">1. 保持专业术语一致性</span></span><br><span class="line"><span class="string">2. 保留数字和特殊符号，$&#123;&#123;TT&#125;&#125;、$&#123;&#123;time&#125;&#125;等是占位符均不翻译。</span></span><br><span class="line"><span class="string">3. 使用正式书面语体</span></span><br><span class="line"><span class="string">4. 按以下格式返回：</span></span><br><span class="line"><span class="string">1. 翻译结果</span></span><br><span class="line"><span class="string">2. 翻译结果"""</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> model_choice == <span class="string">"deepseek"</span>:</span><br><span class="line">        payload = &#123;</span><br><span class="line">            <span class="string">"model"</span>: DEEPSEEK_MODEL_NAME,</span><br><span class="line">            <span class="string">"messages"</span>: [</span><br><span class="line">                &#123;<span class="string">"role"</span>: <span class="string">"system"</span>, <span class="string">"content"</span>: system_prompt&#125;,</span><br><span class="line">                &#123;<span class="string">"role"</span>: <span class="string">"user"</span>, <span class="string">"content"</span>: <span class="string">"请开始翻译"</span>&#125;</span><br><span class="line">            ],</span><br><span class="line">            <span class="string">"temperature"</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="string">"max_tokens"</span>: MAX_TOKENS</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        headers = &#123;</span><br><span class="line">            <span class="string">"Authorization"</span>: <span class="string">f"Bearer <span class="subst">&#123;DEEPSEEK_API_KEY&#125;</span>"</span>,</span><br><span class="line">            <span class="string">"Content-Type"</span>: <span class="string">"application/json"</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="comment"># 添加超时和重试机制</span></span><br><span class="line">            print(system_prompt)</span><br><span class="line">            print(<span class="string">"🚀🚀🚀当前DeepSeek模型是"</span> + DEEPSEEK_MODEL_NAME)</span><br><span class="line"></span><br><span class="line">            response = requests.post(DEEPSEEK_API_URL, json=payload, headers=headers, timeout=(<span class="number">10</span>, <span class="number">30</span>))</span><br><span class="line">            response.raise_for_status()</span><br><span class="line"></span><br><span class="line">            <span class="comment"># status_code</span></span><br><span class="line">            print(<span class="string">f"API响应状态码: <span class="subst">&#123;response.status_code&#125;</span>"</span>)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                response_data = response.json()</span><br><span class="line">                print(response_data)</span><br><span class="line">            <span class="keyword">except</span> ValueError:</span><br><span class="line">                <span class="keyword">raise</span> Exception(<span class="string">"无效的JSON响应"</span>)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> <span class="string">'choices'</span> <span class="keyword">not</span> <span class="keyword">in</span> response_data <span class="keyword">or</span> <span class="keyword">not</span> response_data[<span class="string">'choices'</span>]:</span><br><span class="line">                <span class="keyword">raise</span> Exception(<span class="string">"API返回结构异常"</span>)</span><br><span class="line"></span><br><span class="line">            raw_text = response_data[<span class="string">'choices'</span>][<span class="number">0</span>][<span class="string">'message'</span>][<span class="string">'content'</span>]</span><br><span class="line">            translated = parse_translation_result(raw_text, texts)</span><br><span class="line">            print(translated)</span><br><span class="line">            <span class="keyword">return</span> translated</span><br><span class="line"></span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            print(<span class="string">f"API调用失败: <span class="subst">&#123;str(e)&#125;</span>"</span>)</span><br><span class="line">            <span class="keyword">return</span> []</span><br><span class="line">    <span class="comment"># GPT</span></span><br><span class="line">    <span class="keyword">elif</span> model_choice == <span class="string">"gpt"</span>:</span><br><span class="line">        client = AzureOpenAI(</span><br><span class="line">            azure_endpoint=AZURE_OPENAI_ENDPOINT,</span><br><span class="line">            api_key=AZURE_OPENAI_API_KEY,</span><br><span class="line">            api_version=GPT_API_VERSION</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            response = client.chat.completions.create(</span><br><span class="line">                model=<span class="string">"gpt-4o-mini"</span>,</span><br><span class="line">                messages=[</span><br><span class="line">                    &#123;<span class="string">"role"</span>: <span class="string">"system"</span>, <span class="string">"content"</span>: system_prompt&#125;,</span><br><span class="line">                    &#123;<span class="string">"role"</span>: <span class="string">"user"</span>, <span class="string">"content"</span>: <span class="string">"请开始翻译"</span>&#125;</span><br><span class="line">                ]</span><br><span class="line">            )</span><br><span class="line">            raw_text = response.choices[<span class="number">0</span>].message.content</span><br><span class="line">            translated = parse_translation_result(raw_text, texts)</span><br><span class="line">            print(translated)</span><br><span class="line">            <span class="keyword">return</span> translated</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            print(<span class="string">f"API调用失败: <span class="subst">&#123;str(e)&#125;</span>"</span>)</span><br><span class="line">            <span class="keyword">return</span> []</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">process_excel</span><span class="params">(input_path, output_path, model_choice)</span>:</span></span><br><span class="line">    print(<span class="string">f"开始读取Excel <span class="subst">&#123;input_path&#125;</span>"</span>)</span><br><span class="line">    print(<span class="string">f"当前使用的大模型是: <span class="subst">&#123;model_choice.upper()&#125;</span>"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        wb = openpyxl.load_workbook(input_path)</span><br><span class="line">        sheet = wb.active</span><br><span class="line"></span><br><span class="line">        source_col = <span class="literal">None</span></span><br><span class="line">        <span class="keyword">for</span> idx, cell <span class="keyword">in</span> enumerate(sheet[<span class="number">1</span>], <span class="number">1</span>):</span><br><span class="line">            <span class="keyword">if</span> cell.value <span class="keyword">and</span> cell.value.strip() == <span class="string">"English"</span>:</span><br><span class="line">                source_col = idx</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> source_col:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">"工作表中未找到'English'列，请检查第一行标题"</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 遍历所有目标语言列</span></span><br><span class="line">        <span class="keyword">for</span> col_idx <span class="keyword">in</span> range(<span class="number">1</span>, sheet.max_column + <span class="number">1</span>):</span><br><span class="line">            header_cell = sheet.cell(row=<span class="number">1</span>, column=col_idx)</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> header_cell.value:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">            lang_name = header_cell.value.strip()</span><br><span class="line">            <span class="keyword">if</span> lang_name == <span class="string">"English"</span> <span class="keyword">or</span> lang_name <span class="keyword">not</span> <span class="keyword">in</span> LANGUAGE_MAPPING:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">            print(<span class="string">f"\n=== 正在处理 <span class="subst">&#123;lang_name&#125;</span> ==="</span>)</span><br><span class="line">            process_language_column(sheet, source_col, col_idx, lang_name, model_choice)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 保存结果</span></span><br><span class="line">        wb.save(output_path)</span><br><span class="line">        print(<span class="string">f"\n处理完成！文件已保存至：<span class="subst">&#123;output_path&#125;</span>"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        print(<span class="string">f"处理过程中发生错误: <span class="subst">&#123;str(e)&#125;</span>"</span>)</span><br><span class="line">        <span class="keyword">raise</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">process_language_column</span><span class="params">(sheet, source_col, target_col, lang_name, model_choice)</span>:</span></span><br><span class="line">    <span class="string">"""处理单个语言列"""</span></span><br><span class="line">    batch_texts = []</span><br><span class="line">    batch_positions = []</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> row_idx <span class="keyword">in</span> range(<span class="number">2</span>, sheet.max_row + <span class="number">1</span>):</span><br><span class="line">        source_cell = sheet.cell(row=row_idx, column=source_col)</span><br><span class="line">        target_cell = sheet.cell(row=row_idx, column=target_col)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 跳过空值和已翻译内容</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> source_cell.value <span class="keyword">or</span> (target_cell.value <span class="keyword">and</span> str(target_cell.value).strip()):</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 组成批次</span></span><br><span class="line">        batch_texts.append(str(source_cell.value).strip())</span><br><span class="line">        batch_positions.append((row_idx, target_col))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> len(batch_texts) &gt;= BATCH_SIZE:</span><br><span class="line">            process_batch(sheet, batch_texts, batch_positions, lang_name, model_choice)</span><br><span class="line">            batch_texts.clear()</span><br><span class="line">            batch_positions.clear()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 处理剩余批次</span></span><br><span class="line">    <span class="keyword">if</span> batch_texts:</span><br><span class="line">        process_batch(sheet, batch_texts, batch_positions, lang_name, model_choice)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">process_batch</span><span class="params">(sheet, texts, positions, lang_name, model_choice)</span>:</span></span><br><span class="line">    print(<span class="string">f"正在批量翻译 <span class="subst">&#123;len(texts)&#125;</span> 条文本到 <span class="subst">&#123;lang_name&#125;</span>"</span>)</span><br><span class="line"></span><br><span class="line">    translated = []</span><br><span class="line">    <span class="keyword">for</span> retry <span class="keyword">in</span> range(<span class="number">3</span>):</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            translated = batch_translate(texts, lang_name, model_choice)</span><br><span class="line">            <span class="keyword">if</span> len(translated) == len(texts):</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            print(<span class="string">f"第<span class="subst">&#123;retry + <span class="number">1</span>&#125;</span>次重试..."</span>)</span><br><span class="line">            time.sleep(<span class="number">2</span> ** retry)  <span class="comment"># 指数sleep</span></span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            print(<span class="string">f"批处理失败: <span class="subst">&#123;str(e)&#125;</span>"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> len(translated) != len(texts):</span><br><span class="line">        print(<span class="string">f"未能获取完整翻译，预期<span class="subst">&#123;len(texts)&#125;</span>条，实际<span class="subst">&#123;len(translated)&#125;</span>条"</span>)</span><br><span class="line">        translated += [<span class="string">f"[翻译失败] <span class="subst">&#123;text&#125;</span>"</span> <span class="keyword">for</span> text <span class="keyword">in</span> texts[len(translated):]]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 写入结果</span></span><br><span class="line">    <span class="keyword">for</span> (row, col), text <span class="keyword">in</span> zip(positions, translated):</span><br><span class="line">        cell = sheet.cell(row=row, column=col)</span><br><span class="line">        cell.value = text</span><br><span class="line">        cell.fill = AUTO_TRANSLATE_FILL</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="keyword">import</span> sys</span><br><span class="line">    <span class="keyword">if</span> len(sys.argv) &gt; <span class="number">1</span> <span class="keyword">and</span> sys.argv[<span class="number">1</span>] <span class="keyword">not</span> <span class="keyword">in</span> [<span class="string">"deepseek"</span>, <span class="string">"gpt"</span>]:</span><br><span class="line">        print(<span class="string">"请指定有效的模型，可选值为 [deepseek|gpt]，默认使用gpt。"</span>)</span><br><span class="line">        sys.exit(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    model_choice = sys.argv[<span class="number">1</span>] <span class="keyword">if</span> len(sys.argv) &gt; <span class="number">1</span> <span class="keyword">else</span> <span class="string">"gpt"</span></span><br><span class="line">    input_file = os.path.expanduser(<span class="string">'~/Desktop/test2.xlsx'</span>)</span><br><span class="line">    output_file = os.path.expanduser(<span class="string">'~/Desktop/translated_output.xlsx'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        process_excel(input_file, output_file, model_choice)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        print(<span class="string">f"运行失败: <span class="subst">&#123;str(e)&#125;</span>"</span>)</span><br><span class="line">        exit(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p>使用方式</p>
+<figure class="highlight vim"><table><tr><td class="code"><pre><span class="line">#gpt</span><br><span class="line"><span class="keyword">python3</span> /Users/<span class="keyword">cc</span>/Desktop/ClassTranslate/autoTranslate.<span class="keyword">py</span></span><br><span class="line">#deepseek</span><br><span class="line"><span class="keyword">python3</span> /Users/<span class="keyword">cc</span>/Desktop/ClassTranslate/autoTranslate.<span class="keyword">py</span> deepseek</span><br></pre></td></tr></table></figure>
+
+<p>脚本逻辑也比较简单，配置了最大token数，支持分批次批量请求，也考虑了翻译失败等情况。翻译填充后会修改Excel文本框颜色，方便人工检测。可以根据各APP不同请求修改system_prompt介绍，让翻译更准确。</p>
+<p>脚本Git地址：<a href="https://gitlab.corp.youdao.com/liwc/excelToXilff/-/blob/master/autoTranslate.py" target="_blank" rel="noopener">https://gitlab.corp.youdao.com/liwc/excelToXilff/-/blob/master/autoTranslate.py</a></p>
+<p>测试Excel地址：<a href="https://gitlab.corp.youdao.com/liwc/excelToXilff/-/blob/master/test1.xlsx" target="_blank" rel="noopener">https://gitlab.corp.youdao.com/liwc/excelToXilff/-/blob/master/test1.xlsx</a><br>3.效果演示</p>
+<p>DeepSeek演示：</p>
+<video src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202507142008031.mp4" controls="controls">
+</video>
+
+
+<p>GPT效果演示：</p>
+<video src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202507142015187.mp4" controls="controls">
+
+</video>
+
+<p>这个脚本也可以单独使用，只做本地Excel批量翻译，也可以串联起iOS国际化—xliff自动录入脚本实现Xcode国际化文案录入纯自动化。具体过程不再阐述。</p>
+<p>串联效果演示：（可以做到全自动调用 这里我分开是为了检查翻译文本质量 后续觉得翻译稳定 就可以全自动化）</p>
+<video src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202507142023894.mp4" controls="controls">
+</video>
+使用过程有任何问题 欢迎联系和交流：
+
+<hr>
+<p>李伟灿</p>
+<p>网易有道 国际APP产品部</p>
+<p>liweican#corp.netease.com</p>
+<p>感谢您的阅读~</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/12/26/iOS%E5%8E%9F%E7%94%9F%E6%96%87%E6%A1%A3%E6%89%AB%E6%8F%8F%E5%AE%9E%E7%8E%B0%E2%80%94%E2%80%94Vision-CoreImage/" rel="prev" title="iOS原生文档扫描实现——Vision&CoreImage">
+      <i class="fa fa-chevron-left"></i> iOS原生文档扫描实现——Vision&CoreImage
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-6"><a class="nav-link" href="#0-背景介绍"><span class="nav-text">0.背景介绍</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#1-需求分析"><span class="nav-text">1.需求分析</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-脚本实现"><span class="nav-text">2.脚本实现</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="weican Li"
+      src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/avatar.png">
+  <p class="site-author-name" itemprop="name">weican Li</p>
+  <div class="site-description" itemprop="description">iOS Developer</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/liweican1992" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;liweican1992" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:liweican1992@163.com" title="E-Mail → mailto:liweican1992@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">weican Li</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : true,
+      appId      : '2vtATvMKrRqHP269UUtJOy6L-MdYXbMMI',
+      appKey     : 'zHsuq1nT4cg9Vse62lvSHrUq',
+      placeholder: "在此输入留言",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
