@@ -22,7 +22,7 @@
 
   <meta name="description" content="本文从源码分析GCD中的DispatchGroup是怎么调度的，notify的背后是如何实现的。如果你对Swift中GCD如何使用不太了解。可以参考《详解Swift多线程》  API以下代码是DispatchGroup的常用使用场景         let g1 &#x3D; DispatchGroup.init()                &#x2F;&#x2F;直接输入notify null        g1.n">
 <meta property="og:type" content="article">
-<meta property="og:title" content="从源码分析Swift多线程2—DispatchGroup">
+<meta property="og:title" content="从源码分析Swift多线程—DispatchGroup">
 <meta property="og:url" content="http://yoursite.com/2020/05/30/%E4%BB%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90Swift%E5%A4%9A%E7%BA%BF%E7%A8%8B%E2%80%94DispatchGroup/index.html">
 <meta property="og:site_name" content="licc">
 <meta property="og:description" content="本文从源码分析GCD中的DispatchGroup是怎么调度的，notify的背后是如何实现的。如果你对Swift中GCD如何使用不太了解。可以参考《详解Swift多线程》  API以下代码是DispatchGroup的常用使用场景         let g1 &#x3D; DispatchGroup.init()                &#x2F;&#x2F;直接输入notify null        g1.n">
@@ -31,7 +31,7 @@
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601114842.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601114914.png">
 <meta property="article:published_time" content="2020-05-30T14:18:46.000Z">
-<meta property="article:modified_time" content="2025-07-07T06:19:55.646Z">
+<meta property="article:modified_time" content="2025-07-15T02:53:49.982Z">
 <meta property="article:author" content="weican Li">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img/20200601114808.png">
@@ -49,7 +49,7 @@
   };
 </script>
 
-  <title>从源码分析Swift多线程2—DispatchGroup | licc</title>
+  <title>从源码分析Swift多线程—DispatchGroup | licc</title>
   
 
 
@@ -169,7 +169,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          从源码分析Swift多线程2—DispatchGroup
+          从源码分析Swift多线程—DispatchGroup
         </h1>
 
         <div class="post-meta">
@@ -183,7 +183,7 @@
             </span>
 
           
-            <span id="/2020/05/30/%E4%BB%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90Swift%E5%A4%9A%E7%BA%BF%E7%A8%8B%E2%80%94DispatchGroup/" class="post-meta-item leancloud_visitors" data-flag-title="从源码分析Swift多线程2—DispatchGroup" title="Views">
+            <span id="/2020/05/30/%E4%BB%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90Swift%E5%A4%9A%E7%BA%BF%E7%A8%8B%E2%80%94DispatchGroup/" class="post-meta-item leancloud_visitors" data-flag-title="从源码分析Swift多线程—DispatchGroup" title="Views">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -393,7 +393,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-count">21</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
