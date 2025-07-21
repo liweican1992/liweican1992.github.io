@@ -217,7 +217,7 @@
 <p>那么直接读取本地Excel并批量翻译后生成一个新Excel的方案会更好。这样结合<a href="https://leevcan.com/2020/10/12/iOS%E5%9B%BD%E9%99%85%E5%8C%96%E2%80%94Xliff%E5%BD%95%E5%85%A5%E8%84%9A%E6%9C%AC/" target="_blank" rel="noopener">iOS国际化—xliff自动录入脚本</a>。整个流程都可以实现自动化。</p>
 <p>并且之前尝试使用分隔符批量请求并且让大模型返回json格式的翻译结果，明显会增加大模型幻觉，造成翻译结果错位等。</p>
 <p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202507142000888.png" alt=""></p>
-<h6 id="2-脚本实现"><a href="#2-脚本实现" class="headerlink" title="2.脚本实现"></a>2.脚本实现</h6><p>DeepSeek的API可以在官网购买，但是推荐第三方平台接入，毕竟可以白嫖（不是…）。我使用的是siliconflow平台。注册送2000w token。欢迎大家通过我的邀请链接注册，或者填写邀请码：<strong>gdaCaOmO</strong></p>
+<h6 id="2-脚本实现"><a href="#2-脚本实现" class="headerlink" title="2.脚本实现"></a>2.脚本实现</h6><p>DeepSeek的API可以在官网购买，但是推荐第三方平台接入，毕竟可以白嫖（不是…）。我使用的是siliconflow平台。注册送2000w token。欢迎大家通过我的<a href="https://cloud.siliconflow.cn/i/gdaCaOmO" target="_blank" rel="noopener">邀请链接注册</a>，或者填写邀请码：<strong>gdaCaOmO</strong></p>
 <p><img src="https://cdn.jsdelivr.net/gh/liweican1992/hexoPic/img2/202507142001911.png" alt=""></p>
 <p>GPT的话是通过微软Azure平台接入，详见：<a href="https://learn.microsoft.com/en-us/azure/ai-services/openai/chatgpt-quickstart?tabs=command-line%2Ckeyless%2Ctypescript-keyless%2Cpython-new&pivots=programming-language-python" target="_blank" rel="noopener">Quickstart: Get started using GPT-35-Turbo and GPT-4 with Azure OpenAI Service</a></p>
 <p>下面是整个脚本的实现，默认使用GPT进行翻译，也可以指定DeepSeek，支持修改DeepSeek的模型。模型名称详见：<a href="https://docs.siliconflow.cn/cn/api-reference/chat-completions/chat-completions" target="_blank" rel="noopener">Siliconflow API</a>。注意DeepSeek和GPT的payload格式不一样。</p>
